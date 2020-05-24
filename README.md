@@ -21,6 +21,8 @@ First you need docker running on your computer. If you need help to install dock
 
 `./install_docker.sh`
 
+Note: it could be necessary to restart the computer.
+
 When docker is ready and running you can pull the docker image from [docker-hub](https://hub.docker.com/):
 
 + Run `docker pull serger87/wbc:latest` to download the latest image.

@@ -26,7 +26,7 @@ if [ `sudo systemctl is-active docker` = "inactive" ]; then
 fi
 
 # Cleanup the docker container before launching it
-docker rm -f $CONTAINER_NAME || true
+docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true 
 
 # Run the container with shared X11
 docker run --user `id -u`:sudo --hostname $HOSTNAME --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e SHELL -e DISPLAY -e DOCKER=1 --name $CONTAINER_NAME \

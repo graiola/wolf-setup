@@ -23,8 +23,8 @@ First you need docker running on your computer. If you need help to install dock
 
 When docker is ready and running you can pull the docker image from [docker-hub](https://hub.docker.com/):
 
-+ Run `docker pull serger87/wbc-dockered` to download the latest image.
-+ Run `docker tag serger87/wbc-dockered wbc:latest` to rename the image.
++ Run `docker pull serger87/wbc:latest` to download the latest image.
++ Run `docker tag serger87/wbc:latest wbc` to rename the image.
 + Finally you can launch the controller in the docker environment: `./run_docker.sh`
 
 ### System installation

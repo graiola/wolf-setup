@@ -29,7 +29,7 @@ fi
 docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true 
 
 # Run the container with shared X11
-docker run --user `id -u`:sudo --hostname $HOSTNAME --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e SHELL -e DISPLAY -e DOCKER=1 --name $CONTAINER_NAME \
+docker run --user `id -u`:sudo --hostname $HOSTNAME --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e GAZEBO_MODEL_PATH=/opt/ros/melodic/share/dls_gazebo_resources/models/ -e SHELL -e DISPLAY -e DOCKER=1 --name $CONTAINER_NAME \
 --gpus all \
 --device=/dev/ttyUSB0 \
 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \

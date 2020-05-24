@@ -1,0 +1,40 @@
+sensors_description:
+  ubuntu:
+    xenial: ros-kinetic-sensors-description 
+    bionic: ros-melodic-sensors-description 
+teleop_description:
+  ubuntu:
+    xenial: ros-kinetic-teleop-description
+    bionic: ros-melodic-teleop-description
+anymal_description:
+  ubuntu:
+    xenial: ros-kinetic-anymal-description
+    bionic: ros-melodic-anymal-description
+hyq_description:
+  ubuntu:
+    xenial: ros-kinetic-hyq-description
+    bionic: ros-melodic-hyq-description
+dls_gazebo_interface:
+  ubuntu:
+    xenial: ros-kinetic-dls-gazebo-interface
+    bionic: ros-melodic-dls-gazebo-interface
+dls_gazebo_resources:
+  ubuntu:
+    xenial: ros-kinetic-dls-gazebo-resources
+    bionic: ros-melodic-dls-gazebo-resources
+dls_hardware_interface:
+  ubuntu:
+    xenial: ros-kinetic-dls-hardware-interface
+    bionic: ros-melodic-dls-hardware-interface
+rt_logger:
+  ubuntu:
+    xenial: ros-kinetic-rt-logger
+    bionic: ros-melodic-rt-logger
+wb_controller:
+  ubuntu:
+    xenial: ros-kinetic-wb-controller
+    bionic: ros-melodic-wb-controller
+teleop_description:
+  ubuntu:
+    xenial: ros-kinetic-teleop-description
+    bionic: ros-melodic-teleop-description

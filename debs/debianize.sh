@@ -4,6 +4,7 @@ sudo apt-get update && apt-get install -y python-bloom fakeroot
 
 source /opt/ros/$ROS_DISTRO/setup.bash
 source $HOME/ros_ws/devel/setup.bash
+source /opt/ros/advr-superbuild/setup.bash
 
 WORKING_DIR=`pwd`
 

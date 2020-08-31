@@ -10,3 +10,5 @@ curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidi
 sudo apt-get update
 
 sudo apt-get install -y nvidia-container-runtime nvidia-container-toolkit libcuda-430
+
+sudo systemctl restart docker

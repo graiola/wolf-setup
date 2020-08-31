@@ -29,6 +29,8 @@ When docker is ready and running you can pull the docker image from [docker-hub]
 + Run `docker tag serger87/wbc:latest wbc` to rename the image.
 + Finally you can launch the controller in the docker environment: `./run_docker.sh`
 
+Note: use the `install_nvidia.sh` script if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`.
+
 ### System installation
 
 To install all the required dependencies (including ROS) and the wbc debian packages run the following:

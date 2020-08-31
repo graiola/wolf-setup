@@ -3,7 +3,7 @@
 # These are fixed
 CONTAINER_NAME="wbc"
 IMAGE_NAME="wbc:latest"
-USAGE="Usage: ./run.sh [ROBOT_NAME=hyq|anymal] [WORLD_NAME=empty|ruins]\nExample: ./run.sh hyq ruins"
+USAGE="Usage: ./run_docker.sh [ROBOT_NAME=hyq|anymal] [WORLD_NAME=empty|ruins]\nExample: ./run_docker.sh hyq ruins"
 
 # Check args
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 

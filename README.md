@@ -1,5 +1,7 @@
 ## Whole body controller with inverse dynamics
 
+![1](docs/hyq.gif)
+
 This repo contains the debian packages of the whole body controller presented in the following paper: 
 
     @article{raiola20frontiers,

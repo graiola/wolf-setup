@@ -41,7 +41,7 @@ To launch the controller:
 
 `roslaunch wb_controller wb_controller_bringup.launch`
 
-## How to run the controller
+## How to start the controller
 
 To move the robot around you need a joypad plugged in. Press the `start` button when ready. The joypad commands are reported in the image below:
 

@@ -1,6 +1,8 @@
 ## Whole body controller with inverse dynamics
 
-![1](docs/hyq.gif)
+<p align="center"> 
+<img src="docs/hyq.gif">
+</p>
 
 This repo contains the debian packages of the whole body controller presented in the following paper: 
 
@@ -51,7 +53,9 @@ To move the robot around you need a joypad plugged in. Press the `start` button 
 
 ### Joypad commands
 
-![1](docs/joy_commands.png)
+<p align="center"> 
+<img src="docs/joy_commands.png">
+</p>
 
 ## Legal notes
 

@@ -15,13 +15,13 @@ This repo contains the debian packages of the whole body controller presented in
 
 You can run the code either by installing it on your machine, or by running it in a docker container.
 
-### Docker
+### Docker container for Ubuntu 16.04 and 18.04
 
-First you need docker running on your computer. If you need help to install docker, run the following script:
+First you need docker running on your computer. If you need to install docker from scratch, run the following script:
 
 `./install_docker.sh`
 
-Note: it could be necessary to restart the computer.
+Note: it could be necessary to restart the computer after the installation.
 
 When docker is ready and running you can pull the docker image from [docker-hub](https://hub.docker.com/):
 
@@ -31,9 +31,9 @@ When docker is ready and running you can pull the docker image from [docker-hub]
 
 Note: use the `install_nvidia.sh` script if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`.
 
-### System installation
+### System installation for Ubuntu 18.04
 
-To install all the required dependencies (including ROS) and the wbc debian packages run the following:
+To install the required dependencies (including ROS) and the wbc debian packages for Ubuntu 18.04 run the following:
 
 `./install_dependencies.sh`
 
@@ -41,9 +41,11 @@ To launch the controller:
 
 `roslaunch wb_controller wb_controller_bringup.launch`
 
-Note: the code has been tested both on Ubuntu 16.04 with ROS Kinetic and Ubuntu 18.04 with ROS Melodic.
+## How to run the controller
 
-## Joypad commands
+To move the robot around you need a joypad plugged in. Press the `start` button when ready. The joypad commands are reported in the image below:
+
+### Joypad commands
 
 ![1](docs/joy_commands.png)
 

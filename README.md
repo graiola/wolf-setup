@@ -1,4 +1,4 @@
-## Whole body controller with inverse dynamics
+## Whole-body locomotion framework for quadruped robots
 
 <p align="center"> 
 <img src="docs/hyq.gif">

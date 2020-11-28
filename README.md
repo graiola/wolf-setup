@@ -6,14 +6,15 @@
 
 This repo contains the debian packages of the whole body controller presented in the following paper: 
 
-    @article{raiola20frontiers,
-	author  = {G. Raiola, E. Mingo Hoffman, M. Focchi, N. Tsagarakis, C. Semini.},
-	title   = {A simple yet effective whole-body locomotion framework for quadruped robots},
-	journal = {Frontiers in Robotics.}
-	year    = {2020},
-	doi     = {ToDo},
-	url     = {ToDo}
-    }
+@article{raiola2020simple,
+  title={A simple yet effective whole-body locomotion framework for quadruped robots},
+  author={Raiola, Gennaro and Mingo Hoffman, Enrico and Focchi, Michele and Tsagarakis, Nikos and Semini, Claudio},
+  journal={Frontiers in Robotics and AI},
+  volume={7},
+  pages={159},
+  year={2020},
+  publisher={Frontiers}
+}
 
 ## How to run the code
 

@@ -17,6 +17,8 @@ This repo contains the debian packages of the whole body controller presented in
 }
 ```
 
+If you or your organization is interested in the source code, please send an email at gennaro.raiola(AT)gmail.com
+
 ## How to run the code
 
 You can run the code either by installing it on your machine, or by running it in a docker container.

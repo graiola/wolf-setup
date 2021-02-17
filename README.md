@@ -17,7 +17,7 @@ This repo contains the debian packages of the whole body controller presented in
 }
 ```
 
-If you or your organization is interested in the source code, please send an email at gennaro.raiola(AT)gmail.com
+If you or your organization are interested in the source code, please send an email at gennaro.raiola(AT)gmail.com
 
 ## How to run the code
 

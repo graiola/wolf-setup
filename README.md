@@ -43,6 +43,12 @@ Note: use the `install_nvidia.sh` script if you are experiencing the following p
 
 ### System installation for Ubuntu 18.04
 
+Clone this repository:
+
+`git clone git@github.com:graiola/wbc-setup.git`
+
+Note: git-lfs is needed to correctly clone the debian packages in the debs folder.
+
 To install the required dependencies (including ROS) and the wbc debian packages for Ubuntu 18.04 run the following:
 
 `./install_dependencies.sh`

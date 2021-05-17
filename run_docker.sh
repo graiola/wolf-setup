@@ -9,7 +9,7 @@ set -e
 
 source $SCRIPTPATH/fun.cfg
 
-USAGE="Usage: \n run_docker [OPTIONS...] \n\nHelp Options:\n -h,--help \tShow help options\n\nApplication Options:\n -r \tRobot name: -r [hyq|anymal]\n -w \tWorld name: -w [empty|ruins]\n -a \tAdd the arm to the robot, available only for hyq\n -g \tLaunch rviz\n -n \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine\n -l \tSource the local ROS workspace: -l [workspace]"
+USAGE="Usage: \n run_docker [OPTIONS...] \n\nHelp Options:\n -h,--help \tShow help options\n\nApplication Options:\n -r,--robot \tRobot name: [hyq|anymal]\n -w,--world \tWorld name: [empty|ruins]\n -a,--arm \tAdd the arm to the robot, available only for hyq\n -g,--gui \tLaunch rviz\n -n,--net \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine\n -l,--local \tSource the local ROS workspace: [workspace]"
 
 # Default
 ROBOT_NAME=hyq
@@ -32,29 +32,29 @@ while [ -n "$1" ]; do # while loop starts
 
 	case "$1" in
 
-        -r)
-		ROBOT_NAME="$2"
+         -r|--robot)
+    		ROBOT_NAME="$2"
 		shift
 		;;
 
-	 -w)
+	 -w|--world)
 		WORLD_NAME="$2"
 		shift
 		;;
 
-	-a)    
+	-a|--arm)    
 	        ARM=true
 		;;
 
-	-g)    
+	-g|--gui)    
 	        GUI=true
 		;;
 
-	-n)    
+	-n|--net)    
 	        DOCKER_NET=host
 		;;
 
-	-l)    
+	-l|--local)    
 	        ROS_WS="$2"
 		RUN_LOCAL_WS=true
                 shift
@@ -104,6 +104,8 @@ docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true
 # Opt2 run the code within the docker container by sourcing the ROS workspace INSIDE docker (useful as a demo)
 if $RUN_LOCAL_WS;
 then 
+
+	echo "OOK"
 	if [ -f "$HOME/$ROS_WS/devel/setup.bash" ];
 	then
 		echo "Selected ros workspace: $ROS_WS"

@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-USAGE="Usage: \n run_docker [OPTIONS...] \n\nHelp Options:\n -h,--help \tShow help options\n\nApplication Options:\n -r \tRobot name (hyq,anymal)\n -w \tWorld name (empty,ruins)\n -a \tAdd the arm to the robot, available for hyq only"
+USAGE="Usage: \n run_docker [OPTIONS...] \n\nHelp Options:\n -h,--help \tShow help options\n\nApplication Options:\n -r \tRobot name: [hyq|anymal]\n -w \tWorld name: [empty|ruins]\n -a \tAdd the arm to the robot, available only for hyq\n -g \tLaunch rviz\n -n \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine"
 
 # Default
 ROBOT_NAME=hyq
 WORLD_NAME=empty
 ARM=false
 GUI=false
+DOCKER_NET=bridge
 CONTAINER_NAME="wbc"
 IMAGE_NAME="wbc:latest"
 
@@ -33,6 +34,16 @@ while [ -n "$1" ]; do # while loop starts
 	-a)    
 	        ARM=true
 		shift
+		;;
+
+	-g)    
+	        GUI=true
+		shift
+		;;
+
+	-n)    
+	        DOCKER_NET=host
+                shift
 		;;
 
 	*) echo "Option $1 not recognized!" 
@@ -75,7 +86,7 @@ set -e
 xhost +local:docker
 
 if [ `sudo systemctl is-active docker` = "inactive" ]; then
-  echo "Docker inactive.  Starting docker..."
+  echo "Docker inactive. Starting docker..."
   sudo systemctl start docker
 fi
 
@@ -83,7 +94,7 @@ fi
 docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true 
 
 # Run the container with shared X11
-docker run --user `id -u`:sudo --hostname $HOSTNAME --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e GAZEBO_MODEL_PATH=/opt/ros/melodic/share/dls_gazebo_resources/models/ -e SHELL -e DISPLAY -e DOCKER=1 --name $CONTAINER_NAME \
+docker run --user `id -u`:sudo --hostname $HOSTNAME --net=$DOCKER_NET --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e GAZEBO_MODEL_PATH=/opt/ros/melodic/share/dls_gazebo_resources/models/ -e SHELL -e DISPLAY -e DOCKER=1 --name $CONTAINER_NAME \
 --gpus all \
 --device=/dev/ttyUSB0 \
 --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
@@ -95,4 +106,5 @@ docker run --user `id -u`:sudo --hostname $HOSTNAME --device=/dev/dri:/dev/dri -
 --volume="$HOME/.ros:$HOME/.ros" \
 --volume="$HOME/.gazebo:$HOME/.gazebo" \
 --volume="$HOME/.ignition:$HOME/.ignition" \
+--volume="$HOME/.rviz:$HOME/.rviz" \
 -it $IMAGE_NAME $SHELL -c "eval export HOME=$HOME; cd $HOME; source /opt/ros/melodic/setup.bash; source /opt/ros/advr-superbuild/setup.bash; roslaunch wb_controller wb_controller_bringup.launch robot_name:=$ROBOT_NAME world_name:=$WORLD_NAME.world arm:=$ARM full_gui:=$GUI"

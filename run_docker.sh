@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-USAGE="Usage: \n run_docker [OPTIONS...] \n\nHelp Options:\n -h,--help \tShow help options\n\nApplication Options:\n -r \tRobot name: [hyq|anymal]\n -w \tWorld name: [empty|ruins]\n -a \tAdd the arm to the robot, available only for hyq\n -g \tLaunch rviz\n -n \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine"
+source ./fun.cfg
+
+USAGE="Usage: \n run_docker [OPTIONS...] \n\nHelp Options:\n -h,--help \tShow help options\n\nApplication Options:\n -r \tRobot name: -r [hyq|anymal]\n -w \tWorld name: -w [empty|ruins]\n -a \tAdd the arm to the robot, available only for hyq\n -g \tLaunch rviz\n -n \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine\n -l \tSource the local ROS workspace: -l [workspace]"
 
 # Default
 ROBOT_NAME=hyq
 WORLD_NAME=empty
 ARM=false
 GUI=false
+RUN_LOCAL_WS=false
 DOCKER_NET=bridge
+ROS_WS=
 CONTAINER_NAME="wbc"
 IMAGE_NAME="wbc:latest"
 
@@ -43,6 +47,12 @@ while [ -n "$1" ]; do # while loop starts
 
 	-n)    
 	        DOCKER_NET=host
+                shift
+		;;
+
+	-l)    
+	        ROS_WS="$2"
+		RUN_LOCAL_WS=true
                 shift
 		;;
 
@@ -94,17 +104,19 @@ fi
 docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true 
 
 # Run the container with shared X11
-docker run --user `id -u`:sudo --hostname $HOSTNAME --net=$DOCKER_NET --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e GAZEBO_MODEL_PATH=/opt/ros/melodic/share/dls_gazebo_resources/models/ -e SHELL -e DISPLAY -e DOCKER=1 --name $CONTAINER_NAME \
---gpus all \
---device=/dev/ttyUSB0 \
---volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
---workdir="/home/$USER" \
---volume="/etc/group:/etc/group:ro" \
---volume="/etc/passwd:/etc/passwd:ro" \
---volume="/etc/shadow:/etc/shadow:ro" \
---volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
---volume="$HOME/.ros:$HOME/.ros" \
---volume="$HOME/.gazebo:$HOME/.gazebo" \
---volume="$HOME/.ignition:$HOME/.ignition" \
---volume="$HOME/.rviz:$HOME/.rviz" \
--it $IMAGE_NAME $SHELL -c "eval export HOME=$HOME; cd $HOME; source /opt/ros/melodic/setup.bash; source /opt/ros/advr-superbuild/setup.bash; roslaunch wb_controller wb_controller_bringup.launch robot_name:=$ROBOT_NAME world_name:=$WORLD_NAME.world arm:=$ARM full_gui:=$GUI"
+# Opt1 run the code within the docker container by sourcing the local ROS workspace (useful for development)
+# Opt2 run the code within the docker container by sourcing the ROS workspace INSIDE docker (useful as a demo)
+if $RUN_LOCAL_WS;
+then 
+	if [ -f "$HOME/$ROS_WS/devel/setup.bash" ];
+	then
+		echo "Selected ros workspace: $ROS_WS"
+		run_local_ros_workspace $ROS_WS
+	else
+		echo "The file $HOME/$ROS_WS/devel/setup.bash does not exist!"
+		echo -e $USAGE
+		exit 0
+	fi
+else
+	run_docker_ros_workspace
+fi

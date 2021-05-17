@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 
-source ./fun.cfg
+# Get this script's path
+pushd `dirname $0` > /dev/null
+SCRIPTPATH=`pwd`
+popd > /dev/null
+
+set -e
+
+source $SCRIPTPATH/fun.cfg
 
 USAGE="Usage: \n run_docker [OPTIONS...] \n\nHelp Options:\n -h,--help \tShow help options\n\nApplication Options:\n -r \tRobot name: -r [hyq|anymal]\n -w \tWorld name: -w [empty|ruins]\n -a \tAdd the arm to the robot, available only for hyq\n -g \tLaunch rviz\n -n \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine\n -l \tSource the local ROS workspace: -l [workspace]"
 
@@ -37,17 +44,14 @@ while [ -n "$1" ]; do # while loop starts
 
 	-a)    
 	        ARM=true
-		shift
 		;;
 
 	-g)    
 	        GUI=true
-		shift
 		;;
 
 	-n)    
 	        DOCKER_NET=host
-                shift
 		;;
 
 	-l)    
@@ -63,7 +67,6 @@ while [ -n "$1" ]; do # while loop starts
 	esac
 
 	shift
-
 done
 
 # Checks
@@ -84,13 +87,6 @@ else
 	echo -e $USAGE
 	exit 0
 fi
-
-# Get this script's path
-pushd `dirname $0` > /dev/null
-SCRIPTPATH=`pwd`
-popd > /dev/null
-
-set -e
 
 # Hacky
 xhost +local:docker

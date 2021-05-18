@@ -17,7 +17,7 @@ Help Options:
 \n\n
 Application Options:
 \n 
--r,--robot \tRobot name [hyq|anymal], example: -r anymal
+-r,--robot \tRobot name [hyq|anymal|aliengo], example: -r anymal
 \n 
 -w,--world \tWorld name [empty|ruins], example: -w ruins
 \n 
@@ -88,7 +88,7 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Checks
-if [[ ( $ROBOT_NAME == "hyq") ||  ( $ROBOT_NAME == "anymal") ]] 
+if [[ ( $ROBOT_NAME == "hyq") ||  ( $ROBOT_NAME == "anymal") ||  ( $ROBOT_NAME == "aliengo") ]] 
 then 
 	echo "Selected robot: $ROBOT_NAME"
 else

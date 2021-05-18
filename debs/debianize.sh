@@ -10,7 +10,7 @@ WORKING_DIR=`pwd`
 
 rosdep update	
 
-PKGS="teleop_description sensors_description teleop_description anymal_description hyq_description dls_gazebo_interface dls_gazebo_resources dls_hardware_interface rt_logger wb_controller"
+PKGS="teleop_description sensors_description teleop_description anymal_description aliengo_description hyq_description dls_gazebo_interface dls_gazebo_resources dls_hardware_interface rt_logger wb_controller"
 
 for PKG in $PKGS
 do

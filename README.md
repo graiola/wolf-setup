@@ -40,6 +40,7 @@ When docker is ready and running you can pull the docker image from [docker-hub]
 You can see the avaialbe options with `./run_docker.sh --help`
 
 Note: use the `install_nvidia.sh` script if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`.
+Note2: if you are experiencing this problem `nvidia-container-cli initialization error nvml error driver not loaded`, it probably means that your computer does not have the latest nvidia-drivers installed. So be sure to install/update them.
 
 ### System installation for Ubuntu 18.04
 

@@ -122,8 +122,6 @@ docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true
 # Opt2 run the code within the docker container by sourcing the ROS workspace INSIDE docker (useful as a demo)
 if $RUN_LOCAL_WS;
 then 
-
-	echo "OOK"
 	if [ -f "$HOME/$ROS_WS/devel/setup.bash" ];
 	then
 		echo "Selected ros workspace: $ROS_WS"

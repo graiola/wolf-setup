@@ -1,7 +1,9 @@
 ## Whole-body locomotion framework for quadruped robots
 
-<p align="center"> 
-<img src="docs/hyq.gif">
+<p float="center">
+  <img src="docs/hyq.gif" width="275" height="200" />
+  <img src="docs/anymal.gif" width="275" height="200" /> 
+  <img src="docs/aliengo.gif" width="275" height="200" />
 </p>
 
 This repo contains the debian packages of the whole body controller presented in the following paper: 
@@ -39,8 +41,7 @@ When docker is ready and running you can pull the docker image from [docker-hub]
 
 You can see the avaialbe options with `./run_docker.sh --help`
 
-Note: use the `install_nvidia.sh` script if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`.
-Note2: if you are experiencing this problem `nvidia-container-cli initialization error nvml error driver not loaded`, it probably means that your computer does not have the latest nvidia-drivers installed. So be sure to install/update them.
+Note: use the `install_nvidia.sh` script if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`. If you are experiencing this problem `nvidia-container-cli initialization error nvml error driver not loaded`, it probably means that your computer does not have the latest nvidia-drivers installed. So be sure to install/update them.
 
 ### System installation for Ubuntu 18.04
 

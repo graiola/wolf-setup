@@ -51,6 +51,6 @@ then
  	echo -e "${COLOR_INFO}Bashrc already updated, skipping this step...${COLOR_RESET}"
 else
     	echo -e "${COLOR_INFO}Update the bashrc.${COLOR_RESET}"
-	echo "/opt/ros/advr-superbuild/setup.bash" >> ~/.bashrc
+	echo "source /opt/ros/advr-superbuild/setup.bash" >> ~/.bashrc
 fi
 

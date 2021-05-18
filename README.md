@@ -4,7 +4,12 @@
   <img src="docs/hyq.gif" width="275" height="200" />
   <img src="docs/anymal.gif" width="275" height="200" /> 
   <img src="docs/aliengo.gif" width="275" height="200" />
+  <figure>
+    <figcaption>Left to right: HyQ, AnYmal and Aliengo.</figcaption>
+  </figure>
 </p>
+
+</br>
 
 This repo contains the debian packages of the whole body controller presented in the following paper: 
 ```

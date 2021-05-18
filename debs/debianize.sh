@@ -25,6 +25,8 @@ do
 	fakeroot debian/rules binary
 	#dpkg-buildpackage -nc -d
 
+	sudo dpkg -i ../*.deb
+
 	mv ../*.deb $WORKING_DIR
 	
 	rm -rf debian obj-x86_64-linux-gnu

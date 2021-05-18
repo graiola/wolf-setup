@@ -9,7 +9,25 @@ set -e
 
 source $SCRIPTPATH/fun.cfg
 
-USAGE="Usage: \n run_docker [OPTIONS...] \n\nHelp Options:\n -h,--help \tShow help options\n\nApplication Options:\n -r,--robot \tRobot name: [hyq|anymal]\n -w,--world \tWorld name: [empty|ruins]\n -a,--arm \tAdd the arm to the robot, available only for hyq\n -g,--gui \tLaunch rviz\n -n,--net \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine\n -l,--local \tSource the local ROS workspace: [workspace]"
+USAGE="Usage: \n run_docker [OPTIONS...] 
+\n\n
+Help Options:
+\n 
+-h,--help \tShow help options
+\n\n
+Application Options:
+\n 
+-r,--robot \tRobot name [hyq|anymal], example: -r anymal
+\n 
+-w,--world \tWorld name [empty|ruins], example: -w ruins
+\n 
+-a,--arm \tAdd the arm to the robot, available only for hyq
+\n 
+-g,--gui \tLaunch rviz
+\n 
+-n,--net \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine
+\n 
+-l,--local \tRun a local ROS workspace inside the container [workspace], example: -l ros_ws"
 
 # Default
 ROBOT_NAME=hyq

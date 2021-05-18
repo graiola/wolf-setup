@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# List of usefull colors
-COLOR_RESET="\033[0m"
-COLOR_INFO="\033[0;32m"
-COLOR_ITEM="\033[0;34m"
-COLOR_QUES="\033[0;35m"
-COLOR_WARN="\033[0;33m"
-COLOR_BOLD="\033[1m"
-COLOR_UNDE="\033[4m"
+# Get this script's path
+pushd `dirname $0` > /dev/null
+SCRIPTPATH=`pwd`
+popd > /dev/null
+
+set -e
+
+source $SCRIPTPATH/fun.cfg
 
 # Check ubuntu version and select the right ROS
 UBUNTU=$(lsb_release -cs)

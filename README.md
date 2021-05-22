@@ -6,7 +6,7 @@
   <img src="docs/aliengo.gif" width="275" height="200" />
 </p>
 
-This repo contains the debian packages of the whole body controller presented in the following paper: 
+This repo contains the debian packages of the whole body controller presented in the following [paper](https://hal.archives-ouvertes.fr/hal-03005133/document): 
 ```
 @article{raiola2020simple,
   title={A simple yet effective whole-body locomotion framework for quadruped robots},

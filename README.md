@@ -4,9 +4,13 @@
   <img src="docs/hyq.gif" width="275" height="200" />
   <img src="docs/anymal.gif" width="275" height="200" /> 
   <img src="docs/aliengo.gif" width="275" height="200" />
+  <figure>
+    <figcaption>Left to right: HyQ, AnYmal and Aliengo.</figcaption>
+  </figure>
 </p>
 
 This repo contains the debian packages of the whole body controller presented in the following [paper](https://hal.archives-ouvertes.fr/hal-03005133/document): 
+
 ```
 @article{raiola2020simple,
   title={A simple yet effective whole-body locomotion framework for quadruped robots},

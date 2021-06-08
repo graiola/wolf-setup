@@ -13,4 +13,6 @@ joy
 robot-state-publisher 
 rviz-visual-tools
 plotjuggler
+plotjuggler-ros 
+plotjuggler-msgs
 rosbash

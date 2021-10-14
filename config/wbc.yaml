@@ -1,44 +1,70 @@
-sensors_description:
-  ubuntu:
-    xenial: ros-kinetic-sensors-description 
-    bionic: ros-melodic-sensors-description 
-teleop_description:
-  ubuntu:
-    xenial: ros-kinetic-teleop-description
-    bionic: ros-melodic-teleop-description
-anymal_description:
-  ubuntu:
-    xenial: ros-kinetic-anymal-description
-    bionic: ros-melodic-anymal-description
-hyq_description:
-  ubuntu:
-    xenial: ros-kinetic-hyq-description
-    bionic: ros-melodic-hyq-description
-aliengo_description:
-  ubuntu:
-    xenial: ros-kinetic-aliengo-description
-    bionic: ros-melodic-aliengo-description
-dls_gazebo_interface:
-  ubuntu:
-    xenial: ros-kinetic-dls-gazebo-interface
-    bionic: ros-melodic-dls-gazebo-interface
-dls_gazebo_resources:
-  ubuntu:
-    xenial: ros-kinetic-dls-gazebo-resources
-    bionic: ros-melodic-dls-gazebo-resources
-dls_hardware_interface:
-  ubuntu:
-    xenial: ros-kinetic-dls-hardware-interface
-    bionic: ros-melodic-dls-hardware-interface
-rt_logger:
-  ubuntu:
-    xenial: ros-kinetic-rt-logger
-    bionic: ros-melodic-rt-logger
 wb_controller:
   ubuntu:
     xenial: ros-kinetic-wb-controller
     bionic: ros-melodic-wb-controller
+    focal:  ros-noetic-wb-controller
+wb_gazebo_interface:
+  ubuntu:
+    xenial: ros-kinetic-wb-gazebo-interface
+    bionic: ros-melodic-wb-gazebo-interface
+    focal:  ros-noetic-wb-gazebo-interface
+wb_gazebo_resources:
+  ubuntu:
+    xenial: ros-kinetic-wb-gazebo-resources
+    bionic: ros-melodic-wb-gazebo-resources
+    focal:  ros-noetic-wb-gazebo-resources
+wb_hardware_interface:
+  ubuntu:
+    xenial: ros-kinetic-wb-hardware-interface
+    bionic: ros-melodic-wb-hardware-interface
+    focal:  ros-noetic-wb-hardware-interface
+sensors_description:
+  ubuntu:
+    xenial: ros-kinetic-sensors-description 
+    bionic: ros-melodic-sensors-description 
+    focal:  ros-noetic-sensors-description
 teleop_description:
   ubuntu:
     xenial: ros-kinetic-teleop-description
     bionic: ros-melodic-teleop-description
+    focal:  ros-noetic-teleop-description
+anymal_description:
+  ubuntu:
+    xenial: ros-kinetic-anymal-description
+    bionic: ros-melodic-anymal-description
+    focal:  ros-noetic-anymal-description
+hyq_description:
+  ubuntu:
+    xenial: ros-kinetic-hyq-description
+    bionic: ros-melodic-hyq-description
+    focal:  ros-noetic-hyq-description
+aliengo_description:
+  ubuntu:
+    xenial: ros-kinetic-aliengo-description
+    bionic: ros-melodic-aliengo-description
+    focal:  ros-noetic-aliengo-description
+teleop_description:
+  ubuntu:
+    xenial: ros-kinetic-teleop-description
+    bionic: ros-melodic-teleop-description
+    focal:  ros-noetic-teleop-description
+spot_description:
+  ubuntu:
+    xenial: ros-kinetic-spot-description
+    bionic: ros-melodic-spot-description
+    focal:  ros-noetic-spot-description
+solo_description:
+  ubuntu:
+    xenial: ros-kinetic-solo-description
+    bionic: ros-melodic-solo-description
+    focal:  ros-noetic-solo-description
+kinova_description:
+  ubuntu:
+    xenial: ros-kinetic-kinova-description
+    bionic: ros-melodic-kinova-description
+    focal:  ros-noetic-kinova-description
+rt_logger:
+  ubuntu:
+    xenial: ros-kinetic-rt-logger
+    bionic: ros-melodic-rt-logger
+    focal:  ros-noetic-rt-logger

@@ -1,7 +1,9 @@
 #!/bin/bash
 
-docker build --tag wbc:latest .
+UBUNTU=$(lsb_release -cs)
 
-docker tag wbc:latest serger87/wbc:latest
+docker build --tag wbc:$UBUNTU .
 
-docker push serger87/wbc:latest
+docker tag wbc:$UBUNTU serger87/wbc:$UBUNTU
+
+docker push serger87/wbc:$UBUNTU

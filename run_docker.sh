@@ -17,28 +17,27 @@ Help Options:
 \n\n
 Application Options:
 \n 
--r,--robot \tRobot name [hyq|anymal|aliengo], example: -r anymal
+-r,--robot \tRobot name [hyq|anymal|aliengo|spot], example: -r anymal
 \n 
 -w,--world \tWorld name [empty|ruins], example: -w ruins
-\n 
--a,--arm \tAdd the arm to the robot, available only for hyq
 \n 
 -g,--gui \tLaunch rviz
 \n 
 -n,--net \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine
 \n 
--l,--local \tRun a local ROS workspace inside the container [workspace], example: -l ros_ws"
+-l,--local \tRun a local ROS workspace inside the container [workspace], example: -l ros_ws
+\n 
+-i,--image \tSelect the docker image to run [image], example: -i bionic"
 
 # Default
-ROBOT_NAME=hyq
+ROBOT_NAME=spot
 WORLD_NAME=empty
-ARM=false
 GUI=false
 RUN_LOCAL_WS=false
 DOCKER_NET=bridge
 ROS_WS=
 CONTAINER_NAME="wbc"
-IMAGE_NAME="wbc:latest"
+IMAGE_TAG="bionic"
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
 then 
@@ -60,10 +59,6 @@ while [ -n "$1" ]; do # while loop starts
 		shift
 		;;
 
-	-a|--arm)    
-	        ARM=true
-		;;
-
 	-g|--gui)    
 	        GUI=true
 		;;
@@ -78,6 +73,11 @@ while [ -n "$1" ]; do # while loop starts
                 shift
 		;;
 
+        -i|--image)    
+	        IMAGE_TAG="$2"
+                shift
+		;;
+
 	*) echo "Option $1 not recognized!" 
 		echo -e $USAGE
 		exit 0;;
@@ -88,7 +88,7 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Checks
-if [[ ( $ROBOT_NAME == "hyq") ||  ( $ROBOT_NAME == "anymal") ||  ( $ROBOT_NAME == "aliengo") ]] 
+if [[ ( $ROBOT_NAME == "hyq") ||  ( $ROBOT_NAME == "anymal") ||  ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot") ]] 
 then 
 	echo "Selected robot: $ROBOT_NAME"
 else
@@ -105,6 +105,19 @@ else
 	echo -e $USAGE
 	exit 0
 fi
+
+if [[ ( $IMAGE_TAG == "bionic") ]] 
+then 
+	ROS_DISTRO=melodic
+	echo "Selected docker image: $IMAGE_TAG"
+else
+	echo "Wrong image option!"
+	echo -e $USAGE
+	exit 0
+fi
+
+# Define the image name
+IMAGE_NAME=$CONTAINER_NAME:$IMAGE_TAG
 
 # Hacky
 xhost +local:docker

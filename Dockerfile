@@ -6,6 +6,7 @@
 #					#
 #########################################
 
+#FROM nvidia/cudagl:11.4.2-base-ubuntu20.04
 FROM nvidia/cudagl:9.2-base-ubuntu18.04
 
 MAINTAINER Gennaro Raiola <gennaro.raiola@gmail.com>

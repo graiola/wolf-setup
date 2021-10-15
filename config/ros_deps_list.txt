@@ -17,3 +17,4 @@ plotjuggler-ros
 plotjuggler-msgs
 rosbash
 ddynamic-reconfigure
+moveit-core

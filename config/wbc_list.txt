@@ -1,0 +1,22 @@
+# NOTE: the order of the packages in this list is important
+# since the packages depend on each other
+# TODO: auto-generate the wbc.yaml out of this list
+
+# DESCRIPTIONS
+teleop_description
+kinova_description
+sensors_description
+aliengo_description
+anymal_description
+hyq_description
+solo_description
+spot_description
+
+# SUPPORT
+rt_logger
+
+# CORE
+wb_gazebo_resources
+wb_hardware_interface
+wb_gazebo_interface
+wb_controller

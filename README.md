@@ -40,7 +40,7 @@ Note: it could be necessary to restart the computer after the installation.
 When docker is ready and running you can pull the docker image from [docker-hub](https://hub.docker.com/):
 
 + Run `docker pull serger87/wbc:bionic` to download the bionic image.
-+ Run `docker tag serger87/wbc:bionic wbc` to rename the image.
++ Run `docker tag serger87/wbc:bionic wbc:bionic` to rename the image.
 + Finally you can launch the controller in the docker environment: `./run_docker.sh`
 
 You can see the avaialbe options with `./run_docker.sh --help`

@@ -6,7 +6,7 @@ cd $DIR
 
 # install all binaries
 for file in "$PWD"/*.deb; do
-  sudo dpkg $1 -i $file
+  sudo dpkg $1 --force-overwrite -i $file
 done
 
 # copy environment setup script

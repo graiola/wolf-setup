@@ -88,7 +88,7 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Checks
-if [[ ( $ROBOT_NAME == "hyq") ||  ( $ROBOT_NAME == "anymal") ||  ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot")]] 
+if [[ ( $ROBOT_NAME == "hyq") ||  ( $ROBOT_NAME == "anymal") ||  ( $ROBOT_NAME == "anymalc") ||  ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot")]] 
 then 
 	echo "Selected robot: $ROBOT_NAME"
 else

@@ -33,6 +33,11 @@ anymal_description:
     xenial: ros-kinetic-anymal-description
     bionic: ros-melodic-anymal-description
     focal:  ros-noetic-anymal-description
+anymalc_description:
+  ubuntu:
+    xenial: ros-kinetic-anymalc-description
+    bionic: ros-melodic-anymalc-description
+    focal:  ros-noetic-anymalc-description
 hyq_description:
   ubuntu:
     xenial: ros-kinetic-hyq-description

@@ -8,6 +8,7 @@ kinova_description
 sensors_description
 aliengo_description
 anymal_description
+anymalc_description
 hyq_description
 solo_description
 spot_description

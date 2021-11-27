@@ -1,9 +1,9 @@
 ## Whole-body locomotion framework for quadruped robots
 
 <p float="center">
-  <img src="docs/hyq.gif" width="275" height="200" />
-  <img src="docs/anymal.gif" width="275" height="200" /> 
-  <img src="docs/aliengo.gif" width="275" height="200" />
+  <img src="docs/hyq.gif" width="250" height="185" />
+  <img src="docs/anymal.gif" width="250" height="185" /> 
+  <img src="docs/aliengo.gif" width="250" height="185" />
   <figure>
     <figcaption>Left to right: HyQ, AnYmal and Aliengo.</figcaption>
   </figure>

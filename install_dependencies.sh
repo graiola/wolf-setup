@@ -37,7 +37,7 @@ sudo rosdep init
 rosdep update
 
 # Download the debians
-$SCRIPTPATH/get_debians.sh
+/bin/bash $SCRIPTPATH/get_debians.sh
 
 echo -e "${COLOR_INFO}Install the ADVR debian packages${COLOR_RESET}"
 sudo $SCRIPTPATH/debs/$UBUNTU/advr/install.sh

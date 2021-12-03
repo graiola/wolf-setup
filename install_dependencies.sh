@@ -36,11 +36,14 @@ sudo ldconfig
 sudo rosdep init
 rosdep update
 
-echo -e "${COLOR_INFO}Install the WBC debian packages${COLOR_RESET}"
-sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$UBUNTU/*.deb
+# Download the debians
+$SCRIPTPATH/get_debians.sh
 
 echo -e "${COLOR_INFO}Install the ADVR debian packages${COLOR_RESET}"
 sudo $SCRIPTPATH/debs/$UBUNTU/advr/install.sh
+
+echo -e "${COLOR_INFO}Install the WBC debian packages${COLOR_RESET}"
+sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$UBUNTU/*.deb
 
 # Setup Bashrc
 if grep -Fwq "/opt/ros/${ROS_DISTRO}/setup.bash" ~/.bashrc

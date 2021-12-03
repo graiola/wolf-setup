@@ -9,6 +9,12 @@ popd > /dev/null
 
 set -e
 
+source $SCRIPTPATH/../fun.cfg
+
+clean_folder $SCRIPTPATH/bionic
+clean_folder $SCRIPTPATH/focal
+clean_folder $SCRIPTPATH/xenial 
+
 sudo apt-get update && sudo apt-get install -y python-bloom fakeroot
 
 source /opt/ros/$ROS_DISTRO/setup.bash

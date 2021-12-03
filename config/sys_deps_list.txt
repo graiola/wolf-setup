@@ -5,4 +5,4 @@ python-catkin-tools
 iputils-ping
 libqt5opengl5-dev
 libmatio-dev
-git-lfs
+unzip

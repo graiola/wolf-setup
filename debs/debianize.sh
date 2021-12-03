@@ -7,10 +7,10 @@ pushd `dirname $0` > /dev/null
 SCRIPTPATH=`pwd`
 popd > /dev/null
 
-set -e
-
 source $SCRIPTPATH/../fun.cfg
 
+# Clean
+clean_file   $SCRIPTPATH/wolf.zip
 clean_folder $SCRIPTPATH/bionic
 clean_folder $SCRIPTPATH/focal
 clean_folder $SCRIPTPATH/xenial 
@@ -27,7 +27,7 @@ OS_VERSION=$(lsb_release -cs)
 
 rosdep update
 
-PKGS=$(cat $SCRIPTPATH/../config/wbc_list.txt | grep -v \#)
+PKGS=$(cat $SCRIPTPATH/../config/wolf_list.txt | grep -v \#)
 
 for PKG in $PKGS
 do
@@ -44,8 +44,10 @@ do
 
 	sudo dpkg -i ../*.deb
 
-	mv ../*.deb $SCRIPTPATH/$OS_VERSION
+	mkdir -p $SCRIPTPATH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/$OS_VERSION
 	
 	rm -rf debian obj-x86_64-linux-gnu
 
 done
+
+#zip -r $SCRIPTPATH/wolf.zip $SCRIPTPATH/bionic $SCRIPTPATH/focal $SCRIPTPATH/xenial

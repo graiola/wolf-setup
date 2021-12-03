@@ -1,6 +1,6 @@
 #########################################
 #					#
-#            WBC-DOCKERED		#
+#            WoLF-DOCKERED		#
 #                                       #
 # my github: https://github.com/graiola #
 #					#

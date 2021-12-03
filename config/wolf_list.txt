@@ -1,6 +1,6 @@
 # NOTE: the order of the packages in this list is important
 # since the packages depend on each other
-# TODO: auto-generate the wbc.yaml out of this list
+# TODO: auto-generate the wolf.yaml out of this list
 
 # DESCRIPTIONS
 teleop_description

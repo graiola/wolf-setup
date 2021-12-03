@@ -36,7 +36,7 @@ GUI=false
 RUN_LOCAL_WS=false
 DOCKER_NET=bridge
 ROS_WS=
-CONTAINER_NAME="wbc"
+CONTAINER_NAME="wolf"
 IMAGE_TAG="bionic"
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 

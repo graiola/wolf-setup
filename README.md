@@ -36,8 +36,8 @@ Note: it could be necessary to restart the computer after the installation.
 
 When docker is ready and running you can pull the docker image from [docker-hub](https://hub.docker.com/):
 
-+ Run `docker pull serger87/wbc:bionic` to download the bionic image.
-+ Run `docker tag serger87/wbc:bionic wbc:bionic` to rename the image.
++ Run `docker pull serger87/wolf:bionic` to download the bionic image.
++ Run `docker tag serger87/wolf:bionic wolf:bionic` to rename the image.
 + Finally you can launch the controller in the docker environment: `./run_docker.sh`
 
 You can see the avaialbe options with `./run_docker.sh --help`
@@ -48,11 +48,9 @@ Note: use the `install_nvidia.sh` script if you are experiencing the following p
 
 Clone this repository:
 
-`git clone git@github.com:graiola/wbc-setup.git`
+`git clone git@github.com:graiola/wolf-setup.git`
 
-Note: git-lfs is needed to correctly clone the debian packages in the debs folder.
-
-To install the required dependencies (including ROS) and the wbc debian packages for Ubuntu 18.04 run the following:
+To install the required dependencies (including ROS) and the wolf debian packages for Ubuntu 18.04 run the following:
 
 `./install_dependencies.sh`
 

@@ -52,7 +52,7 @@ Clone this repository:
 
 To install the required dependencies (including ROS) and the wolf debian packages for Ubuntu 18.04 run the following:
 
-`./install_dependencies.sh`
+`./install.sh`
 
 To launch the controller:
 

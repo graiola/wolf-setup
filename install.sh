@@ -48,16 +48,16 @@ sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$UBUNTU/*.deb
 # Setup Bashrc
 if grep -Fwq "/opt/ros/${ROS_DISTRO}/setup.bash" ~/.bashrc
 then 
- 	echo -e "${COLOR_INFO}Bashrc already updated, skipping this step...${COLOR_RESET}"
+ 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/ros/${ROS_DISTRO}/setup.bash${COLOR_RESET}"
 else
-    	echo -e "${COLOR_INFO}Update the bashrc.${COLOR_RESET}"
+    	echo -e "${COLOR_INFO}Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc${COLOR_RESET}"
 	echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 fi
 
 if grep -Fwq "/opt/xbot/setup.bash" ~/.bashrc
 then 
- 	echo -e "${COLOR_INFO}Bashrc already updated, skipping this step...${COLOR_RESET}"
+ 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.bash${COLOR_RESET}"
 else
-    	echo -e "${COLOR_INFO}Update the bashrc.${COLOR_RESET}"
+    	echo -e "${COLOR_INFO}Add /opt/xbot/setup.bash to the bashrc ${COLOR_RESET}"
 	echo "source /opt/xbot/setup.bash" >> ~/.bashrc
 fi

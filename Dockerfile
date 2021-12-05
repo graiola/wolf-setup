@@ -34,4 +34,4 @@ ADD . /root/
 
 WORKDIR /root/
 
-RUN bash install_dependencies.sh
+RUN bash install.sh

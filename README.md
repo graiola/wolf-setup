@@ -1,7 +1,7 @@
 ## WoLF: Whole-body Locomotion Framework for quadruped robots
 
 <p float="center">
-  <img src="docs/anymal.gif" width="250" height="185" /> 
+  <img src="docs/spot.gif" width="250" height="185" /> 
   <img src="docs/wolf-logo.jpeg" width="250" height="185" />
   <img src="docs/aliengo.gif" width="250" height="185" />
 </p>
@@ -60,12 +60,18 @@ To launch the controller:
 
 ## How to start the controller
 
-To move the robot around you need a joypad plugged in. Press the `start` button when ready. The joypad commands are reported in the image below:
+WoLF provides three possible ways to move the robot around:
 
-### Joypad commands
+- With a [PS3](docs/ps3.png) controller: `roslaunch wb_controller wb_controller_bringup.launch input_device:=ps3`
+- With a [XBox](docs/xbox.jpeg) controller: `roslaunch wb_controller wb_controller_bringup.launch input_device:=xbox`
+- With a dedicated ROS topic: `roslaunch wb_controller wb_controller_bringup.launch input_device:=twist`
+
+With the latter it is possible to send twist commands by publishing on the `/robot_name/wb_controller/twist` topic, or to use the keyboard by running `rosrun wb_controller keyboard_node`.
+
+If you are using a joypad, press the `start` button when ready, otherwise use the gui as reported in the image below:
 
 <p align="center"> 
-<img src="docs/joy_commands.png">
+<img src="docs/gui.png">
 </p>
 
 ## Legal notes

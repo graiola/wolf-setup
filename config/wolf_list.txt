@@ -12,6 +12,7 @@ anymalc_description
 hyq_description
 solo_description
 spot_description
+wolf_description_utils
 
 # SUPPORT
 rt_logger

@@ -68,6 +68,11 @@ kinova_description:
     xenial: ros-kinetic-kinova-description
     bionic: ros-melodic-kinova-description
     focal:  ros-noetic-kinova-description
+wolf_description_utils:
+  ubuntu:
+    xenial: ros-kinetic-wolf-description-utils
+    bionic: ros-melodic-wolf-description-utils
+    focal:  ros-noetic-wolf-description-utils
 rt_logger:
   ubuntu:
     xenial: ros-kinetic-rt-logger

@@ -19,6 +19,8 @@ Application Options:
 \n 
 -r,--robot \tRobot name [hyq|anymal|aliengo|spot], example: -r anymal
 \n 
+-d,--device \tInput device type [ps3|xbox|twist], example: -d ps3
+\n 
 -w,--world \tWorld name [empty|ruins], example: -w ruins
 \n 
 -g,--gui \tLaunch rviz
@@ -31,6 +33,7 @@ Application Options:
 
 # Default
 ROBOT_NAME=spot
+DEVICE=ps3
 WORLD_NAME=empty
 GUI=false
 RUN_LOCAL_WS=false
@@ -51,6 +54,11 @@ while [ -n "$1" ]; do # while loop starts
 
          -r|--robot)
     		ROBOT_NAME="$2"
+		shift
+		;;
+
+ 	 -d|--device)
+    		DEVICE="$2"
 		shift
 		;;
 
@@ -93,6 +101,15 @@ then
 	echo "Selected robot: $ROBOT_NAME"
 else
 	echo "Wrong robot option!"
+	echo -e $USAGE
+	exit 0
+fi
+
+if [[ ( $DEVICE == "ps3") ||  ( $DEVICE == "xbox") ||  ( $DEVICE == "twist") ]] 
+then 
+	echo "Selected input device: $DEVICE"
+else
+	echo "Wrong input device option!"
 	echo -e $USAGE
 	exit 0
 fi

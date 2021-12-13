@@ -19,7 +19,7 @@ Application Options:
 \n 
 -r,--robot \tRobot name [hyq|anymal|aliengo|spot], example: -r anymal
 \n 
--d,--device \tInput device type [ps3|xbox|twist], example: -d ps3
+-d,--device \tInput device type [ps3|xbox|twist|keyboard], example: -d ps3
 \n 
 -w,--world \tWorld name [empty|ruins], example: -w ruins
 \n 
@@ -33,7 +33,7 @@ Application Options:
 
 # Default
 ROBOT_NAME=spot
-DEVICE=ps3
+DEVICE=keyboard
 WORLD_NAME=empty
 GUI=false
 RUN_LOCAL_WS=false

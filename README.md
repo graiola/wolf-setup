@@ -60,13 +60,14 @@ To launch the controller:
 
 ## How to start the controller
 
-WoLF provides three possible ways to move the robot around:
+WoLF provides four possible ways to move the robot around:
 
-- With a [PS3](docs/ps3.png) controller: `roslaunch wb_controller wb_controller_bringup.launch input_device:=ps3`
-- With a [XBox](docs/xbox.jpeg) controller: `roslaunch wb_controller wb_controller_bringup.launch input_device:=xbox`
+- With a [PS3](docs/ps3.png) joypad: `roslaunch wb_controller wb_controller_bringup.launch input_device:=ps3`
+- With a [XBox](docs/xbox.jpeg) joypad: `roslaunch wb_controller wb_controller_bringup.launch input_device:=xbox`
+- With the [keyboard](docs/keyboard_controls.png): `roslaunch wb_controller wb_controller_bringup.launch input_device:=keyboard`
 - With a dedicated ROS topic: `roslaunch wb_controller wb_controller_bringup.launch input_device:=twist`
 
-With the latter option it is possible to send twist commands by publishing directly on the `/robot_name/wb_controller/twist` topic, or to control the robot with the keyboard by running in a separate terminal `rosrun wb_controller keyboard_node`.
+With the latter option it is possible to send twist commands by publishing directly on the `/robot_name/wb_controller/twist` topic.
 
 If you are using a joypad, press the `start` button when ready, otherwise use the gui as reported in the image below:
 

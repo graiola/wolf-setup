@@ -105,7 +105,7 @@ else
 	exit 0
 fi
 
-if [[ ( $DEVICE == "ps3") ||  ( $DEVICE == "xbox") ||  ( $DEVICE == "twist") ]] 
+if [[ ( $DEVICE == "ps3") ||  ( $DEVICE == "xbox") ||  ( $DEVICE == "twist") ||  ( $DEVICE == "keyboard") ]] 
 then 
 	echo "Selected input device: $DEVICE"
 else

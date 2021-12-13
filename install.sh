@@ -39,10 +39,10 @@ rosdep update
 # Download the debians
 /bin/bash $SCRIPTPATH/get_debians.sh
 
-echo -e "${COLOR_INFO}Install the ADVR debian packages${COLOR_RESET}"
+echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
 sudo $SCRIPTPATH/debs/$UBUNTU/advr/install.sh
 
-echo -e "${COLOR_INFO}Install the WBC debian packages${COLOR_RESET}"
+echo -e "${COLOR_INFO}Install WoLF debian packages${COLOR_RESET}"
 sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$UBUNTU/*.deb
 
 # Setup Bashrc

@@ -1,4 +1,4 @@
-## WoLF: Whole-body Locomotion Framework for quadruped robots
+# WoLF: Whole-body Locomotion Framework for quadruped robots
 
 <p float="center">
   <img src="docs/spot.gif" width="250" height="185" /> 
@@ -22,43 +22,43 @@ This repo contains the debian packages of the whole-body controller presented in
 
 If you or your organization are interested in the source code, please send an email to gennaro.raiola(AT)gmail.com
 
-## How to run the code
+## How to run the controller
 
-You can run the code either by installing it on your machine, or by running it in a docker container.
+You can run the controller by installing it on your computer or by running it in a docker container. First be sure to clone the repo:
+
+`git clone https://github.com/graiola/wolf-setup.git`
 
 ### Docker container for Ubuntu 16.04 and 18.04
 
-First you need docker running on your computer. If you need to install docker from scratch, run the following script:
+If you need to install docker on your computer, you can run the following:
 
 `./install_docker.sh`
 
-Note: it could be necessary to restart the computer after the installation.
+To download the image from [docker-hub](https://hub.docker.com/repository/docker/serger87/wolf) and launch the controller run the following script:
 
-When docker is ready and running you can pull the docker image from [docker-hub](https://hub.docker.com/):
+`./run_docker.sh`
 
-+ Run `docker pull serger87/wolf:bionic` to download the bionic image.
-+ Run `docker tag serger87/wolf:bionic wolf:bionic` to rename the image.
-+ Finally you can launch the controller in the docker environment: `./run_docker.sh`
+Use the help argument to see what are the available options:
 
-You can see the avaialbe options with `./run_docker.sh --help`
+`./run_docker.sh --help`
 
-Note: use the `install_nvidia.sh` script if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`. If you are experiencing this problem `nvidia-container-cli initialization error nvml error driver not loaded`, it probably means that your computer does not have the latest nvidia-drivers installed. So be sure to install/update them.
+#### Notes:
+
+- It could be necessary to restart the computer after `install_docker.sh`.
+- Use `install_nvidia.sh` script if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`. 
+- If you are experiencing this problem `nvidia-container-cli initialization error nvml error driver not loaded`, it probably means that your computer does not have the latest nvidia-drivers installed. So be sure to install/update them.
 
 ### System installation for Ubuntu 18.04
 
-Clone this repository:
-
-`git clone git@github.com:graiola/wolf-setup.git`
-
-To install the required dependencies (including ROS) and the wolf debian packages for Ubuntu 18.04 run the following:
+To install the required dependencies (including ROS) and the WoLF debian packages for Ubuntu 18.04 run the following:
 
 `./install.sh`
 
-To launch the controller:
+After the installation, update your bash enviroment:
 
-`roslaunch wb_controller wb_controller_bringup.launch`
+`source ~/.bashrc`
 
-## How to start the controller
+#### How to start the controller
 
 WoLF provides four possible ways to move the robot around:
 
@@ -67,7 +67,7 @@ WoLF provides four possible ways to move the robot around:
 - With the [keyboard](docs/keyboard_controls.png): `roslaunch wb_controller wb_controller_bringup.launch input_device:=keyboard`
 - With a dedicated ROS topic: `roslaunch wb_controller wb_controller_bringup.launch input_device:=twist`
 
-With the latter option it is possible to send twist commands by publishing directly on the `/robot_name/wb_controller/twist` topic.
+With this last option it is possible to send twist commands by publishing on the topic `/robot_name/wb_controller/twist`.
 
 If you are using a joypad, press the `start` button when ready, otherwise use the gui as reported in the image below:
 

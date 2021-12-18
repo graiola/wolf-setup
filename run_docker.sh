@@ -134,7 +134,7 @@ else
 fi
 
 # Define the image name
-IMAGE_NAME=$CONTAINER_NAME:$IMAGE_TAG
+IMAGE_NAME=serger87/$CONTAINER_NAME:$IMAGE_TAG
 
 # Hacky
 xhost +local:docker

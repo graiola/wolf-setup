@@ -64,7 +64,7 @@ WoLF provides four possible ways to move the robot around:
 
 - With a [PS3](docs/ps3.png) joypad: `roslaunch wb_controller wb_controller_bringup.launch input_device:=ps3`
 - With a [XBox](docs/xbox.jpeg) joypad: `roslaunch wb_controller wb_controller_bringup.launch input_device:=xbox`
-- With the [keyboard](docs/keyboard_controls.png): `roslaunch wb_controller wb_controller_bringup.launch input_device:=keyboard`
+- With the [keyboard](docs/keyboard.png): `roslaunch wb_controller wb_controller_bringup.launch input_device:=keyboard`
 - With a dedicated ROS topic: `roslaunch wb_controller wb_controller_bringup.launch input_device:=twist`
 
 With this last option it is possible to send twist commands by publishing on the topic `/robot_name/wb_controller/twist`.

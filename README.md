@@ -75,6 +75,10 @@ If you are using a joypad, press the `start` button when ready, otherwise use th
 <img src="docs/gui.png">
 </p>
 
+## How to add a new robot
+
+If you are interested in testing a different quadruped robot check out this [repository](https://github.com/graiola/wolf_descriptions).
+
 ## Legal notes
 
 This work is licensed under a [license]("http://creativecommons.org/licenses/by-nc-nd/4.0/") Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.

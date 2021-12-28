@@ -18,7 +18,7 @@ wolf_description_utils
 rt_logger
 
 # CORE
-wb_gazebo_resources
-wb_hardware_interface
-wb_gazebo_interface
+wolf_gazebo_resources
+wolf_hardware_interface
+wolf_gazebo_interface
 wb_controller

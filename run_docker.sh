@@ -21,7 +21,7 @@ Application Options:
 \n 
 -d,--device \tInput device type [ps3|xbox|twist|keyboard], example: -d ps3
 \n 
--w,--world \tWorld name [empty|ruins], example: -w ruins
+-w,--world \tWorld name [empty|ruins|pyramid|ramps|stairs], example: -w ruins
 \n 
 -g,--gui \tLaunch rviz
 \n 
@@ -114,7 +114,7 @@ else
 	exit 0
 fi
 
-if [[ ( $WORLD_NAME == "empty") ||  ( $WORLD_NAME == "ruins") ]] 
+if [[ ( $WORLD_NAME == "empty") ||  ( $WORLD_NAME == "ruins") ||  ( $WORLD_NAME == "pyramid") ||  ( $WORLD_NAME == "ramps") ||  ( $WORLD_NAME == "stairs") ]] 
 then 
 	echo "Selected world: $WORLD_NAME"
 else

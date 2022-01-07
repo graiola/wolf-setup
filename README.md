@@ -62,12 +62,12 @@ After the installation, update your bash enviroment:
 
 WoLF provides four possible ways to move the robot around:
 
-- With a [PS3](docs/ps3.png) joypad: `roslaunch wb_controller wb_controller_bringup.launch input_device:=ps3`
-- With a [XBox](docs/xbox.jpeg) joypad: `roslaunch wb_controller wb_controller_bringup.launch input_device:=xbox`
-- With the [keyboard](docs/keyboard.png): `roslaunch wb_controller wb_controller_bringup.launch input_device:=keyboard`
-- With a dedicated ROS topic: `roslaunch wb_controller wb_controller_bringup.launch input_device:=twist`
+- With a [PS3](docs/ps3.png) joypad: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=ps3`
+- With a [XBox](docs/xbox.jpeg) joypad: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=xbox`
+- With the [keyboard](docs/keyboard.png): `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=keyboard`
+- With a dedicated ROS topic: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=twist`
 
-With this last option it is possible to send twist commands by publishing on the topic `/robot_name/wb_controller/twist`.
+With this last option it is possible to send twist commands by publishing on the topic `/robot_name/wolf_controller/twist`.
 
 If you are using a joypad, press the `start` button when ready, otherwise use the gui as reported in the image below:
 

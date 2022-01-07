@@ -1,8 +1,8 @@
-wb_controller:
+wolf_controller:
   ubuntu:
-    xenial: ros-kinetic-wb-controller
-    bionic: ros-melodic-wb-controller
-    focal:  ros-noetic-wb-controller
+    xenial: ros-kinetic-wolf-controller
+    bionic: ros-melodic-wolf-controller
+    focal:  ros-noetic-wolf-controller
 wolf_gazebo_interface:
   ubuntu:
     xenial: ros-kinetic-wolf-gazebo-interface

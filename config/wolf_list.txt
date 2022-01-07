@@ -21,4 +21,4 @@ rt_logger
 wolf_gazebo_resources
 wolf_hardware_interface
 wolf_gazebo_interface
-wb_controller
+wolf_controller

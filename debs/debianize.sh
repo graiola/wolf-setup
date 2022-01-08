@@ -7,7 +7,7 @@ pushd `dirname $0` > /dev/null
 SCRIPTPATH=`pwd`
 popd > /dev/null
 
-source $SCRIPTPATH/../fun.cfg
+source $SCRIPTPATH/../support/fun.cfg
 
 # Clean
 clean_file   $SCRIPTPATH/wolf.zip

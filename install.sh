@@ -7,7 +7,7 @@ popd > /dev/null
 
 set -e
 
-source $SCRIPTPATH/fun.cfg
+source $SCRIPTPATH/support/fun.cfg
 
 # Check ubuntu version and select the right ROS
 UBUNTU=$(lsb_release -cs)
@@ -37,7 +37,7 @@ sudo rosdep init
 rosdep update
 
 # Download the debians
-/bin/bash $SCRIPTPATH/get_debians.sh
+/bin/bash $SCRIPTPATH/support/get_debians.sh
 
 echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
 sudo $SCRIPTPATH/debs/$UBUNTU/advr/install.sh

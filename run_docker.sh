@@ -7,7 +7,7 @@ popd > /dev/null
 
 set -e
 
-source $SCRIPTPATH/fun.cfg
+source $SCRIPTPATH/support/fun.cfg
 
 USAGE="Usage: \n run_docker [OPTIONS...] 
 \n\n

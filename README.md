@@ -30,11 +30,7 @@ You can run the controller by installing it on your computer or by running it in
 
 ### Docker container for Ubuntu 16.04 and 18.04
 
-If you need to install docker on your computer, you can run the following:
-
-`./install_docker.sh`
-
-To download the image from [docker-hub](https://hub.docker.com/repository/docker/serger87/wolf) and launch the controller run the following script:
+To download the image from [docker-hub](https://hub.docker.com/repository/docker/serger87/wolf) and launch the controller within a docker container, run the following script:
 
 `./run_docker.sh`
 
@@ -42,11 +38,15 @@ Use the help argument to see what are the available options:
 
 `./run_docker.sh --help`
 
+If you need to install docker on your computer, you can run the following:
+
+`./support/install_docker.sh`
+
 #### Notes:
 
-- It could be necessary to restart the computer after `install_docker.sh`.
-- Use `install_nvidia.sh` script if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`. 
-- If you are experiencing this problem `nvidia-container-cli initialization error nvml error driver not loaded`, it probably means that your computer does not have the latest nvidia-drivers installed. So be sure to install/update them.
+- It could be necessary to restart the computer after  installing docker with `install_docker.sh`.
+- Use the `install_nvidia.sh` script in the `support` folder  if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`. 
+- If you are experiencing this problem `nvidia-container-cli initialization error nvml error driver not loaded`, it probably means that your computer does not have the latest nvidia-drivers installed. Be sure that they are installed and updated.
 
 ### System installation for Ubuntu 18.04
 

@@ -1,8 +1,3 @@
-python-rosdep
-python-catkin-pkg
-python-catkin-pkg-modules
-python-catkin-tools
-python-pygame
 iputils-ping
 libqt5opengl5-dev
 libmatio-dev

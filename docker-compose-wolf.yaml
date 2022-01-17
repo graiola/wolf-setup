@@ -1,0 +1,31 @@
+###########################################
+#                                         #
+#                  WoLF                   #
+#                                         #
+#  https://github.com/graiola/wolf-setup  #
+#                       .                 #
+#                      / V\               #
+#                    / `  /               #
+#                   <<   |                #
+#                   /    |                #
+#                 /      |                #
+#               /        |                #
+#             /    \  \ /                 #
+#            (      ) | |                 #
+#    ________|   _/_  | |                 #
+#  <__________\______)\__)                #
+#                                         #
+###########################################
+
+version: "3.4"
+services:
+  wolf-bionic:
+    context: ..
+    dockerfile: ./dockerfiles/wolf/Dockerfile
+    args:
+      - IMAGE=wolf-base-bionic
+  wolf-focal:
+    context: ..
+    dockerfile: ./dockerfiles/wolf/Dockerfile
+    args:
+      - IMAGE=wolf-base-focal

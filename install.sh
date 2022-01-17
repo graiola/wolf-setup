@@ -9,41 +9,85 @@ set -e
 
 source $SCRIPTPATH/support/fun.cfg
 
+USAGE="Usage: \n run_docker [OPTIONS...] 
+\n\n
+Help Options:
+\n 
+-h,--help \tShow help options
+\n\n
+Application Options:
+\n 
+-i,--install \tInstall options [base|wolf|all], example: -i all"
+
+# Default
+INSTALL_OPT=all
+
+if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
+then 
+	echo -e $USAGE
+	exit 0
+fi
+
+while [ -n "$1" ]; do # while loop starts
+	case "$1" in
+         -i|--install)
+    		INSTALL_OPT="$2"
+		shift
+		;;
+	*) echo "Option $1 not recognized!" 
+		echo -e $USAGE
+		exit 0;;
+	esac
+	shift
+done
+
+# Checks
+if [[ ( $INSTALL_OPT == "base") ||  ( $INSTALL_OPT == "wolf") ||  ( $INSTALL_OPT == "all")]] 
+then 
+	echo "Selected install option: $INSTALL_OPT"
+else
+	echo "Wrong install option!"
+	echo -e $USAGE
+	exit 0
+fi
+
 # Check ubuntu version and select the right ROS
 UBUNTU=$(lsb_release -cs)
 if   [ $UBUNTU == "bionic" ]; then
 	ROS_DISTRO=melodic
-elif [ $UBUNTU == "xenial" ]; then
-	ROS_DISTRO=kinetic
+	PYTHON_NAME=python
 elif [ $UBUNTU == "focal" ]; then
         ROS_DISTRO=noetic
+	PYTHON_NAME=python3
 else
-    echo -e "${COLOR_WARN}Wrong Ubuntu! This code runs on Ubuntu 16.04 - 18.04 - 20.04${COLOR_RESET}"
+    echo -e "${COLOR_WARN}Wrong Ubuntu! This script supports Ubuntu 18.04 - 20.04${COLOR_RESET}"
 fi
 
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros-latest.list'
-wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
-sudo apt-get update
+if [[ ( $INSTALL_OPT == "base") ||  ( $INSTALL_OPT == "all") ]]
+then 
+	sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros-latest.list'
+	wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
+	sudo apt-get update
+	echo -e "${COLOR_INFO}Install system libraries${COLOR_RESET}"
+	cat $SCRIPTPATH/config/sys_deps_list.txt | grep -v \# | xargs sudo apt-get install -y
+	echo -e "${COLOR_INFO}Install python libraries${COLOR_RESET}"
+	cat $SCRIPTPATH/config/python_deps_list.txt | grep -v \# | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
+	echo -e "${COLOR_INFO}Install ROS packages${COLOR_RESET}"
+	cat $SCRIPTPATH/config/ros_deps_list.txt | grep -v \# | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
+	sudo ldconfig
+	sudo rosdep init
+	rosdep update
+fi
 
-echo -e "${COLOR_INFO}Install system libraries${COLOR_RESET}"
-cat $SCRIPTPATH/config/sys_deps_list.txt | grep -v \# | xargs sudo apt-get install -y
-
-echo -e "${COLOR_INFO}Install ROS packages${COLOR_RESET}"
-cat $SCRIPTPATH/config/ros_deps_list.txt | grep -v \# | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
-
-sudo ldconfig
-
-sudo rosdep init
-rosdep update
-
-# Download the debians
-/bin/bash $SCRIPTPATH/support/get_debians.sh
-
-echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
-sudo $SCRIPTPATH/debs/$UBUNTU/advr/install.sh
-
-echo -e "${COLOR_INFO}Install WoLF debian packages${COLOR_RESET}"
-sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$UBUNTU/*.deb
+if [[ ( $INSTALL_OPT == "wolf") ||  ( $INSTALL_OPT == "all") ]]
+then 
+	# Download the debians
+	/bin/bash $SCRIPTPATH/support/get_debians.sh
+	echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
+	sudo $SCRIPTPATH/debs/$UBUNTU/advr/install.sh
+	echo -e "${COLOR_INFO}Install WoLF debian packages${COLOR_RESET}"
+	sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$UBUNTU/*.deb
+fi
 
 # Setup Bashrc
 if grep -Fwq "/opt/ros/${ROS_DISTRO}/setup.bash" ~/.bashrc
@@ -53,7 +97,6 @@ else
     	echo -e "${COLOR_INFO}Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc${COLOR_RESET}"
 	echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 fi
-
 if grep -Fwq "/opt/xbot/setup.bash" ~/.bashrc
 then 
  	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.bash${COLOR_RESET}"

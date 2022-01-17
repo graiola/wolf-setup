@@ -1,19 +1,18 @@
 # This is the list of ROS packages we need to install:
 desktop-full
-ros-control 
-ros-controllers 
-realtime-tools 
+ros-control
+ros-controllers
+realtime-tools
 gazebo-dev
 gazebo-plugins
 gazebo-ros
 gazebo-ros-control
-gazebo-ros-pkgs 
-ps3joy 
-joy 
-robot-state-publisher 
+gazebo-ros-pkgs
+joy
+robot-state-publisher
 rviz-visual-tools
 plotjuggler
-plotjuggler-ros 
+plotjuggler-ros
 plotjuggler-msgs
 rosbash
 ddynamic-reconfigure

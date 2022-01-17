@@ -1,0 +1,5 @@
+rosdep
+catkin-pkg
+catkin-pkg-modules
+catkin-tools
+pygame

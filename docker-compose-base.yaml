@@ -1,0 +1,33 @@
+###########################################
+#                                         #
+#                  WoLF                   #
+#                                         #
+#  https://github.com/graiola/wolf-setup  #
+#                       .                 #
+#                      / V\               #
+#                    / `  /               #
+#                   <<   |                #
+#                   /    |                #
+#                 /      |                #
+#               /        |                #
+#             /    \  \ /                 #
+#            (      ) | |                 #
+#    ________|   _/_  | |                 #
+#  <__________\______)\__)                #
+#                                         #
+###########################################
+
+version: "3.4"
+services:
+  wolf-base-bionic:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/base/Dockerfile
+      args:
+        - IMAGE=nvidia/cudagl:9.2-base-ubuntu18.04
+  wolf-base-focal:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/base/Dockerfile
+      args:
+        - IMAGE=nvidia/cudagl:11.4.2-base-ubuntu20.04

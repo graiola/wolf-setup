@@ -28,7 +28,7 @@ You can run the controller by installing it on your computer or by running it in
 
 `git clone https://github.com/graiola/wolf-setup.git`
 
-### Docker container for Ubuntu 16.04 and 18.04
+### Docker container for Ubuntu 16.04 - 18.04 - 20.04
 
 To download the image from [docker-hub](https://hub.docker.com/repository/docker/serger87/wolf) and launch the controller within a docker container, run the following script:
 

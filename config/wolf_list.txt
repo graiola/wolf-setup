@@ -3,7 +3,6 @@
 # TODO: auto-generate the wolf.yaml out of this list
 
 # DESCRIPTIONS
-teleop_description
 kinova_description
 sensors_description
 aliengo_description

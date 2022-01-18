@@ -17,7 +17,7 @@ Help Options:
 \n\n
 Application Options:
 \n 
--i,--install \tInstall options [base|wolf|all], example: -i all"
+-i,--install \tInstall options [base|app|all], example: -i all"
 
 # Default
 INSTALL_OPT=all
@@ -42,7 +42,7 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Checks
-if [[ ( $INSTALL_OPT == "base") ||  ( $INSTALL_OPT == "wolf") ||  ( $INSTALL_OPT == "all")]] 
+if [[ ( $INSTALL_OPT == "base") ||  ( $INSTALL_OPT == "app") ||  ( $INSTALL_OPT == "all")]] 
 then 
 	echo "Selected install option: $INSTALL_OPT"
 else
@@ -63,7 +63,7 @@ else
     echo -e "${COLOR_WARN}Wrong Ubuntu! This script supports Ubuntu 18.04 - 20.04${COLOR_RESET}"
 fi
 
-if [[ ( $INSTALL_OPT == "base") ||  ( $INSTALL_OPT == "all") ]]
+if [[ ( $INSTALL_OPT == "base") || ( $INSTALL_OPT == "all") ]]
 then 
 	sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros-latest.list'
 	wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
@@ -79,7 +79,7 @@ then
 	rosdep update
 fi
 
-if [[ ( $INSTALL_OPT == "wolf") ||  ( $INSTALL_OPT == "all") ]]
+if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "all") ]]
 then 
 	# Download the debians
 	/bin/bash $SCRIPTPATH/support/get_debians.sh
@@ -90,17 +90,23 @@ then
 fi
 
 # Setup Bashrc
-if grep -Fwq "/opt/ros/${ROS_DISTRO}/setup.bash" ~/.bashrc
+if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "base") || ( $INSTALL_OPT == "all") ]]
 then 
- 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/ros/${ROS_DISTRO}/setup.bash${COLOR_RESET}"
-else
-    	echo -e "${COLOR_INFO}Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc${COLOR_RESET}"
-	echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+	if grep -Fwq "/opt/ros/${ROS_DISTRO}/setup.bash" ~/.bashrc
+	then 
+		echo -e "${COLOR_INFO}Bashrc is already updated with /opt/ros/${ROS_DISTRO}/setup.bash${COLOR_RESET}"
+	else
+		echo -e "${COLOR_INFO}Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc${COLOR_RESET}"
+		echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+	fi
 fi
-if grep -Fwq "/opt/xbot/setup.bash" ~/.bashrc
+if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "all") ]]
 then 
- 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.bash${COLOR_RESET}"
-else
-    	echo -e "${COLOR_INFO}Add /opt/xbot/setup.bash to the bashrc ${COLOR_RESET}"
+	if grep -Fwq "/opt/xbot/setup.bash" ~/.bashrc
+	then 
+		echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.bash${COLOR_RESET}"
+	else
+		echo -e "${COLOR_INFO}Add /opt/xbot/setup.bash to the bashrc ${COLOR_RESET}"
 	echo "source /opt/xbot/setup.bash" >> ~/.bashrc
+	fi
 fi

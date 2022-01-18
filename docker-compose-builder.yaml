@@ -1,0 +1,53 @@
+###########################################
+#                                         #
+#                  WoLF                   #
+#                                         #
+#  https://github.com/graiola/wolf-setup  #
+#                       .                 #
+#                      / V\               #
+#                    / `  /               #
+#                   <<   |                #
+#                   /    |                #
+#                 /      |                #
+#               /        |                #
+#             /    \  \ /                 #
+#            (      ) | |                 #
+#    ________|   _/_  | |                 #
+#  <__________\______)\__)                #
+#                                         #
+###########################################
+
+version: "3.4"
+services:
+  wolf-builder-bionic:
+    image: wolf-base:bionic
+    user: "root:root"
+    volumes:
+      - $HOME/.ssh:/root/.ssh
+      - /tmp/:/root/wolf/setup/debs
+    command: bash -c "wget http://xbot.cloud/nightly/xbot2-full-devel/bionic-nightly.tar.gz -P /tmp/ &&
+                      tar --strip-components 1 -xvf /tmp/bionic-nightly.tar.gz -C /tmp/ &&
+                      bash /tmp/install.sh &&
+                      source /opt/xbot/setup.sh &&
+                      export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake &&
+                      source /opt/ros/melodic/setup.bash &&
+                      mkdir -p ros_ws/src &&
+                      catkin_init_workspace ros_ws/src &&
+                      git clone -b devel --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
+                      cd ros_ws &&
+                      catkin build ;
+                      source devel/setup.bash &&
+                      sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
+                      cd src/wolf/setup/debs/ &&
+                      ./debianize.sh
+                     "
+#  wolf-builder-focal:
+#    image: wolf-builder:focal
+#    build:
+#      context: .
+#      dockerfile: ./dockerfiles/builder/Dockerfile
+#      args:
+#        - IMAGE=wolf-base:focal
+#    volumes:
+#      - $HOME/.ssh:$HOME/.ssh
+#    command: ls -l #git clone --recursive git@github.com:graiola/wolf.git && cd wolf && git submodule update && ./setup/debs/debianize.sh

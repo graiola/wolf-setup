@@ -8,4 +8,4 @@ ADD . /root/
 
 WORKDIR /root/
 
-RUN bash install.sh -i wolf
+RUN bash install.sh -i app

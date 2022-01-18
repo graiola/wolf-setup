@@ -20,12 +20,14 @@
 version: "3.4"
 services:
   wolf-base-bionic:
+    image: wolf-base:bionic
     build:
       context: .
       dockerfile: ./dockerfiles/base/Dockerfile
       args:
         - IMAGE=nvidia/cudagl:9.2-base-ubuntu18.04
   wolf-base-focal:
+    image: wolf-base:focal
     build:
       context: .
       dockerfile: ./dockerfiles/base/Dockerfile

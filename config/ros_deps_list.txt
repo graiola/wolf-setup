@@ -18,3 +18,9 @@ plotjuggler-msgs
 rosbash
 ddynamic-reconfigure
 moveit-core
+# For navigation
+pointcloud-to-laserscan
+gmapping
+velodyne-laserscan
+velodyne-pointcloud
+velodyne-gazebo-plugins

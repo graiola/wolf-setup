@@ -77,36 +77,32 @@ then
 	sudo ldconfig
 	sudo rosdep init
 	rosdep update
+	echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
+	wget http://xbot.cloud/nightly/xbot2-full-devel/${UBUNTU}-nightly.tar.gz -P /tmp/ &&
+        tar --strip-components 1 -xvf /tmp/${UBUNTU}-nightly.tar.gz -C /tmp/ &&
+        bash /tmp/install.sh
 fi
 
 if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "all") ]]
 then 
 	# Download the debians
 	/bin/bash $SCRIPTPATH/support/get_debians.sh
-	echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
-	sudo $SCRIPTPATH/debs/$UBUNTU/advr/install.sh
 	echo -e "${COLOR_INFO}Install WoLF debian packages${COLOR_RESET}"
 	sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$UBUNTU/*.deb
 fi
 
 # Setup Bashrc
-if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "base") || ( $INSTALL_OPT == "all") ]]
+if grep -Fwq "/opt/ros/${ROS_DISTRO}/setup.bash" ~/.bashrc
 then 
-	if grep -Fwq "/opt/ros/${ROS_DISTRO}/setup.bash" ~/.bashrc
-	then 
-		echo -e "${COLOR_INFO}Bashrc is already updated with /opt/ros/${ROS_DISTRO}/setup.bash${COLOR_RESET}"
-	else
-		echo -e "${COLOR_INFO}Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc${COLOR_RESET}"
-		echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
-	fi
+	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/ros/${ROS_DISTRO}/setup.bash${COLOR_RESET}"
+else
+	echo -e "${COLOR_INFO}Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc${COLOR_RESET}"
+	echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 fi
-if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "all") ]]
+if grep -Fwq "/opt/xbot/setup.bash" ~/.bashrc
 then 
-	if grep -Fwq "/opt/xbot/setup.bash" ~/.bashrc
-	then 
-		echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.bash${COLOR_RESET}"
-	else
-		echo -e "${COLOR_INFO}Add /opt/xbot/setup.bash to the bashrc ${COLOR_RESET}"
-	echo "source /opt/xbot/setup.bash" >> ~/.bashrc
-	fi
+	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.bash${COLOR_RESET}"
+else
+	echo -e "${COLOR_INFO}Add /opt/xbot/setup.bash to the bashrc ${COLOR_RESET}"
+echo "source /opt/xbot/setup.bash" >> ~/.bashrc
 fi

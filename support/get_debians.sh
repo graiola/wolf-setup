@@ -11,7 +11,6 @@ source $SCRIPTPATH/fun.cfg
 clean_file $SCRIPTPATH/../debs/wolf.zip
 clean_folder $SCRIPTPATH/../debs/bionic
 clean_folder $SCRIPTPATH/../debs/focal
-clean_folder $SCRIPTPATH/../debs/xenial
 
 #Download
 wget -P $SCRIPTPATH/../debs https://www.dropbox.com/sh/njzikm4yk61w2r8/AABcoJi5BDrRb8Lhc_ftnH1ca?dl=0 --content-disposition

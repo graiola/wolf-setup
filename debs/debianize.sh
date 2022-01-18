@@ -13,12 +13,10 @@ source $SCRIPTPATH/../support/fun.cfg
 clean_file   $SCRIPTPATH/wolf.zip
 clean_folder $SCRIPTPATH/bionic
 clean_folder $SCRIPTPATH/focal
-clean_folder $SCRIPTPATH/xenial 
 
 sudo apt-get update && sudo apt-get install -y python-bloom fakeroot
 
 source /opt/ros/$ROS_DISTRO/setup.bash
-source $HOME/ros_ws/devel/setup.bash
 source /opt/xbot/setup.sh
 export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake
 

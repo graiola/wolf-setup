@@ -32,8 +32,7 @@ echo -e "${COLOR_INFO}Install ROS packages${COLOR_RESET}"
 cat $SCRIPTPATH/config/ros_deps_list.txt | grep -v \# | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
 
 sudo ldconfig
-
-sudo rosdep init
+sudo rosdep init || true
 rosdep update
 
 # Download the debians

@@ -14,14 +14,22 @@ clean_file   $SCRIPTPATH/wolf.zip
 clean_folder $SCRIPTPATH/bionic
 clean_folder $SCRIPTPATH/focal
 
-sudo apt-get update && sudo apt-get install -y python-bloom fakeroot
+# Check ubuntu version and select the right ROS
+OS=ubuntu
+OS_VERSION=$(lsb_release -cs)
+if   [ $OS_VERSION == "bionic" ]; then
+	PYTHON_NAME=python
+elif [ $OS_VERSION == "focal" ]; then
+	PYTHON_NAME=python3
+else
+	echo -e "${COLOR_WARN}Wrong Ubuntu! This script supports Ubuntu 18.04 - 20.04${COLOR_RESET}"
+fi
+
+sudo apt-get update && sudo apt-get install -y ${PYTHON_NAME}-bloom fakeroot
 
 source /opt/ros/$ROS_DISTRO/setup.bash
 source /opt/xbot/setup.sh
 export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake
-
-OS=ubuntu
-OS_VERSION=$(lsb_release -cs)
 
 rosdep update
 
@@ -37,8 +45,8 @@ do
 	echo -e "override_dh_shlibdeps:" >> debian/rules
 	echo -e "	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info" >> debian/rules
 
-        fakeroot debian/rules binary
-        #dpkg-buildpackage -nc -d -uc -us
+	fakeroot debian/rules binary
+	#dpkg-buildpackage -nc -d -uc -us
 
 	sudo dpkg -i ../*.deb
 

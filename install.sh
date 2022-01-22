@@ -56,10 +56,10 @@ else
 	echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 fi
 
-if grep -Fwq "/opt/xbot/setup.bash" ~/.bashrc
+if grep -Fwq "/opt/xbot/setup.sh" ~/.bashrc
 then 
- 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.bash${COLOR_RESET}"
+ 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.sh${COLOR_RESET}"
 else
-    	echo -e "${COLOR_INFO}Add /opt/xbot/setup.bash to the bashrc ${COLOR_RESET}"
-	echo "source /opt/xbot/setup.bash" >> ~/.bashrc
+    	echo -e "${COLOR_INFO}Add /opt/xbot/setup.sh to the bashrc ${COLOR_RESET}"
+	echo "source /opt/xbot/setup.sh" >> ~/.bashrc
 fi

@@ -19,23 +19,17 @@
 
 version: "3.4"
 services:
-  wolf-app-bionic:
-    container_name: wolf-app:bionic
+  wolf-base-bionic:
+    image: wolf-base:bionic
     build:
-      context: .
-      dockerfile: ./dockerfiles/wolf/Dockerfile
+      context: ${CONTEXT_PATH}
+      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
       args:
-        - IMAGE=wolf-base:bionic
-    volumes:
-      - $HOME/.ssh:$HOME/.ssh
-    command: git clone git@github.com:graiola/wolf.git && cd wolf && git submodule update --init && ./setup/debs/debianize.sh
-  wolf-app-focal:
-    container_name: wolf-app:focal
+        - IMAGE=nvidia/cudagl:9.2-base-ubuntu18.04
+  wolf-base-focal:
+    image: wolf-base:focal
     build:
-      context: .
-      dockerfile: ./dockerfiles/wolf/Dockerfile
+      context: ${CONTEXT_PATH}
+      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
       args:
-        - IMAGE=wolf-base:focal
-    volumes:
-      - $HOME/.ssh:$HOME/.ssh
-    command: git clone git@github.com:graiola/wolf.git && cd wolf && git submodule update --init && ./setup/debs/debianize.sh
+        - IMAGE=nvidia/cudagl:11.4.2-base-ubuntu20.04

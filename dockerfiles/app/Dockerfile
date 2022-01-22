@@ -8,4 +8,4 @@ ADD . /root/
 
 WORKDIR /root/
 
-RUN bash install.sh -i app
+RUN ./install.sh -i app

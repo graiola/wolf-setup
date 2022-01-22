@@ -9,11 +9,13 @@ RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-
 	build-essential \
         software-properties-common \
         sudo \
+        nano \
         wget \
         git \
         openssh-client \
         gpg-agent \
         tzdata \
+        cmake-curses-gui \
         xserver-xorg-video-intel \
         libgl1-mesa-glx \
         libgl1-mesa-dri \
@@ -27,4 +29,4 @@ ADD . /root/
 
 WORKDIR /root/
 
-RUN bash install.sh -i base
+RUN ./install.sh -i base

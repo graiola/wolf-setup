@@ -17,7 +17,7 @@ Help Options:
 \n\n
 Application Options:
 \n 
--r,--robot \tRobot name [aliengo|spot], example: -r spot
+-r,--robot \tRobot name [aliengo|spot|hyq], example: -r spot
 \n 
 -d,--device \tInput device type [ps3|xbox|twist|keyboard], example: -d ps3
 \n 
@@ -29,7 +29,7 @@ Application Options:
 \n 
 -l,--local \tRun a local ROS workspace inside the container [workspace], example: -l ros_ws
 \n 
--i,--image \tSelect the docker image to run [image], example: -i bionic"
+-i,--image \tSelect the docker image to run [bionic|focal], example: -i bionic"
 
 # Default
 ROBOT_NAME=spot
@@ -39,7 +39,7 @@ GUI=false
 RUN_LOCAL_WS=false
 DOCKER_NET=bridge
 ROS_WS=
-CONTAINER_NAME="wolf"
+CONTAINER_NAME="wolf-app"
 IMAGE_TAG="bionic"
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
@@ -96,7 +96,7 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Checks
-if [[ ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot")]] 
+if [[ ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot") ||  ( $ROBOT_NAME == "hyq")]] 
 then 
 	echo "Selected robot: $ROBOT_NAME"
 else
@@ -125,8 +125,10 @@ fi
 
 if [[ ( $IMAGE_TAG == "bionic") ]] 
 then 
-	ROS_DISTRO=melodic
-	echo "Selected docker image: $IMAGE_TAG"
+	ROS=melodic
+elif [[ ( $IMAGE_TAG == "focal") ]]
+then
+	ROS=noetic
 else
 	echo "Wrong image option!"
 	echo -e $USAGE
@@ -155,12 +157,12 @@ then
 	if [ -f "$HOME/$ROS_WS/devel/setup.bash" ];
 	then
 		echo "Selected ros workspace: $ROS_WS"
-		run_local_ros_workspace $ROS_WS
+		run_local_ros_workspace $ROS_WS $ROS
 	else
 		echo "The file $HOME/$ROS_WS/devel/setup.bash does not exist!"
 		echo -e $USAGE
 		exit 0
 	fi
 else
-	run_docker_ros_workspace
+	run_docker_ros_workspace $ROS
 fi

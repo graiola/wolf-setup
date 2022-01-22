@@ -47,8 +47,7 @@ do
 
 	fakeroot debian/rules binary
 	#dpkg-buildpackage -nc -d -uc -us
-
-	sudo dpkg -i ../*.deb
+	#sudo dpkg -i ../*.deb
 
 	mkdir -p $SCRIPTPATH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/$OS_VERSION
 	

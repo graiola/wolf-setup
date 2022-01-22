@@ -19,32 +19,26 @@
 
 version: "3.4"
 services:
-  wolf-builder-bionic:
-    image: wolf-base:bionic
+ wolf-builder:
+    image: wolf-base:${UBUNTU}
     user: "root:root"
     volumes:
       - $HOME/.ssh:/root/.ssh
-      - /tmp/:/root/wolf/setup/debs
-    command: bash -c "source /opt/xbot/setup.sh &&
-                      export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake &&
-                      source /opt/ros/melodic/setup.bash &&
+      - /tmp/debs:/tmp/debs
+    command: bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash &&
+                      rm -rf ros_ws/src &&
                       mkdir -p ros_ws/src &&
                       catkin_init_workspace ros_ws/src &&
                       git clone -b devel --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
                       cd ros_ws &&
-                      catkin build &&
+                      /bin/bash ./src/wolf/setup/support/get_debians.sh &&
+                      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
+                      /bin/bash ./src/wolf/setup/debs/${UBUNTU}/advr/install.sh &&
+                      source /opt/xbot/setup.sh &&
+                      catkin build -DCMAKE_BUILD_TYPE=Release &&
                       source devel/setup.bash &&
                       sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
                       cd src/wolf/setup/debs/ &&
-                      ./debianize.sh
+                      ./debianize.sh &&
+                      mv ${UBUNTU} /tmp/debs
                      "
-#  wolf-builder-focal:
-#    image: wolf-builder:focal
-#    build:
-#      context: .
-#      dockerfile: ./dockerfiles/builder/Dockerfile
-#      args:
-#        - IMAGE=wolf-base:focal
-#    volumes:
-#      - $HOME/.ssh:$HOME/.ssh
-#    command: ls -l #git clone --recursive git@github.com:graiola/wolf.git && cd wolf && git submodule update && ./setup/debs/debianize.sh

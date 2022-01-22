@@ -9,10 +9,59 @@ set -e
 
 source $SCRIPTPATH/fun.cfg
 
-UBUNTU=$(lsb_release -cs)
+USAGE="Usage: \n build_docker [OPTIONS...] 
+\n\n
+Help Options:
+\n 
+-h,--help \tShow help options
+\n\n
+Application Options:
+\n 
+-b,--build \tBuild options [base|app|all], example: -b all"
 
-docker build --tag wolf:$UBUNTU -f $SCRIPTPATH/../dockerfile/Dockerfile ..
+# Default
+BUILD_OPT=all
+BASE_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-base.yaml
+APP_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-app.yaml
 
-docker tag wolf:$UBUNTU serger87/wolf:$UBUNTU
+if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
+then 
+	echo -e $USAGE
+	exit 0
+fi
 
-docker push serger87/wolf:$UBUNTU
+while [ -n "$1" ]; do # while loop starts
+	case "$1" in
+         -b|--build)
+    		BUILD_OPT="$2"
+		shift
+		;;
+	*) echo "Option $1 not recognized!" 
+		echo -e $USAGE
+		exit 0;;
+	esac
+	shift
+done
+
+# Checks
+if [[ ( $BUILD_OPT == "base") ||  ( $BUILD_OPT == "app") ||  ( $BUILD_OPT == "all")]] 
+then 
+	echo "Selected build option: $BUILD_OPT"
+else
+	echo "Wrong build option!"
+	echo -e $USAGE
+	exit 0
+fi
+
+if [[ ( $BUILD_OPT == "base") || ( $BUILD_OPT == "all") ]]
+then 
+	DOCKERFILE_PATH=$SCRIPTPATH/../dockerfiles/base CONTEXT_PATH=$SCRIPTPATH/.. docker-compose -f $BASE_COMPOSE build
+fi
+if [[ ( $BUILD_OPT == "app") || ( $BUILD_OPT == "all") ]]
+then 
+	DOCKERFILE_PATH=$SCRIPTPATH/../dockerfiles/app CONTEXT_PATH=$SCRIPTPATH/.. docker-compose -f $APP_COMPOSE build
+	#docker push serger87/wolf-app:bionic
+	#docker push serger87/wolf-app:focal
+fi
+
+

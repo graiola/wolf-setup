@@ -25,7 +25,7 @@ services:
     volumes:
       - $HOME/.ssh:/root/.ssh
       - /tmp/debs:/tmp/debs
-    command: bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash &&
+    command: bash -c "source /opt/ros/${ROS}/setup.bash &&
                       rm -rf ros_ws/src &&
                       mkdir -p ros_ws/src &&
                       catkin_init_workspace ros_ws/src &&

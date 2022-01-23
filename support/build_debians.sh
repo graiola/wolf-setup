@@ -11,8 +11,8 @@ source $SCRIPTPATH/fun.cfg
 
 BUILDER_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-builder.yaml
 
-#docker-compose -f $BUILDER_COMPOSE down
-#UBUNTU=bionic ROS_DISTRO=melodic docker-compose -f $BUILDER_COMPOSE up
+ROS=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE down
+ROS=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans
 
-docker-compose -f $BUILDER_COMPOSE down
-UBUNTU=focal ROS_DISTRO=noetic docker-compose -f $BUILDER_COMPOSE up
+#ROS=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE down
+#ROS=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans

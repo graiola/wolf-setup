@@ -9,7 +9,7 @@ set -e
 
 source $SCRIPTPATH/support/fun.cfg
 
-USAGE="Usage: \n run_docker [OPTIONS...] 
+USAGE="Usage: \n run_docker [OPTIONS...]
 \n\n
 Help Options:
 \n 
@@ -21,6 +21,27 @@ Application Options:
 
 # Default
 INSTALL_OPT=all
+
+echo ' 
+###########################################
+#                                         #
+#                  WoLF                   #
+#                                         #
+#  https://github.com/graiola/wolf-setup  #
+#                       .                 #
+#                      / V\               #
+#                    / .  /               #
+#                   <<   |                #
+#                   /    |                #
+#                 /      |                #
+#               /        |                #
+#             /    \  \ /                 #
+#            (      ) | |                 #
+#    ________|   _/_  | |                 #
+#  <__________\______)\__)                #
+#                                         #
+###########################################
+'
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
 then 

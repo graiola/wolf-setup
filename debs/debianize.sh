@@ -9,7 +9,7 @@ pushd `dirname $0` > /dev/null
 SCRIPTPATH=`pwd`
 popd > /dev/null
 
-source $SCRIPTPATH/fun.cfg
+source $SCRIPTPATH/../support/fun.cfg
 
 USAGE="Usage: \n debianize [OPTIONS...]
 \n\n
@@ -45,8 +45,8 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Clean
-clean_file     $SCRIPTPATH/../debs/wolf.zip
-clean_folder   $SCRIPTPATH/../debs/$BRANCH
+clean_file $SCRIPTPATH/wolf.zip
+clean_folder $SCRIPTPATH/$BRANCH
 
 # Check ubuntu version and select the right ROS
 OS_VERSION=$(lsb_release -cs)
@@ -82,7 +82,7 @@ do
 	#dpkg-buildpackage -nc -d -uc -us
 	#sudo dpkg -i ../*.deb
 
-	mkdir -p $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION
+	mkdir -p $SCRIPTPATH/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/$BRANCH/$OS_VERSION
 	
 	rm -rf debian obj-x86_64-linux-gnu
 

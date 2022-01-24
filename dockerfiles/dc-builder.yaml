@@ -13,14 +13,13 @@ services:
                       git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
                       cd ros_ws &&
                       /bin/bash ./src/wolf/setup/support/get_debians.sh &&
-                      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
+                      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
                       /bin/bash ./src/wolf/setup/debs/${UBUNTU}/advr/install.sh &&
                       source /opt/xbot/setup.sh &&
                       catkin build -DCMAKE_BUILD_TYPE=Release &&
                       source devel/setup.bash &&
                       sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
-                      cd src/wolf/setup/support/ &&
-                      ./debianize.sh -b ${BRANCH} &&
+                      /bin/bash ./src/wolf/setup/debs/debianize.sh -b ${BRANCH} &&
                       mkdir -p /tmp/debs/${BRANCH} &&
-                      mv ../debs/${BRANCH}/${UBUNTU} /tmp/debs/${BRANCH}
+                      mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU} /tmp/debs/${BRANCH}
                      "

@@ -17,10 +17,13 @@ Help Options:
 \n\n
 Application Options:
 \n 
--i,--install \tInstall options [base|app|all], example: -i all"
+-i,--install \tInstall options [base|app|all], example: -i all
+\n 
+-b,--branch \tBranch to install when installing the app, example: -b devel"
 
 # Default
 INSTALL_OPT=all
+BRANCH=devel
 
 echo ' 
 ###########################################
@@ -51,8 +54,12 @@ fi
 
 while [ -n "$1" ]; do # while loop starts
 	case "$1" in
-         -i|--install)
-    		INSTALL_OPT="$2"
+	-i|--install)
+		INSTALL_OPT="$2"
+		shift
+		;;
+	-b|--branch)
+		BRANCH="$2"
 		shift
 		;;
 	*) echo "Option $1 not recognized!" 
@@ -109,9 +116,9 @@ then
 	# Download the debians
 	/bin/bash $SCRIPTPATH/support/get_debians.sh
 	echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
-	sudo $SCRIPTPATH/debs/$UBUNTU/advr/install.sh
+	sudo $SCRIPTPATH/debs/$BRANCH/$UBUNTU/advr/install.sh
 	echo -e "${COLOR_INFO}Install WoLF debian packages${COLOR_RESET}"
-	sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$UBUNTU/*.deb
+	sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$BRANCH/$UBUNTU/*.deb
 fi
 
 # Setup Bashrc

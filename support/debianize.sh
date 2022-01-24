@@ -1,21 +1,33 @@
 #!/bin/bash
 
-#TODO ros_ws -> variable
+#This script uses the system ROS_DISTRO and ubuntu version
 
 # Get this script's path
 pushd `dirname $0` > /dev/null
 SCRIPTPATH=`pwd`
 popd > /dev/null
 
-source $SCRIPTPATH/../support/fun.cfg
+source $SCRIPTPATH/fun.cfg
+
+USAGE="Usage: \n debianize [OPTIONS...]
+\n\n
+Help Options:
+\n 
+-h,--help \tShow help options
+\n\n
+Application Options:
+\n 
+-b,--branch \tBranch to install, example: -b devel"
+
+# Default
+BRANCH=devel
+OS=ubuntu
 
 # Clean
-clean_file   $SCRIPTPATH/wolf.zip
-clean_folder $SCRIPTPATH/bionic
-clean_folder $SCRIPTPATH/focal
+clean_file     $SCRIPTPATH/../debs/wolf.zip
+clean_folder   $SCRIPTPATH/../debs/$BRANCH
 
 # Check ubuntu version and select the right ROS
-OS=ubuntu
 OS_VERSION=$(lsb_release -cs)
 if   [ $OS_VERSION == "bionic" ]; then
 	PYTHON_NAME=python
@@ -49,10 +61,8 @@ do
 	#dpkg-buildpackage -nc -d -uc -us
 	#sudo dpkg -i ../*.deb
 
-	mkdir -p $SCRIPTPATH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/$OS_VERSION
+	mkdir -p $SCRIPTPATH/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/$BRANCH/$OS_VERSION
 	
 	rm -rf debian obj-x86_64-linux-gnu
 
 done
-
-#zip -r $SCRIPTPATH/wolf.zip $SCRIPTPATH/bionic $SCRIPTPATH/focal $SCRIPTPATH/xenial

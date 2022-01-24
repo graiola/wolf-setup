@@ -20,6 +20,6 @@ services:
                       source devel/setup.bash &&
                       sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
                       cd src/wolf/setup/debs/ &&
-                      ./debianize.sh &&
-                      mv ${UBUNTU} /tmp/debs
+                      ./debianize.sh -b ${BRANCH} &&
+                      mv ${UBUNTU} /tmp/debs/${BRANCH}/
                      "

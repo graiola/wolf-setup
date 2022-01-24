@@ -9,7 +9,7 @@ pushd `dirname $0` > /dev/null
 SCRIPTPATH=`pwd`
 popd > /dev/null
 
-source $SCRIPTPATH/../support/fun.cfg
+source $SCRIPTPATH/fun.cfg
 
 USAGE="Usage: \n debianize [OPTIONS...]
 \n\n
@@ -19,11 +19,15 @@ Help Options:
 \n\n
 Application Options:
 \n 
--b,--branch \tBranch to install, example: -b devel"
+-b,--branch \tBranch to install, example: -b devel
+\n
+-w, --workspace \tWorkspace to debianize, example: -w ros_ws
+"
 
 # Default
 BRANCH=devel
 OS=ubuntu
+ROS_WS=ros_ws
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
 then 
@@ -37,6 +41,10 @@ while [ -n "$1" ]; do # while loop starts
 		BRANCH="$2"
 		shift
 		;;
+	-w|--workspace)
+		ROS_WS="$2"
+		shift
+		;;
 	*) echo "Option $1 not recognized!" 
 		echo -e $USAGE
 		exit 0;;
@@ -45,8 +53,8 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Clean
-clean_file $SCRIPTPATH/wolf.zip
-clean_folder $SCRIPTPATH/$BRANCH
+clean_file $SCRIPTPATH/../debs/wolf.zip
+clean_folder $SCRIPTPATH/../debs/$BRANCH
 
 # Check ubuntu version and select the right ROS
 OS_VERSION=$(lsb_release -cs)
@@ -61,6 +69,7 @@ fi
 sudo apt-get update && sudo apt-get install -y ${PYTHON_NAME}-bloom fakeroot
 
 source /opt/ros/$ROS_DISTRO/setup.bash
+source $HOME/$ROS_WS/devel/setup.bash
 source /opt/xbot/setup.sh
 export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake
 

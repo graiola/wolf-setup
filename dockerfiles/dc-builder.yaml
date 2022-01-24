@@ -6,11 +6,11 @@ services:
     volumes:
       - $HOME/.ssh:/root/.ssh
       - /tmp/debs:/tmp/debs
-    command: bash -c "source /opt/ros/${ROS}/setup.bash &&
+    command: bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash &&
                       rm -rf ros_ws/src &&
                       mkdir -p ros_ws/src &&
                       catkin_init_workspace ros_ws/src &&
-                      git clone -b devel --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
+                      git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
                       cd ros_ws &&
                       /bin/bash ./src/wolf/setup/support/get_debians.sh &&
                       sudo dpkg -i --force-overwrite src/wolf/setup/debs/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&

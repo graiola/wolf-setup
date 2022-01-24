@@ -19,11 +19,11 @@ Application Options:
 \n 
 -i,--install \tInstall options [base|app|all], example: -i all
 \n 
--b,--branch \tBranch to install when installing the app, example: -b devel"
+-b,--branch \tBranch to install, example: -b devel"
 
 # Default
 INSTALL_OPT=all
-BRANCH=devel
+BRANCH_OPT=devel
 
 echo ' 
 ###########################################
@@ -59,7 +59,7 @@ while [ -n "$1" ]; do # while loop starts
 		shift
 		;;
 	-b|--branch)
-		BRANCH="$2"
+		BRANCH_OPT="$2"
 		shift
 		;;
 	*) echo "Option $1 not recognized!" 
@@ -116,9 +116,9 @@ then
 	# Download the debians
 	/bin/bash $SCRIPTPATH/support/get_debians.sh
 	echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
-	sudo $SCRIPTPATH/debs/$BRANCH/$UBUNTU/advr/install.sh
+	sudo $SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/advr/install.sh
 	echo -e "${COLOR_INFO}Install WoLF debian packages${COLOR_RESET}"
-	sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$BRANCH/$UBUNTU/*.deb
+	sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/*.deb
 fi
 
 # Setup Bashrc

@@ -20,7 +20,7 @@ Application Options:
 -b,--branch \tBranch to build, example: -b devel"
 
 # Default
-BRANCH=devel
+BRANCH_OPT=devel
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
 then 
@@ -31,7 +31,7 @@ fi
 while [ -n "$1" ]; do # while loop starts
 	case "$1" in
 	-b|--branch)
-		BRANCH="$2"
+		BRANCH_OPT="$2"
 		shift
 		;;
 	*) echo "Option $1 not recognized!" 
@@ -44,8 +44,8 @@ done
 
 BUILDER_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-builder.yaml
 
-BRANCH=$BRANCH ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE down
-BRANCH=$BRANCH ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans
+BRANCH=$BRANCH_OPT ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE down
+BRANCH=$BRANCH_OPT ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans
 
-BRANCH=$BRANCH ROS_DISTRO=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE down
-BRANCH=$BRANCH ROS_DISTRO=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans
+BRANCH=$BRANCH_OPT ROS_DISTRO=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE down
+BRANCH=$BRANCH_OPT ROS_DISTRO=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans

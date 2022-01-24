@@ -19,11 +19,15 @@ Help Options:
 \n\n
 Application Options:
 \n 
--b,--branch \tBranch to install, example: -b devel"
+-b,--branch \tBranch to install, example: -b devel
+\n
+-w, --workspace \tWorkspace to debianize, example: -w ros_ws
+"
 
 # Default
 BRANCH=devel
 OS=ubuntu
+ROS_WS=ros_ws
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
 then 
@@ -35,6 +39,10 @@ while [ -n "$1" ]; do # while loop starts
 	case "$1" in
 	-b|--branch)
 		BRANCH="$2"
+		shift
+		;;
+	-w|--workspace)
+		ROS_WS="$2"
 		shift
 		;;
 	*) echo "Option $1 not recognized!" 
@@ -61,6 +69,7 @@ fi
 sudo apt-get update && sudo apt-get install -y ${PYTHON_NAME}-bloom fakeroot
 
 source /opt/ros/$ROS_DISTRO/setup.bash
+source $HOME/$ROS_WS/devel/setup.bash
 source /opt/xbot/setup.sh
 export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake
 

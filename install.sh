@@ -103,7 +103,7 @@ then
 	echo -e "${COLOR_INFO}Install ROS packages${COLOR_RESET}"
 	cat $SCRIPTPATH/config/ros_deps_list.txt | grep -v \# | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
 	sudo ldconfig
-	sudo rosdep init
+	sudo rosdep init || true
 	rosdep update
 	#echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
 	#wget http://xbot.cloud/nightly/xbot2-full-devel/${UBUNTU}-nightly.tar.gz -P /tmp/ &&
@@ -129,10 +129,20 @@ else
 	echo -e "${COLOR_INFO}Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc${COLOR_RESET}"
 	echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 fi
+<<<<<<< HEAD
 if grep -Fwq "/opt/xbot/setup.sh" ~/.bashrc
 then 
 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.bash${COLOR_RESET}"
 else
 	echo -e "${COLOR_INFO}Add /opt/xbot/setup.sh to the bashrc ${COLOR_RESET}"
 echo "source /opt/xbot/setup.sh" >> ~/.bashrc
+=======
+
+if grep -Fwq "/opt/xbot/setup.sh" ~/.bashrc
+then 
+ 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.sh${COLOR_RESET}"
+else
+    	echo -e "${COLOR_INFO}Add /opt/xbot/setup.sh to the bashrc ${COLOR_RESET}"
+	echo "source /opt/xbot/setup.sh" >> ~/.bashrc
+>>>>>>> navigation
 fi

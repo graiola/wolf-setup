@@ -19,7 +19,8 @@ services:
                       catkin build -DCMAKE_BUILD_TYPE=Release &&
                       source devel/setup.bash &&
                       sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
-                      cd src/wolf/setup/debs/ &&
+                      cd src/wolf/setup/support/ &&
                       ./debianize.sh -b ${BRANCH} &&
-                      mv ${UBUNTU} /tmp/debs/${BRANCH}/
+                      mkdir -p /tmp/debs/${BRANCH} &&
+                      mv ../debs/${BRANCH}/${UBUNTU} /tmp/debs/${BRANCH}
                      "

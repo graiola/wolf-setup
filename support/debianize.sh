@@ -1,6 +1,8 @@
 #!/bin/bash
 
 #This script uses the system ROS_DISTRO and ubuntu version
+#Branch is treated as a folder, so be sure that the git repository is in the correct branch!
+#git name-rev --name-only HEAD
 
 # Get this script's path
 pushd `dirname $0` > /dev/null
@@ -22,6 +24,25 @@ Application Options:
 # Default
 BRANCH=devel
 OS=ubuntu
+
+if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
+then 
+	echo -e $USAGE
+	exit 0
+fi
+
+while [ -n "$1" ]; do # while loop starts
+	case "$1" in
+	-b|--branch)
+		BRANCH="$2"
+		shift
+		;;
+	*) echo "Option $1 not recognized!" 
+		echo -e $USAGE
+		exit 0;;
+	esac
+	shift
+done
 
 # Clean
 clean_file     $SCRIPTPATH/../debs/wolf.zip
@@ -61,7 +82,7 @@ do
 	#dpkg-buildpackage -nc -d -uc -us
 	#sudo dpkg -i ../*.deb
 
-	mkdir -p $SCRIPTPATH/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/$BRANCH/$OS_VERSION
+	mkdir -p $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION
 	
 	rm -rf debian obj-x86_64-linux-gnu
 

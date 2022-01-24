@@ -17,9 +17,8 @@ services:
                       /bin/bash ./src/wolf/setup/debs/${UBUNTU}/advr/install.sh &&
                       source /opt/xbot/setup.sh &&
                       catkin build -DCMAKE_BUILD_TYPE=Release &&
-                      source devel/setup.bash &&
                       sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
-                      /bin/bash ./src/wolf/setup/support/debianize.sh -b ${BRANCH} &&
+                      ./src/wolf/setup/support/debianize.sh -b ${BRANCH} &&
                       mkdir -p /tmp/debs/${BRANCH} &&
                       mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU} /tmp/debs/${BRANCH}
                      "

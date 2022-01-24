@@ -19,9 +19,9 @@ Help Options:
 \n\n
 Application Options:
 \n 
--b,--branch \tBranch to install, example: -b devel
+-b,--branch\tBranch to install, example: -b devel
 \n
--w, --workspace \tWorkspace to debianize, example: -w ros_ws
+-w, --workspace\tWorkspace to debianize, example: -w ros_ws
 "
 
 # Default
@@ -89,9 +89,9 @@ do
 
 	fakeroot debian/rules binary
 	#dpkg-buildpackage -nc -d -uc -us
-	#sudo dpkg -i ../*.deb
+	sudo dpkg -i ../*.deb
 
-	mkdir -p $SCRIPTPATH/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/$BRANCH/$OS_VERSION
+	mkdir -p $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION
 	
 	rm -rf debian obj-x86_64-linux-gnu
 

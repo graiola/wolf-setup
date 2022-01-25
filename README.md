@@ -48,7 +48,7 @@ If you need to install docker on your computer, you can run the following:
 - Use the `install_nvidia.sh` script in the `support` folder  if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`. 
 - If you are experiencing this problem `nvidia-container-cli initialization error nvml error driver not loaded`, it probably means that your computer does not have the latest nvidia-drivers installed. Be sure that they are installed and updated.
 
-### System installation for Ubuntu 18.04
+### System installation for Ubuntu 18.04 - 20.04
 
 To install the required dependencies (including ROS) and the WoLF debian packages for Ubuntu 18.04 run the following:
 

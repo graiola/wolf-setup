@@ -25,3 +25,4 @@ velodyne-gazebo-plugins
 velodyne-description
 hector-mapping
 move-base
+explore-lite

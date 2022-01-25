@@ -129,20 +129,10 @@ else
 	echo -e "${COLOR_INFO}Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc${COLOR_RESET}"
 	echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 fi
-<<<<<<< HEAD
-if grep -Fwq "/opt/xbot/setup.sh" ~/.bashrc
-then 
-	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.bash${COLOR_RESET}"
-else
-	echo -e "${COLOR_INFO}Add /opt/xbot/setup.sh to the bashrc ${COLOR_RESET}"
-echo "source /opt/xbot/setup.sh" >> ~/.bashrc
-=======
-
 if grep -Fwq "/opt/xbot/setup.sh" ~/.bashrc
 then 
  	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/xbot/setup.sh${COLOR_RESET}"
 else
     	echo -e "${COLOR_INFO}Add /opt/xbot/setup.sh to the bashrc ${COLOR_RESET}"
 	echo "source /opt/xbot/setup.sh" >> ~/.bashrc
->>>>>>> navigation
 fi

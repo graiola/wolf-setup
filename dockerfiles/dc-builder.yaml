@@ -14,7 +14,7 @@ services:
                       cd ros_ws &&
                       /bin/bash ./src/wolf/setup/support/get_debians.sh &&
                       sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
-                      /bin/bash ./src/wolf/setup/debs/${UBUNTU}/advr/install.sh &&
+                      /bin/bash ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/advr/install.sh &&
                       source /opt/xbot/setup.sh &&
                       catkin build -DCMAKE_BUILD_TYPE=Release &&
                       sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&

@@ -18,11 +18,11 @@ rosbash
 ddynamic-reconfigure
 moveit-core
 # For navigation
-pointcloud-to-laserscan
-velodyne-laserscan
-velodyne-pointcloud
-velodyne-gazebo-plugins
-velodyne-description
-hector-mapping
-move-base
-explore-lite
+# pointcloud-to-laserscan
+# velodyne-laserscan
+# velodyne-pointcloud
+# velodyne-gazebo-plugins
+# velodyne-description
+# hector-mapping
+# move-base
+# explore-lite

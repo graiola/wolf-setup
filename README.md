@@ -6,7 +6,7 @@
   <img src="docs/aliengo.gif" width="250" height="185" />
 </p>
 
-This repo contains the debian packages of the whole-body controller presented in the following [paper](https://hal.archives-ouvertes.fr/hal-03005133/document): 
+This repo contains the setup for the whole-body controller presented in the following [paper](https://hal.archives-ouvertes.fr/hal-03005133/document): 
 
 ```
 @article{raiola2020simple,
@@ -50,7 +50,7 @@ If you need to install docker on your computer, you can run the following:
 
 ### System installation for Ubuntu 18.04 - 20.04
 
-To install the required dependencies (including ROS) and the WoLF debian packages for Ubuntu 18.04 run the following:
+To install the required dependencies (including ROS) and the WoLF debian packages run the following:
 
 `./install.sh`
 

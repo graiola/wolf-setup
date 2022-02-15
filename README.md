@@ -81,5 +81,7 @@ If you are interested in testing a different quadruped robot check out this [rep
 
 ## Legal notes
 
-This work is licensed under a [license]("http://creativecommons.org/licenses/by-nc-nd/4.0/") Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
+- `wolf-setup` is distributed and licensed under a license GNU General Public License v3.0.
+- `wolf-controller` is licensed under a [license]("http://creativecommons.org/licenses/by-nc-nd/4.0/") Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
 ![2](https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png)
+- For the other packages please check the respective `LICENSE` document.

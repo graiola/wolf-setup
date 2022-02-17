@@ -60,15 +60,14 @@ After the installation, update your bash enviroment:
 
 #### How to start the controller
 
-WoLF provides four possible ways to move the robot around:
+WoLF provides three different interfaces to move the robot:
 
 - With a [PS3](docs/ps3.png) joypad: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=ps3`
 - With a [XBox](docs/xbox.jpeg) joypad: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=xbox`
-- With the [keyboard](docs/keyboard.png): `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=keyboard`
-- With a dedicated ROS topic: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=twist`
+- With a [keyboard](docs/keyboard.png): `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=keyboard`
 
-With this last option it is possible to send twist commands by publishing to the topic `/robot_name/wolf_controller/twist`.
-
+Also, a twist topic is always active at `/robot_name/wolf_controller/twist`, and it can be used to send twist commands at a lower priority than the above mentioned interfaces.
+This topic can be used to send `move_base` commands, see [wolf_navigation](https://github.com/graiola/wolf_navigation) for an example.
 If you are using a joypad, press the `start` button when ready, otherwise use the gui as reported in the image below:
 
 <p align="center"> 

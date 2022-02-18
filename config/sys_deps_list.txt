@@ -2,3 +2,4 @@ iputils-ping
 libqt5opengl5-dev
 libmatio-dev
 unzip
+spacenavd

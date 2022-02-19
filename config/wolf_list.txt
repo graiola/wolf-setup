@@ -11,6 +11,7 @@ anymalc_description
 hyq_description
 solo_description
 spot_description
+ylo2_description
 wolf_description_utils
 
 # SUPPORT

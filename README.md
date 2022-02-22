@@ -1,9 +1,7 @@
 # WoLF: Whole-body Locomotion Framework for quadruped robots
 
 <p float="center">
-  <img src="docs/spot.gif" width="250" height="185" /> 
   <img src="docs/wolf-logo.jpeg" width="250" height="185" />
-  <img src="docs/aliengo.gif" width="250" height="185" />
 </p>
 
 This repo contains the setup for the whole-body controller presented in the following [paper](https://hal.archives-ouvertes.fr/hal-03005133/document): 
@@ -20,7 +18,26 @@ This repo contains the setup for the whole-body controller presented in the foll
 }
 ```
 
-If you or your organization are interested in the source code, please send an email to gennaro.raiola(AT)gmail.com
+## Features
+
+WoLF provides several features for your quadruped robotic friend:
+
+<table style="width:100%">
+  <tr>
+    <td>Push recovery</td>
+    <td>Step reflex</td>
+    <td>Navigation ready</td>
+    <td>Loco-manipulation</td>
+    <td>Multi robot</td>
+  </tr>
+  <tr>
+    <td><img src="docs/push_recovery.gif" width="200" height="130" /> </td>
+    <td><img src="docs/step_reflex.gif" width="200" height="130" /> </td>
+    <td><img src="docs/navigation.jpeg" width="200" height="130" /></td>
+        <td><img src="docs/spot_arm.png" width="200" height="130" /></td>
+  </tr>
+</table>
+
 
 ## How to run the controller
 

@@ -9,6 +9,7 @@ gazebo-ros
 gazebo-ros-control
 gazebo-ros-pkgs
 joy
+spacenav-node
 robot-state-publisher
 rviz-visual-tools
 plotjuggler

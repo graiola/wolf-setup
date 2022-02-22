@@ -78,6 +78,10 @@ If you are using a joypad, press the `start` button when ready, otherwise use th
 
 If you are interested in testing a different quadruped robot check out this [repository](https://github.com/graiola/wolf_descriptions).
 
+## Changelog
+
+Check the changelog [here](CHANGELOG.md)
+
 ## Legal notes
 
 - `wolf-setup` is distributed and licensed under a license GNU General Public License v3.0.

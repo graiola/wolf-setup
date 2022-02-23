@@ -1,6 +1,6 @@
 # WoLF: Whole-body Locomotion Framework for quadruped robots
 
-<p float="center">
+<p align="center">
   <img src="docs/wolf-logo.jpeg" width="250" height="185" />
 </p>
 
@@ -22,21 +22,15 @@ This repo contains the setup for the whole-body controller presented in the foll
 
 WoLF provides several features for your quadruped robotic friend:
 
-<table style="width:100%">
-  <tr>
-    <td>Push recovery</td>
-    <td>Step reflex</td>
-    <td>Navigation ready</td>
-    <td>Loco-manipulation</td>
-    <td>Multi robot</td>
-  </tr>
-  <tr>
-    <td><img src="docs/push_recovery.gif" width="200" height="130" /> </td>
-    <td><img src="docs/step_reflex.gif" width="200" height="130" /> </td>
-    <td><img src="docs/navigation.jpeg" width="200" height="130" /></td>
-        <td><img src="docs/spot_arm.png" width="200" height="130" /></td>
-  </tr>
-</table>
+
+<center>
+
+|  Push recovery |  Step reflex | Navigation ready  | Loco-manipulation  | Multi robot  |
+|:-:|:-:|:-:|:-:|:-:|
+|  <img src="docs/push_recovery.gif" width="200" height="120" /> |   <img src="docs/step_reflex.gif" width="200" height="120" />  | <img src="docs/spot_navigation.gif" width="200" height="120" />  | <img src="docs/spot_arm.gif" width="200" height="120" />  | <img src="docs/robots.png" width="160" height="120" />  |
+
+</center>
+
 
 
 ## How to run the controller
@@ -77,23 +71,19 @@ After the installation, update your bash enviroment:
 
 #### How to start the controller
 
-WoLF provides three different interfaces to move the robot:
+WoLF provides three interfaces to move the robot:
 
-- With a [PS3](docs/ps3.png) joypad: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=ps3`
-- With a [XBox](docs/xbox.jpeg) joypad: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=xbox`
-- With a [keyboard](docs/keyboard.png): `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=keyboard`
+- A [PS3](docs/ps3.png) joypad interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=ps3`
+- A [XBox](docs/xbox.jpeg) joypad interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=xbox`
+- A [keyboard](docs/keyboard.png) interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=keyboard`
 
-Also, a twist topic is always active at `/robot_name/wolf_controller/twist`, and it can be used to send twist commands at a lower priority than the above mentioned interfaces.
-This topic can be used to send `move_base` commands, see [wolf_navigation](https://github.com/graiola/wolf_navigation) for an example.
-If you are using a joypad, press the `start` button when ready, otherwise use the gui as reported in the image below:
-
-<p align="center"> 
-<img src="docs/gui.png">
-</p>
+A twist topic is always active and listening for velocity commands on `/robot_name/wolf_controller/twist`. This topic can be used to send twist commands at a lower priority than the above mentioned interfaces.
+It can be used to send `move_base` commands if you want  to use the ROS navigation stack, see [wolf_navigation](https://github.com/graiola/wolf_navigation) for an example.
+To make the robot stand up, press the `start` button on the joypad or press the `enter` key if you are using the keyboard.
 
 ## How to add a new robot
 
-If you are interested in testing a different quadruped robot check out this [repository](https://github.com/graiola/wolf_descriptions).
+If you want to test a different quadruped robot check out [wolf_descriptions](https://github.com/graiola/wolf_descriptions).
 
 ## Legal notes
 

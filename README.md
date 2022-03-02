@@ -31,7 +31,15 @@ WoLF provides several features for your quadruped robotic friend:
 
 </center>
 
+## Packages
 
+- wolf-setup
+- wolf_descriptions
+- wolf_hardware_interface
+- wolf_gazebo_interface
+- wolf_gazebo_resources
+- wolf_navigation
+- wolf_controller
 
 ## How to run the controller
 

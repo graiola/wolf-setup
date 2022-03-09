@@ -22,7 +22,6 @@ This repo contains the setup for the whole-body controller presented in the foll
 
 WoLF provides several features for your quadruped robotic friend:
 
-
 <center>
 
 |  Push recovery |  Step reflex | Navigation ready  | Loco-manipulation  | Multi robot  |
@@ -31,9 +30,19 @@ WoLF provides several features for your quadruped robotic friend:
 
 </center>
 
+## Packages
+
+- [wolf-setup](https://github.com/graiola/wolf-setup): This repository, containing scripts and installation utilities for WoLF.
+- [wolf_descriptions](https://github.com/graiola/wolf-setup): It contains robot and sensor descriptions used with WoLF. Please check out this repository If you want to add your own robot to WoLF.
+- [wolf_gazebo_resources](https://github.com/graiola/wolf_gazebo_resources): Gazebo models and other goodies to create interesting simulation enviroments.
+- [wolf_hardware_interface](https://github.com/graiola/wolf_hardware_interface): It implements a hardware interface for `ros_control` to be used with WoLF.
+- [wolf_gazebo_interface](https://github.com/graiola/wolf_gazebo_interface): Gazebo hardware interface for `ros_control`.
+- [wolf_aliengo_interface](https://github.com/graiola/wolf_aliengo_interface): Aliengo hardware interface for WoLF using both `wolf_hardware_interface` and `ros_control`.
+- [wolf_navigation](https://github.com/graiola/wolf_navigation): A basic package which interfaces the ROS navigation stack with WoLF ( work in progress! ).
+
 ## How to run WoLF
 
-You can run it by installing the WoLF debian packages on your computer or by running WoLF inside a docker container. First, clone the repository with the following command:
+You can run it by installing the WoLF debian packages on your computer or by running WoLF inside a docker container. First, clone this repository with the following command:
 
 `git clone https://github.com/graiola/wolf-setup.git`
 
@@ -76,7 +85,7 @@ WoLF provides four interfaces to move the robot:
 - A [PS3](docs/ps3.png) joypad interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=ps3`
 - A [XBox](docs/xbox.jpeg) joypad interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=xbox`
 - A [keyboard](docs/keyboard.png) interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=keyboard`
-- A [spacemouse](docs/spacemouse.png) interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=spacemouse`
+- A [spacemouse](docs/spacemouse.pdf) interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=spacemouse`
 
 A twist topic is always active and listening for velocity commands on `/robot_name/wolf_controller/twist`. This topic can be used to send twist commands at a lower priority than the above mentioned interfaces.
 It can also be used to send `move_base` commands if you want  to integrate WoLF with the ROS navigation stack (see [wolf_navigation](https://github.com/graiola/wolf_navigation) for an example).

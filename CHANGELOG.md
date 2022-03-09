@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
+## wolf_controller - [0.1.0]
+
+### Added
+- Set default_step_reflex_max_retraction value to set the maximum step retraction when the step
+  reflex is active
+
+### Changed
+ 
+### Fixed
+
 ## wolf_controller - [0.0.9]
 
 ### Added

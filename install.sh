@@ -105,14 +105,14 @@ then
 	sudo ldconfig
 	sudo rosdep init || true
 	rosdep update
-fi
-
-if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "all") ]]
-then 
 	sudo sh -c 'echo "deb http://xbot.cloud/xbot2-nightly/ubuntu/$(lsb_release -sc) /" > /etc/apt/sources.list.d/xbot-nightly.list'
 	wget -q -O - http://xbot.cloud/xbot2/ubuntu/KEY.gpg | sudo apt-key add -
 	sudo apt-get update
 	sudo apt-get install xbot2_desktop_full -y
+fi
+
+if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "all") ]]
+then 
 	# Download the debians
 	/bin/bash $SCRIPTPATH/support/get_debians.sh
 	#echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"

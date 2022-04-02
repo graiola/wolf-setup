@@ -7,15 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## wolf_controller - [0.1.1]
 
 ### Added
+- isFirstStep and isLastStep in gait_generator
 
 ### Changed
 - update odomPublisher to use tf2 instead of tf
+- reduce torque limits to 0.9 in the solver for safety
  
 ### Fixed 
 - avoid publishing duplicated transforms in the odomPublisher, this solves the "Warning: TF_REPEATED_DATA" issue
 - fix state_estimator estimation_t deduction from string and vice-versa
 - avoid segfault when activating cost
 - fix reference frame for the foot tasks
+- fix regularization for point contact model
  
 ## wolf_controller - [0.1.0]
 

@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
  
+## wolf_controller - [0.1.1]
+
+### Added
+
+### Changed
+- update odomPublisher to use tf2 instead of tf
+ 
+### Fixed 
+- avoid publishing duplicated transforms in the odomPublisher, this solves the "Warning: TF_REPEATED_DATA" issue
+- fix state_estimator estimation_t deduction from string and vice-versa
+- avoid segfault when activating cost
+- fix reference frame for the foot tasks
+ 
 ## wolf_controller - [0.1.0]
 
 ### Added

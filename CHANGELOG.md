@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - isFirstStep and isLastStep in gait_generator
+- activate_com_z, activate_angular_momentum, activate_postural
+- use postural and waist z
 
 ### Changed
 - update odomPublisher to use tf2 instead of tf

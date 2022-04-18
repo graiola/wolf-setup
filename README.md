@@ -33,7 +33,7 @@ WoLF provides several features for your quadruped robotic friend:
 ## Packages
 
 - [wolf-setup](https://github.com/graiola/wolf-setup): This repository, containing scripts and installation utilities for WoLF.
-- [wolf_descriptions](https://github.com/graiola/wolf-setup): It contains robot and sensor descriptions used with WoLF. Please check out this repository If you want to add your own robot to WoLF.
+- [wolf_descriptions](https://github.com/graiola/wolf_descriptions): It contains robot and sensor descriptions used with WoLF. Please check out this repository If you want to add your own robot to WoLF.
 - [wolf_gazebo_resources](https://github.com/graiola/wolf_gazebo_resources): Gazebo models and other goodies to create interesting simulation enviroments.
 - [wolf_hardware_interface](https://github.com/graiola/wolf_hardware_interface): It implements a hardware interface for `ros_control` to be used with WoLF.
 - [wolf_gazebo_interface](https://github.com/graiola/wolf_gazebo_interface): Gazebo hardware interface for `ros_control`.

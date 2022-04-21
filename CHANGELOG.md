@@ -8,8 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - isFirstStep and isLastStep in gait_generator
-- activate_com_z, activate_angular_momentum, activate_postural
-- use postural and waist z
+- export activate_com_z, activate_angular_momentum, activate_postural, activate_joint_position_limits, regularization
+- add the possibility to activate the postural, com height control, angular momentum and joint position limits
+- joint position limits
+- trajectory interpolation and waypoints for the cartesian tasks
 
 ### Changed
 - update odomPublisher to use tf2 instead of tf

@@ -48,7 +48,7 @@ You can run it by installing the WoLF debian packages on your computer or by run
 
 ### Docker container for Ubuntu 16.04 - 18.04 - 20.04
 
-To download the image from [docker-hub](https://hub.docker.com/repository/docker/serger87/wolf) and launch WoLF within a docker container, run the following script:
+To download the image from [docker-hub](https://hub.docker.com/r/serger87/wolf-app) and launch WoLF within a docker container, run the following script:
 
 `./run_docker.sh`
 

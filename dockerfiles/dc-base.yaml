@@ -6,11 +6,11 @@ services:
       context: ${CONTEXT_PATH}
       dockerfile: ${DOCKERFILE_PATH}/Dockerfile
       args:
-        - IMAGE=nvidia/cudagl:9.2-base-ubuntu18.04
+        - IMAGE=nvidia/opengl:base-ubuntu18.04
   wolf-base-focal:
     image: wolf-base:focal
     build:
       context: ${CONTEXT_PATH}
       dockerfile: ${DOCKERFILE_PATH}/Dockerfile
       args:
-        - IMAGE=nvidia/cudagl:11.4.2-base-ubuntu20.04
+        - IMAGE=nvidia/opengl:base-ubuntu20.04

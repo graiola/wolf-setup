@@ -82,4 +82,9 @@ rt_logger:
   ubuntu:
     xenial: ros-kinetic-rt-logger
     bionic: ros-melodic-rt-logger
-    focal:  ros-noetic-rt-logger
+    focal:  ros-noetic-rt-logger 
+rt_gui:
+  ubuntu:
+    xenial: ros-kinetic-rt-gui
+    bionic: ros-melodic-rt-gui
+    focal:  ros-noetic-rt-gui

@@ -3,3 +3,5 @@ libqt5opengl5-dev
 libmatio-dev
 unzip
 spacenavd
+libreadline-dev
+libqwt-qt5-dev

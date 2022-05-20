@@ -16,9 +16,16 @@ wolf_description_utils
 
 # SUPPORT
 rt_logger
+rt_gui
+wolf_rviz_plugin
 
 # CORE
 wolf_gazebo_resources
 wolf_hardware_interface
 wolf_gazebo_interface
 wolf_controller
+
+# NAV
+wolf_navigation_utils
+wolf_exploration
+wolf_waypoints

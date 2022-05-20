@@ -78,6 +78,26 @@ wolf_description_utils:
     xenial: ros-kinetic-wolf-description-utils
     bionic: ros-melodic-wolf-description-utils
     focal:  ros-noetic-wolf-description-utils
+wolf_rviz_plugin:
+  ubuntu:
+    xenial: ros-kinetic-wolf-rviz-plugin
+    bionic: ros-melodic-wolf-rviz-plugin
+    focal:  ros-noetic-wolf-rviz-plugin
+wolf_navigation_utils:
+  ubuntu:
+    xenial: ros-kinetic-wolf-navigation-utils
+    bionic: ros-melodic-wolf-navigation-utils
+    focal:  ros-noetic-wolf-navigation-utils
+wolf_exploration:
+  ubuntu:
+    xenial: ros-kinetic-wolf-exploration
+    bionic: ros-melodic-wolf-exploration
+    focal:  ros-noetic-wolf-exploration
+wolf_waypoints:
+  ubuntu:
+    xenial: ros-kinetic-wolf-waypoints
+    bionic: ros-melodic-wolf-waypoints
+    focal:  ros-noetic-wolf-waypoints
 rt_logger:
   ubuntu:
     xenial: ros-kinetic-rt-logger

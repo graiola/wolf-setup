@@ -17,11 +17,11 @@ Help Options:
 \n\n
 Application Options:
 \n 
--r,--robot \tRobot name [aliengo|spot|hyq], example: -r spot
+-r,--robot \tRobot name [aliengo|spot|anymalc], example: -r spot
 \n 
 -d,--device \tInput device type [ps3|xbox|twist|keyboard], example: -d ps3
 \n 
--w,--world \tWorld name [empty|ruins|pyramid|ramps|stairs], example: -w ruins
+-w,--world \tWorld name [empty|ruins|pyramid|ramps|stairs|office], example: -w ruins
 \n 
 -g,--gui \tLaunch rviz
 \n 
@@ -74,7 +74,7 @@ while [ -n "$1" ]; do # while loop starts
 	case "$1" in
 
          -r|--robot)
-    		ROBOT_NAME="$2"
+		ROBOT_NAME="$2"
 		shift
 		;;
 
@@ -117,7 +117,7 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Checks
-if [[ ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot") ||  ( $ROBOT_NAME == "hyq")]] 
+if [[ ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot") ||  ( $ROBOT_NAME == "anymalc")]] 
 then 
 	echo "Selected robot: $ROBOT_NAME"
 else
@@ -135,7 +135,7 @@ else
 	exit 0
 fi
 
-if [[ ( $WORLD_NAME == "empty") ||  ( $WORLD_NAME == "ruins") ||  ( $WORLD_NAME == "pyramid") ||  ( $WORLD_NAME == "ramps") ||  ( $WORLD_NAME == "stairs") ]] 
+if [[ ( $WORLD_NAME == "empty") ||  ( $WORLD_NAME == "ruins") ||  ( $WORLD_NAME == "pyramid") ||  ( $WORLD_NAME == "ramps") ||  ( $WORLD_NAME == "stairs") ||  ( $WORLD_NAME == "office") ]] 
 then 
 	echo "Selected world: $WORLD_NAME"
 else

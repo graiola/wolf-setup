@@ -62,6 +62,14 @@ In case you don't have docker installed on your computer, you can run the follow
 
 This script will install docker and its dependencies.
 
+#### Demos:
+
+We prepared some demos to run directly within the docker container:
+
+- `./demos/navigation.sh` : Run a navigation demo inside an office
+- `./demos/manipulation.sh` : Run spot with a kinova arm mounted on top
+- `./demos/locomotion.sh` : Run a demo with stairs
+
 #### Notes:
 
 - It could be necessary to restart the computer after running `install_docker.sh`.

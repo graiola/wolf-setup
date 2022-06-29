@@ -4,7 +4,7 @@
   <img src="docs/wolf-logo.jpeg" width="250" height="185" />
 </p>
 
-This repo contains the setup for the whole-body controller presented in the following [paper](https://hal.archives-ouvertes.fr/hal-03005133/document): 
+This repo contains the setup for the whole-body controller presented in the following papers [raiola2020simple](https://hal.archives-ouvertes.fr/hal-03005133/document), [raiola2022wolf](https://arxiv.org/pdf/2205.06526.pdf): 
 
 ```
 @article{raiola2020simple,
@@ -15,6 +15,13 @@ This repo contains the setup for the whole-body controller presented in the foll
   pages={159},
   year={2020},
   publisher={Frontiers}
+}
+
+@article{raiola2022wolf,
+  title={WoLF: the Whole-body Locomotion Framework for Quadruped Robots},
+  author={Raiola, Gennaro and Focchi, Michele and Hoffman, Enrico Mingo},
+  journal={arXiv preprint arXiv:2205.06526},
+  year={2022}
 }
 ```
 

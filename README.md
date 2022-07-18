@@ -50,7 +50,7 @@ WoLF provides several features for your quadruped robotic friend:
 
 ## How to run WoLF
 
-You can run it by installing the WoLF debian packages on your computer or by running WoLF inside a docker container. First, clone this repository with the following command:
+You can run WoLF by installing the debian packages on your computer or with a docker container. To clone this repository run the following command:
 
 `git clone https://github.com/graiola/wolf-setup.git`
 

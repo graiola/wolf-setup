@@ -33,7 +33,7 @@ WoLF provides several features for your quadruped robotic friend:
 
 |  Push recovery |  Step reflex | Navigation ready  | Loco-manipulation  | Multi robot  |
 |:-:|:-:|:-:|:-:|:-:|
-|  <img src="docs/push_recovery.gif" width="200" height="120" /> |   <img src="docs/step_reflex.gif" width="200" height="120" />  | <img src="docs/spot_navigation.gif" width="200" height="120" />  | <img src="docs/spot_arm.gif" width="200" height="120" />  | <img src="docs/robots.png" width="160" height="120" />  |
+|  <img src="docs/push_recovery.gif" width="190" height="120" /> |   <img src="docs/step_reflex.gif" width="190" height="120" />  | <img src="docs/spot_navigation.gif" width="190" height="120" />  | <img src="docs/spot_arm.gif" width="190" height="120" />  | <img src="docs/robots.png" width="190" height="120" />  |
 
 </center>
 

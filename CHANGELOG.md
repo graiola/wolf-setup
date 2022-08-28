@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## wolf_controller - [0.1.2]
 
 ### Added
-- clean waypoints if control mode is changed
+- clean trajectory waypoints if control mode is changed
 
 ### Changed
 - robot_semantic_description changed to robot_description_semantic to be compliant with MoveIt!
@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - ramp up the desired joint position instead of the desired torques when standing up
 - support polygon scaling inside push recovery
+- make rt_gui dependency optional in package.xml
 
 ## wolf_controller - [0.1.1]
 

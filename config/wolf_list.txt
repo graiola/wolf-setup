@@ -18,6 +18,7 @@ wolf_description_utils
 rt_logger
 rt_gui
 wolf_rviz_plugin
+wolf_msgs
 
 # CORE
 wolf_gazebo_resources

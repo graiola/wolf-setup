@@ -3,6 +3,11 @@ wolf_controller:
     xenial: ros-kinetic-wolf-controller
     bionic: ros-melodic-wolf-controller
     focal:  ros-noetic-wolf-controller
+wolf_msgs:
+  ubuntu:
+    xenial: ros-kinetic-wolf-msgs
+    bionic: ros-melodic-wolf-msgs
+    focal:  ros-noetic-wolf-msgs
 wolf_gazebo_interface:
   ubuntu:
     xenial: ros-kinetic-wolf-gazebo-interface

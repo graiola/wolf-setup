@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - clean trajectory waypoints if control mode is changed
+- clean waypoints if control mode is changed
+- wolf_msgs
 
 ### Changed
 - robot_semantic_description changed to robot_description_semantic to be compliant with MoveIt!

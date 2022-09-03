@@ -26,6 +26,10 @@ velodyne-gazebo-plugins
 velodyne-description
 move-base
 dwa-local-planner
+teb-local-planner 
+global-planner
 map-server
 amcl
 gmapping
+costmap-converter
+costmap-2d

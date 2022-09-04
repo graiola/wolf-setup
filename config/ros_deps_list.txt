@@ -11,6 +11,7 @@ gazebo-ros-pkgs
 joy
 spacenav-node
 robot-state-publisher
+joint-state-publisher-gui
 rviz-visual-tools
 plotjuggler
 plotjuggler-ros

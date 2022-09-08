@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## wolf_controller - [0.1.3]
+
+### Added
+- imu accelerometer filter and rqt interface
+
+### Changed
+- function naming inside state estimator to reflect the same functions in wolf_estimation
+
+### Fixed
+- bug about imu angular accelerations in wolf_gazebo_interface
+
+
 ## wolf_controller - [0.1.2]
 
 ### Added

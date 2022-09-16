@@ -12,9 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - function naming inside state estimator to reflect the same functions in wolf_estimation
+- increase to 1khz the publishing frequency of the joint state publisher
 
 ### Fixed
 - bug about imu angular accelerations in wolf_gazebo_interface
+- reset input command if inactive
 
 
 ## wolf_controller - [0.1.2]

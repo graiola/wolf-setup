@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - imu accelerometer filter and rqt interface
 - controller state message
+- des_contact ins ContactForces msg
 
 ### Changed
 - function naming inside state estimator to reflect the same functions in wolf_estimation

@@ -21,6 +21,7 @@ wolf_rviz_plugin
 wolf_msgs
 
 # CORE
+wolf_estimation
 wolf_gazebo_resources
 wolf_hardware_interface
 wolf_gazebo_interface

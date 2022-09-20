@@ -113,3 +113,8 @@ wolf_msgs:
     xenial: ros-kinetic-wolf-msgs
     bionic: ros-melodic-wolf-msgs
     focal:  ros-noetic-wolf-msgs
+wolf_estimation:
+  ubuntu:
+    xenial: ros-kinetic-wolf-estimation
+    bionic: ros-melodic-wolf-estimation
+    focal:  ros-noetic-wolf-estimation

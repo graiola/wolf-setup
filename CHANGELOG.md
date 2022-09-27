@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - controller state message
 - des_contact ins ContactForces msg
 - odometry with wolf_estimation inside the controller
+- contact force minimization tasks, qddot minimization task
 
 ### Changed
 - function naming inside state estimator to reflect the same functions in wolf_estimation

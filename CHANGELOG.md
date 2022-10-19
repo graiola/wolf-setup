@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+- use desired contact forces for the odom estimation, this seems to solve the z drift problem
 
 ### Fixed
 - Postural task name

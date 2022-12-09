@@ -26,6 +26,7 @@ velodyne-pointcloud
 velodyne-gazebo-plugins
 velodyne-description
 move-base
+global-planner 
 dwa-local-planner
 teb-local-planner 
 global-planner

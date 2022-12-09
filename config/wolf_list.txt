@@ -29,5 +29,7 @@ wolf_controller
 
 # NAV
 wolf_navigation_utils
-wolf_exploration
-wolf_waypoints
+task_interface
+task_exploration
+task_waypoints
+task_homing

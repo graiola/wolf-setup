@@ -68,6 +68,11 @@ ylo2_description:
     xenial: ros-kinetic-ylo2-description
     bionic: ros-melodic-ylo2-description
     focal:  ros-noetic-ylo2-description
+go1_description:
+ ubuntu:
+    xenial: ros-kinetic-go1-description
+    bionic: ros-melodic-go1-description
+    focal:  ros-noetic-go1-description
 kinova_description:
   ubuntu:
     xenial: ros-kinetic-kinova-description

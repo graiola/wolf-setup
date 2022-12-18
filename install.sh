@@ -9,7 +9,7 @@ set -e
 
 source $SCRIPTPATH/support/fun.cfg
 
-USAGE="Usage: \n run_docker [OPTIONS...]
+USAGE="Usage: \n install [OPTIONS...]
 \n\n
 Help Options:
 \n 

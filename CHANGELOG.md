@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Postural task name
+- height control when going un slopes using the ground_truth ( or any other absolute reference for the base )
+- now visualization of the capture point info is done wrt the terrain for the z coordinate
 
 ## wolf_controller - [0.1.3]
 

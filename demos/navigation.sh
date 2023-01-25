@@ -39,6 +39,13 @@ WORLD_NAME=office
 MAPPING=true
 GAZEBO_GUI=true
 
+if [[ ( $ROBOT_NAME == "go1") ]]
+then
+	LIDAR_TOPIC=/rslidar_points
+else
+	LIDAR_TOPIC=/velodyne_points
+fi
+
 # Define the image name
 IMAGE_NAME=serger87/$CONTAINER_NAME:$IMAGE_TAG
 
@@ -57,4 +64,4 @@ docker run --user root:root --hostname $HOSTNAME --net=bridge --device=/dev/dri:
 	--gpus all \
 	--device=/dev/ttyUSB0 \
 	--volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/xbot/setup.sh; roslaunch wolf_navigation_utils wolf_navigation.launch mapping:=$MAPPING world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME gazebo_gui:=$GAZEBO_GUI"
+        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/xbot/setup.sh; roslaunch wolf_navigation_utils wolf_navigation.launch mapping:=$MAPPING world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME gazebo_gui:=$GAZEBO_GUI lidar_topic:=$LIDAR_TOPIC"

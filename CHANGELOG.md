@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## wolf_controller - [0.1.5]
+
+### Added
+- the possibility to publish odom and tf from the robot odom estimator
+- wolf_controller_utils
+
+### Changed
+
+### Fixed
+
 ## wolf_controller - [0.1.4]
 
 ### Added

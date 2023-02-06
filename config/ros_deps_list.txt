@@ -37,3 +37,7 @@ gmapping
 costmap-converter
 costmap-2d
 robot-localization
+pcl-ros
+pcl-conversions
+rviz-satellite
+

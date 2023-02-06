@@ -48,6 +48,7 @@ WoLF provides several features for your quadruped robotic friend:
 - [wolf_navigation](https://github.com/graiola/wolf_navigation): A basic package which interfaces the ROS navigation stack with WoLF ( work in progress! ).
 - [wolf_rviz_plugin](https://github.com/graiola/wolf_rviz_plugin): A plugin for rviz to interact with some functionalities of WoLF.
 - [wolf_msgs](https://github.com/graiola/wolf_msgs): ROS message and service definitions.
+- [wolf_controller_utils](https://github.com/graiola/wolf_controller_utils): WoLF common utilities.
 
 ## How to run WoLF
 

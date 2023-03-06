@@ -35,3 +35,6 @@ task_interface
 task_exploration
 task_waypoints
 task_homing
+slam_toolbox
+slam_toolbox_msgs
+slam_toolbox_rviz

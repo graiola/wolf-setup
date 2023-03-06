@@ -138,3 +138,18 @@ wolf_estimation:
     xenial: ros-kinetic-wolf-estimation
     bionic: ros-melodic-wolf-estimation
     focal:  ros-noetic-wolf-estimation
+slam_toolbox:
+  ubuntu:
+    xenial: ros-kinetic-slam-toolbox
+    bionic: ros-melodic-slam-toolbox
+    focal:  ros-noetic-slam-toolbox
+slam_toolbox_msgs:
+  ubuntu:
+    xenial: ros-kinetic-slam-toolbox-msgs
+    bionic: ros-melodic-slam-toolbox-msgs
+    focal:  ros-noetic-slam-toolbox-msgs
+slam_toolbox_rviz:
+  ubuntu:
+    xenial: ros-kinetic-slam-toolbox-rviz
+    bionic: ros-melodic-slam-toolbox-rviz
+    focal:  ros-noetic-slam-toolbox-rviz

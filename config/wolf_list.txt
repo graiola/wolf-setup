@@ -38,3 +38,7 @@ task_homing
 slam_toolbox
 slam_toolbox_msgs
 slam_toolbox_rviz
+nimbro_cam_transport
+nimbro_log_transport
+nimbro_service_transport
+nimbro_topic_transport

@@ -138,3 +138,38 @@ wolf_estimation:
     xenial: ros-kinetic-wolf-estimation
     bionic: ros-melodic-wolf-estimation
     focal:  ros-noetic-wolf-estimation
+slam_toolbox:
+  ubuntu:
+    xenial: ros-kinetic-slam-toolbox
+    bionic: ros-melodic-slam-toolbox
+    focal:  ros-noetic-slam-toolbox
+slam_toolbox_msgs:
+  ubuntu:
+    xenial: ros-kinetic-slam-toolbox-msgs
+    bionic: ros-melodic-slam-toolbox-msgs
+    focal:  ros-noetic-slam-toolbox-msgs
+slam_toolbox_rviz:
+  ubuntu:
+    xenial: ros-kinetic-slam-toolbox-rviz
+    bionic: ros-melodic-slam-toolbox-rviz
+    focal:  ros-noetic-slam-toolbox-rviz
+nimbro_cam_transport:
+  ubuntu:
+    xenial: ros-kinetic-nimbro-cam-transport
+    bionic: ros-melodic-nimbro-cam-transport
+    focal:  ros-noetic-nimbro-cam-transport
+nimbro_log_transport:
+  ubuntu:
+    xenial: ros-kinetic-nimbro-log-transport
+    bionic: ros-melodic-nimbro-log-transport
+    focal:  ros-noetic-nimbro-log-transport
+nimbro_service_transport:
+  ubuntu:
+    xenial: ros-kinetic-nimbro-service-transport
+    bionic: ros-melodic-nimbro-service-transport
+    focal:  ros-noetic-nimbro-service-transport
+nimbro_topic_transport:
+  ubuntu:
+    xenial: ros-kinetic-nimbro-topic-transport
+    bionic: ros-melodic-nimbro-topic-transport
+    focal:  ros-noetic-nimbro-topic-transport

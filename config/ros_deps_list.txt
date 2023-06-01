@@ -40,4 +40,5 @@ robot-localization
 pcl-ros
 pcl-conversions
 rviz-satellite
-
+sparse-bundle-adjustment
+fuse-loss

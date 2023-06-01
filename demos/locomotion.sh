@@ -34,7 +34,8 @@ echo '
 ROS=melodic
 CONTAINER_NAME="wolf-app"
 IMAGE_TAG="bionic"
-ROBOT_NAME=spot
+ROBOT_MODEL=spot
+ROBOT_NAME=
 WORLD_NAME=stairs
 NET=bridge
 
@@ -56,4 +57,4 @@ docker run --user root:root --hostname $HOSTNAME --net=$NET --device=/dev/dri:/d
         --gpus all \
         --device=/dev/ttyUSB0 \
         --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/xbot/setup.sh; roslaunch wolf_controller wolf_controller_bringup.launch world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME rviz_gui:=true plot_node_gui:=true"
+        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/xbot/setup.sh; roslaunch wolf_controller wolf_controller_bringup.launch world_name:=$WORLD_NAME robot_model:=$ROBOT_MODEL robot_name:=$ROBOT_NAME rviz_gui:=true plot_node_gui:=true"

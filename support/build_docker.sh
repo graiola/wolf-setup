@@ -60,9 +60,9 @@ fi
 if [[ ( $BUILD_OPT == "app") || ( $BUILD_OPT == "all") ]]
 then 
 	DOCKERFILE_PATH=$SCRIPTPATH/../dockerfiles/app CONTEXT_PATH=$SCRIPTPATH/.. docker-compose -f $APP_COMPOSE build --no-cache
-	docker tag wolf-app:bionic serger87/wolf-app:bionic
+        #docker tag wolf-app:bionic serger87/wolf-app:bionic
 	docker tag wolf-app:focal serger87/wolf-app:focal
-	docker push serger87/wolf-app:bionic
+        #docker push serger87/wolf-app:bionic
 	docker push serger87/wolf-app:focal
 fi
 

@@ -31,9 +31,9 @@ echo '
 '
 
 # Options
-ROS=melodic
+ROS=noetic
 CONTAINER_NAME="wolf-app"
-IMAGE_TAG="bionic"
+IMAGE_TAG="focal"
 ROBOT_MODEL=spot
 ROBOT_NAME=
 WORLD_NAME=ruins

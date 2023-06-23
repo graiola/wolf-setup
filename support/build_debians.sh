@@ -44,8 +44,8 @@ done
 
 BUILDER_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-builder.yaml
 
-BRANCH=$BRANCH_OPT ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE down
-BRANCH=$BRANCH_OPT ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans
+#BRANCH=$BRANCH_OPT ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE down
+#BRANCH=$BRANCH_OPT ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans
 
 BRANCH=$BRANCH_OPT ROS_DISTRO=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE down
 BRANCH=$BRANCH_OPT ROS_DISTRO=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans

@@ -1,12 +1,12 @@
 version: "3.4"
 services:
-  wolf-app-bionic:
-    image: wolf-app:bionic
-    build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
-      args:
-        - IMAGE=wolf-base:bionic
+  #wolf-app-bionic:
+  #  image: wolf-app:bionic
+  #  build:
+  #    context: ${CONTEXT_PATH}
+  #    dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+  #    args:
+  #      - IMAGE=wolf-base:bionic
   wolf-app-focal:
     image: wolf-app:focal
     build:

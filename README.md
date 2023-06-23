@@ -86,7 +86,7 @@ We prepared some demos to run directly within the docker container:
 - Use the `install_nvidia.sh` script in the `support` folder  if you are experiencing the following problem: `could not select device driver "" with capabilities: [[gpu]]`. 
 - If you are experiencing this problem `nvidia-container-cli initialization error nvml error driver not loaded`, it probably means that your computer does not have the latest nvidia-drivers installed, so be sure that they are installed and updated to the last version.
 
-### System installation for Ubuntu 18.04 - 20.04
+### System installation for Ubuntu 20.04
 
 To install the required dependencies (including ROS) and the WoLF debian packages run the following:
 

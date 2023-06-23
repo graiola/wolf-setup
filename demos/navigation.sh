@@ -31,9 +31,9 @@ echo '
 '
 
 # Options
-ROS=melodic
+ROS=noetic
 CONTAINER_NAME="wolf-app"
-IMAGE_TAG="bionic"
+IMAGE_TAG="focal"
 ROBOT_MODEL=spot
 ROBOT_NAME=
 WORLD_NAME=office
@@ -41,7 +41,7 @@ MAPPING=true
 GAZEBO_GUI=true
 NET=bridge
 
-if [[ ( $ROBOT_NAME == "go1") ]]
+if [[ ( $ROBOT_MODEL == "go1") ]]
 then
 	LIDAR_TOPIC=/rslidar_points
 else

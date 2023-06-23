@@ -1,12 +1,12 @@
 version: "3.4"
 services:
-  wolf-base-bionic:
-    image: wolf-base:bionic
-    build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
-      args:
-        - IMAGE=nvidia/opengl:base-ubuntu18.04
+  #wolf-base-bionic:
+  #  image: wolf-base:bionic
+  #  build:
+  #    context: ${CONTEXT_PATH}
+  #    dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+  #    args:
+  #      - IMAGE=nvidia/opengl:base-ubuntu18.04
   wolf-base-focal:
     image: wolf-base:focal
     build:

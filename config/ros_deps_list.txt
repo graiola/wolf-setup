@@ -42,3 +42,6 @@ pcl-conversions
 rviz-satellite
 sparse-bundle-adjustment
 fuse-loss
+slam-toolbox
+slam-toolbox-msgs
+slam-toolbox-rviz

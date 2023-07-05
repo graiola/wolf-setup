@@ -18,8 +18,10 @@ wolf_description_utils
 # SUPPORT
 rt_logger
 rt_gui
+ai_utils_ros
 wolf_rviz_plugin
 wolf_msgs
+wolf_nvga
 
 # CORE
 wolf_controller_utils

@@ -128,6 +128,11 @@ rt_gui:
     xenial: ros-kinetic-rt-gui
     bionic: ros-melodic-rt-gui
     focal:  ros-noetic-rt-gui
+ai_utils_ros:
+  ubuntu:
+    xenial: ros-kinetic-ai-utils-ros
+    bionic: ros-melodic-ai-utils-ros
+    focal:  ros-noetic-ai-utils-ros
 wolf_msgs:
   ubuntu:
     xenial: ros-kinetic-wolf-msgs
@@ -138,6 +143,11 @@ wolf_estimation:
     xenial: ros-kinetic-wolf-estimation
     bionic: ros-melodic-wolf-estimation
     focal:  ros-noetic-wolf-estimation
+wolf_nvga:
+  ubuntu:
+    xenial: ros-kinetic-wolf-nvga
+    bionic: ros-melodic-wolf-nvga
+    focal:  ros-noetic-wolf-nvga
 nimbro_cam_transport:
   ubuntu:
     xenial: ros-kinetic-nimbro-cam-transport

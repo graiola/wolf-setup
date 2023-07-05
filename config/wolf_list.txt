@@ -21,7 +21,7 @@ rt_gui
 ai_utils_msgs
 wolf_rviz_plugin
 wolf_msgs
-wolf_nvga
+wolf_ngva
 
 # CORE
 wolf_controller_utils

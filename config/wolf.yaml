@@ -143,11 +143,11 @@ wolf_estimation:
     xenial: ros-kinetic-wolf-estimation
     bionic: ros-melodic-wolf-estimation
     focal:  ros-noetic-wolf-estimation
-wolf_nvga:
+wolf_ngva:
   ubuntu:
-    xenial: ros-kinetic-wolf-nvga
-    bionic: ros-melodic-wolf-nvga
-    focal:  ros-noetic-wolf-nvga
+    xenial: ros-kinetic-wolf-ngva
+    bionic: ros-melodic-wolf-ngva
+    focal:  ros-noetic-wolf-ngva
 nimbro_cam_transport:
   ubuntu:
     xenial: ros-kinetic-nimbro-cam-transport

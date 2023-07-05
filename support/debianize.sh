@@ -22,12 +22,15 @@ Application Options:
 -b,--branch\tBranch to install, example: -b devel
 \n
 -w, --workspace\tWorkspace to debianize, example: -w ros_ws
+\n
+-p, --pkg\tSelect package to compile, example: -p package_name
 "
 
 # Default
 BRANCH=devel
 OS=ubuntu
 ROS_WS=ros_ws
+SINGLE_PKG=
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
 then 
@@ -45,6 +48,10 @@ while [ -n "$1" ]; do # while loop starts
 		ROS_WS="$2"
 		shift
 		;;
+        -p|--pkg)
+                SINGLE_PKG="$2"
+                shift
+                ;;
 	*) echo "Option $1 not recognized!" 
 		echo -e $USAGE
 		exit 0;;
@@ -64,6 +71,7 @@ elif [ $OS_VERSION == "focal" ]; then
 	PYTHON_NAME=python3
 else
 	echo -e "${COLOR_WARN}Wrong Ubuntu! This script supports Ubuntu 18.04 - 20.04${COLOR_RESET}"
+        exit 0
 fi
 
 sudo apt-get update && sudo apt-get install -y ${PYTHON_NAME}-bloom fakeroot
@@ -75,24 +83,46 @@ export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake
 
 rosdep update
 
-PKGS=$(cat $SCRIPTPATH/../config/wolf_list.txt | grep -v \#)
 
-for PKG in $PKGS
-do
-	roscd $PKG
+function build()
+{
+    bloom-generate rosdebian --os-name $OS --os-version $OS_VERSION --ros-distro $ROS_DISTRO
 
-	bloom-generate rosdebian --os-name $OS --os-version $OS_VERSION --ros-distro $ROS_DISTRO
+    echo -e "override_dh_usrlocal:" >> debian/rules
+    echo -e "override_dh_shlibdeps:" >> debian/rules
+    echo -e "	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info" >> debian/rules
 
-	echo -e "override_dh_usrlocal:" >> debian/rules
-	echo -e "override_dh_shlibdeps:" >> debian/rules
-	echo -e "	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info" >> debian/rules
+    fakeroot debian/rules binary
+    #dpkg-buildpackage -nc -d -uc -us
+    sudo dpkg -i ../*.deb
 
-	fakeroot debian/rules binary
-	#dpkg-buildpackage -nc -d -uc -us
-	sudo dpkg -i ../*.deb
+    mkdir -p $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION
 
-	mkdir -p $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION
-	
-	rm -rf debian obj-x86_64-linux-gnu
+    rm -rf debian obj-x86_64-linux-gnu
+}
 
-done
+
+if [[ ( $SINGLE_PKG != "") ]]
+then
+
+    roscd $SINGLE_PKG
+    build
+
+else
+
+    PKGS=$(cat $SCRIPTPATH/../config/wolf_list.txt | grep -v \#)
+
+    for PKG in $PKGS
+    do
+            roscd $PKG
+
+            if [[ $? == 0 ]]
+            then
+               build
+            else
+                echo -e "${COLOR_WARN}${PKG} is not available${COLOR_RESET}"
+            fi
+
+    done
+
+ fi

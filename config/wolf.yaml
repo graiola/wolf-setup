@@ -128,11 +128,11 @@ rt_gui:
     xenial: ros-kinetic-rt-gui
     bionic: ros-melodic-rt-gui
     focal:  ros-noetic-rt-gui
-ai_utils_ros:
+ai_utils_msgs:
   ubuntu:
-    xenial: ros-kinetic-ai-utils-ros
-    bionic: ros-melodic-ai-utils-ros
-    focal:  ros-noetic-ai-utils-ros
+    xenial: ros-kinetic-ai-utils-msgs
+    bionic: ros-melodic-ai-utils-msgs
+    focal:  ros-noetic-ai-utils-msgs
 wolf_msgs:
   ubuntu:
     xenial: ros-kinetic-wolf-msgs

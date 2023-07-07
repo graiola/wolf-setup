@@ -113,6 +113,11 @@ task_homing:
     xenial: ros-kinetic-task-homing
     bionic: ros-melodic-task-homing
     focal:  ros-noetic-task-homing
+task_goto:
+  ubuntu:
+    xenial: ros-kinetic-task-goto
+    bionic: ros-melodic-task-goto
+    focal:  ros-noetic-task-goto
 task_interface:
   ubuntu:
     xenial: ros-kinetic-task-interface

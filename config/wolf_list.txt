@@ -37,6 +37,7 @@ task_interface
 task_exploration
 task_waypoints
 task_homing
+task_goto
 nimbro_cam_transport
 nimbro_log_transport
 nimbro_service_transport

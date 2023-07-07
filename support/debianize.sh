@@ -71,18 +71,18 @@ elif [ $OS_VERSION == "focal" ]; then
 	PYTHON_NAME=python3
 else
 	echo -e "${COLOR_WARN}Wrong Ubuntu! This script supports Ubuntu 18.04 - 20.04${COLOR_RESET}"
-        exit 0
+	exit 0
 fi
 
 sudo apt-get update && sudo apt-get install -y ${PYTHON_NAME}-bloom fakeroot
 
+unset ROS_PACKAGE_PATH
 source /opt/ros/$ROS_DISTRO/setup.bash
 source $HOME/$ROS_WS/devel/setup.bash
 source /opt/xbot/setup.sh
 export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake
 
 rosdep update
-
 
 function build()
 {

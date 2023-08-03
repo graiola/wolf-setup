@@ -66,4 +66,4 @@ docker run --user root:root --hostname $HOSTNAME --net=$NET --device=/dev/dri:/d
 	--gpus all \
 	--device=/dev/ttyUSB0 \
 	--volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/xbot/setup.sh; roslaunch wolf_navigation_utils wolf_navigation.launch mapping:=$MAPPING world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME robot_model:=$ROBOT_MODEL gazebo_gui:=$GAZEBO_GUI lidar_topic:=$LIDAR_TOPIC initial_xyz=[0.0,0.0,0.3]"
+        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/xbot/setup.sh; roslaunch wolf_navigation_utils wolf_navigation.launch mapping:=$MAPPING world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME robot_model:=$ROBOT_MODEL gazebo_gui:=$GAZEBO_GUI lidar_topic:=$LIDAR_TOPIC initial_xyz=[0.0,0.0,1.0]"

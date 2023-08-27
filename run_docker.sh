@@ -17,7 +17,7 @@ Help Options:
 \n\n
 Application Options:
 \n 
--r,--robot \tRobot name [aliengo|spot|anymalc], example: -r spot
+-r,--robot \tRobot name [aliengo|spot|go1], example: -r spot
 \n 
 -d,--device \tInput device type [ps3|xbox|twist|keyboard], example: -d ps3
 \n 
@@ -40,7 +40,7 @@ RUN_LOCAL_WS=false
 DOCKER_NET=bridge
 ROS_WS=
 CONTAINER_NAME="wolf-app"
-IMAGE_TAG="bionic"
+IMAGE_TAG="focal"
 
 echo ' 
 ###########################################
@@ -117,7 +117,7 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Checks
-if [[ ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot") ||  ( $ROBOT_NAME == "anymalc")]] 
+if [[ ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot") ||  ( $ROBOT_NAME == "go1")]] 
 then 
 	echo "Selected robot: $ROBOT_NAME"
 else

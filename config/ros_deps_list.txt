@@ -46,3 +46,4 @@ fuse-loss
 slam-toolbox
 slam-toolbox-msgs
 slam-toolbox-rviz
+cv-bridge

@@ -105,7 +105,8 @@ then
 	sudo ldconfig
 	sudo rosdep init || true
 	rosdep update
-	sudo sh -c 'echo "deb http://xbot.cloud/xbot2-nightly/ubuntu/$(lsb_release -sc) /" > /etc/apt/sources.list.d/xbot-nightly.list'
+	#sudo sh -c 'echo "deb http://xbot.cloud/xbot2-nightly/ubuntu/$(lsb_release -sc) /" > /etc/apt/sources.list.d/xbot-nightly.list'
+	sudo sh -c 'echo "deb http://xbot.cloud/xbot2/ubuntu/$(lsb_release -sc) /" > /etc/apt/sources.list.d/xbot.list'
 	wget -q -O - http://xbot.cloud/xbot2/ubuntu/KEY.gpg | sudo apt-key add -
 	sudo apt-get update
 	sudo apt-get install xbot2_desktop_full -y

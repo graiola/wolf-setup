@@ -28,51 +28,11 @@ sensors_description:
     xenial: ros-kinetic-sensors-description 
     bionic: ros-melodic-sensors-description 
     focal:  ros-noetic-sensors-description
-teleop_description:
-  ubuntu:
-    xenial: ros-kinetic-teleop-description
-    bionic: ros-melodic-teleop-description
-    focal:  ros-noetic-teleop-description
-anymal_description:
-  ubuntu:
-    xenial: ros-kinetic-anymal-description
-    bionic: ros-melodic-anymal-description
-    focal:  ros-noetic-anymal-description
-anymalc_description:
-  ubuntu:
-    xenial: ros-kinetic-anymalc-description
-    bionic: ros-melodic-anymalc-description
-    focal:  ros-noetic-anymalc-description
-hyq_description:
-  ubuntu:
-    xenial: ros-kinetic-hyq-description
-    bionic: ros-melodic-hyq-description
-    focal:  ros-noetic-hyq-description
-aliengo_description:
-  ubuntu:
-    xenial: ros-kinetic-aliengo-description
-    bionic: ros-melodic-aliengo-description
-    focal:  ros-noetic-aliengo-description
-teleop_description:
-  ubuntu:
-    xenial: ros-kinetic-teleop-description
-    bionic: ros-melodic-teleop-description
-    focal:  ros-noetic-teleop-description
 spot_description:
   ubuntu:
     xenial: ros-kinetic-spot-description
     bionic: ros-melodic-spot-description
     focal:  ros-noetic-spot-description
-solo_description:
-  ubuntu:
-    xenial: ros-kinetic-solo-description
-    bionic: ros-melodic-solo-description
-    focal:  ros-noetic-solo-description
-ylo2_description:
-  ubuntu:
-    xenial: ros-kinetic-ylo2-description
-    bionic: ros-melodic-ylo2-description
-    focal:  ros-noetic-ylo2-description
 go1_description:
  ubuntu:
     xenial: ros-kinetic-go1-description

@@ -5,13 +5,7 @@
 # DESCRIPTIONS
 kinova_description
 sensors_description
-aliengo_description
-anymal_description
-anymalc_description
-hyq_description
-solo_description
 spot_description
-ylo2_description
 go1_description
 wolf_description_utils
 

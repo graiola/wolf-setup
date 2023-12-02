@@ -25,6 +25,9 @@ wolf_hardware_interface
 wolf_gazebo_interface
 wolf_controller
 
+# PLANNER
+wolf_planner
+
 # NAV
 wolf_navigation_utils
 task_interface

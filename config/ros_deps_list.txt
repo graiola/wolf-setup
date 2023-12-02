@@ -47,3 +47,6 @@ slam-toolbox
 slam-toolbox-msgs
 slam-toolbox-rviz
 cv-bridge
+# OCS2
+pinocchio 
+hpp-fcl

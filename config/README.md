@@ -39,7 +39,7 @@ git clone https://github.com/graiola/ocs2_robotic_assets.git
 Compile only the necesary ocs2 packages:
 
 ```
-catkin_make -DCATKIN_WHITELIST_PACKAGES="ocs2_legged_robot_ros;ocs2_self_collision_visualization" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ocs2
+catkin_make -DCATKIN_WHITELIST_PACKAGES="ocs2_thirdparty;ocs2_core;ocs2_legged_robot_ros;ocs2_self_collision_visualization;ocs2_robotic_tools;ocs2_oc;ocs2_pinocchio_interface;ocs2_self_collision;ocs2_ros_interfaces;ocs2_msgs;ocs2_mpc;ocs2_ddp;ocs2_qp_solver;ocs2_sqp;blasfeo_catkin;hpipm_catkin;ocs2_ipm;ocs2_centroidal_model;ocs2_robotic_assets;ocs2_legged_robot" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ocs2
 ```
 
 Use checkinstall in the catkin build folder:

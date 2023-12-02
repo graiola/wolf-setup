@@ -137,3 +137,10 @@ else
     	echo -e "${COLOR_INFO}Add /opt/xbot/setup.sh to the bashrc ${COLOR_RESET}"
 	echo "source /opt/xbot/setup.sh" >> ~/.bashrc
 fi
+if grep -Fwq "/opt/ocs2/setup.sh" ~/.bashrc
+then 
+ 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/ocs2/setup.sh${COLOR_RESET}"
+else
+    	echo -e "${COLOR_INFO}Add /opt/ocs2/setup.sh to the bashrc ${COLOR_RESET}"
+	echo "source /opt/ocs2/setup.sh" >> ~/.bashrc
+fi

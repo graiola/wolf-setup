@@ -27,6 +27,7 @@ wolf_controller
 
 # PLANNER
 wolf_planner
+wolf_planner_interface
 
 # NAV
 wolf_navigation_utils

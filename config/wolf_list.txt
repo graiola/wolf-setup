@@ -26,8 +26,8 @@ wolf_gazebo_interface
 wolf_controller
 
 # PLANNER
-wolf_planner
 wolf_planner_interface
+wolf_planner
 
 # NAV
 wolf_navigation_utils

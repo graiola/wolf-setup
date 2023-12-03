@@ -81,7 +81,7 @@ source /opt/ros/$ROS_DISTRO/setup.bash
 source $HOME/$ROS_WS/devel/setup.bash
 source /opt/xbot/setup.sh
 source /opt/ocs2/setup.sh
-export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake
+export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake:/opt/ocs2/cmake
 
 rosdep update
 

@@ -77,10 +77,10 @@ fi
 sudo apt-get update && sudo apt-get install -y ${PYTHON_NAME}-bloom fakeroot
 
 unset ROS_PACKAGE_PATH
-source /opt/ros/$ROS_DISTRO/setup.bash
-source $HOME/$ROS_WS/devel/setup.bash
 source /opt/xbot/setup.sh
 source /opt/ocs2/setup.sh
+source /opt/ros/$ROS_DISTRO/setup.bash
+source $HOME/$ROS_WS/devel/setup.bash
 export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake:/opt/ocs2/cmake
 
 rosdep update

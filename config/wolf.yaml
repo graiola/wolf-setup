@@ -143,3 +143,8 @@ nimbro_topic_transport:
     xenial: ros-kinetic-nimbro-topic-transport
     bionic: ros-melodic-nimbro-topic-transport
     focal:  ros-noetic-nimbro-topic-transport
+ocs2_legged_robot:
+  ubuntu:
+    xenial: ros-kinetic-ocs2-legged-robot
+    bionic: ros-melodic-ocs2-legged-robot
+    focal:  ros-noetic-ocs2-legged-robot

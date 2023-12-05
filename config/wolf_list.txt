@@ -16,18 +16,18 @@ ai_utils_msgs
 wolf_rviz_plugin
 wolf_msgs
 wolf_ngva
-
-# CORE
 wolf_controller_utils
 wolf_estimation
 wolf_gazebo_resources
 wolf_hardware_interface
 wolf_gazebo_interface
-wolf_controller
 
 # PLANNER
 wolf_planner_interface
 wolf_planner
+
+# CONTROLLER
+wolf_controller
 
 # NAV
 wolf_navigation_utils

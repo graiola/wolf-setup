@@ -81,12 +81,21 @@ source /opt/ros/$ROS_DISTRO/setup.bash
 source /opt/xbot/setup.sh
 source /opt/ocs2/setup.sh
 source $HOME/$ROS_WS/devel/setup.bash
-export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake:/opt/ocs2/cmake
+export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake
+
+echo -e "${COLOR_WARN}+++++++++++++ ROS DISTRO:${COLOR_RESET}"
+echo $ROS_DISTRO
+echo -e "${COLOR_WARN}+++++++++++++:${COLOR_RESET}"
+
+echo -e "${COLOR_WARN}+++++++++++++ ROS PACKAGE PATH:${COLOR_RESET}"
+echo $ROS_PACKAGE_PATH
+echo -e "${COLOR_WARN}+++++++++++++:${COLOR_RESET}"
 
 rosdep update
 
 function build()
 {
+
     bloom-generate rosdebian --os-name $OS --os-version $OS_VERSION --ros-distro $ROS_DISTRO
 
     echo -e "override_dh_usrlocal:" >> debian/rules

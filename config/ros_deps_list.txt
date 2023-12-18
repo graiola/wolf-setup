@@ -49,5 +49,5 @@ slam-toolbox-rviz
 cv-bridge
 twist-mux
 # OCS2
-pinocchio 
+pinocchio
 hpp-fcl

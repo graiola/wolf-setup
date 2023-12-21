@@ -51,13 +51,16 @@ fi
 # Define the image name
 IMAGE_NAME=serger87/$CONTAINER_NAME:$IMAGE_TAG
 
-# Hacky
+# Add docker to xhost
 xhost +local:docker
 
 if [ `sudo systemctl is-active docker` = "inactive" ]; then
   echo "Docker inactive. Starting docker..."
   sudo systemctl start docker
 fi
+
+# Be sure there is no update on the image
+docker pull $IMAGE_NAME
 
 # Cleanup the docker container before launching it
 docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true 

@@ -143,3 +143,13 @@ wolf_planner:
     xenial: ros-kinetic-wolf-planner
     bionic: ros-melodic-wolf-planner
     focal:  ros-noetic-wolf-planner
+wolf_planner_default:
+  ubuntu:
+    xenial: ros-kinetic-wolf-planner-default
+    bionic: ros-melodic-wolf-planner-default
+    focal:  ros-noetic-wolf-planner-default
+wolf_planner_adaptive:
+  ubuntu:
+    xenial: ros-kinetic-wolf-planner-adaptive
+    bionic: ros-melodic-wolf-planner-adaptive
+    focal:  ros-noetic-wolf-planner-adaptive

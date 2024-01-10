@@ -25,6 +25,8 @@ wolf_gazebo_interface
 # PLANNER
 wolf_planner_interface
 wolf_planner
+wolf_planner_default
+wolf_planner_adaptive
 
 # CONTROLLER
 wolf_controller

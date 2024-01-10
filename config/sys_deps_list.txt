@@ -9,3 +9,4 @@ pybind11-dev
 liburdfdom-dev 
 liboctomap-dev 
 libassimp-dev
+libmpfr-dev

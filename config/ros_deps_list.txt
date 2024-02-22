@@ -29,6 +29,7 @@ velodyne-description
 hector-mapping
 hector-gazebo-plugins
 move-base
+move-base-flex
 global-planner
 dwa-local-planner
 teb-local-planner

@@ -58,8 +58,16 @@ docker pull $IMAGE_NAME
 # Cleanup the docker container before launching it
 docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true 
 
-docker run --user root:root --hostname $HOSTNAME --net=$NET --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/$ROS/share/wolf_gazebo_resources/models/ -e SHELL -e DISPLAY -e DOCKER=1 --name $CONTAINER_NAME \
+docker run --user root:root --hostname $HOSTNAME --ipc=host --net=$NET --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/$ROS/share/wolf_gazebo_resources/models/ -e SHELL -e DISPLAY -e DOCKER=1 --name $CONTAINER_NAME \
 	--gpus all \
 	--device=/dev/ttyUSB0 \
 	--volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+	--volume="$HOME/.Xauthority:/root/.Xauthority:rw" \
+	--volume="/tmp:/tmp" \
+	--volume="/etc/group:/etc/group:ro" \
+	--volume="$HOME/.ros:/root/.ros"    \
+	--volume="$HOME/.ssh:$HOME/.ssh:ro" \
+	--volume="/etc/passwd:/etc/passwd:ro" \
+	--volume="/etc/shadow:/etc/shadow:ro" \
+	--volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
         -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/xbot/setup.sh; roslaunch wolf_navigation_utils wolf_navigation.launch mapping:=$MAPPING world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME robot_model:=$ROBOT_MODEL gazebo_gui:=$GAZEBO_GUI initial_xyz:=[0.0,0.0,5.0]"

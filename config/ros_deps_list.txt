@@ -49,6 +49,10 @@ slam-toolbox-msgs
 slam-toolbox-rviz
 cv-bridge
 twist-mux
+srdfdom
+tf-remapper-cpp
+rtabmap-ros
+rtabmap-slam
 # OCS2
 pinocchio
 hpp-fcl

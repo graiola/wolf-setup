@@ -42,3 +42,8 @@ nimbro_cam_transport
 nimbro_log_transport
 nimbro_service_transport
 nimbro_topic_transport
+
+# 3D NAV
+wolf_3dnav_core
+wolf_3dnav_planner
+wolf_3dnav_plugin

@@ -78,7 +78,8 @@ This script will install docker and its dependencies.
 
 We prepared some demos to run directly within the docker container:
 
-- `./demos/navigation.sh` : Run a navigation demo inside an office
+- `./demos/2d_navigation.sh` : Run an indoor 2D navigation demo 
+- `./demos/3d_navigation.sh` : Run an outdoor 3D navigation demo
 - `./demos/manipulation.sh` : Run spot with a kinova arm mounted on top
 - `./demos/locomotion.sh` : Run a demo with stairs
 

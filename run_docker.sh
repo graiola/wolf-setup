@@ -17,7 +17,7 @@ Help Options:
 \n\n
 Application Options:
 \n 
--r,--robot \tRobot name [aliengo|spot|go1], example: -r spot
+-r,--robot \tRobot model [spot|go1], example: -r spot
 \n 
 -d,--device \tInput device type [ps3|xbox|twist|keyboard], example: -d ps3
 \n 
@@ -27,12 +27,11 @@ Application Options:
 \n 
 -n,--net \tLaunch docker with shared network, useful to visualize the ROS topics on the host machine
 \n 
--l,--local \tRun a local ROS workspace inside the container [workspace], example: -l ros_ws
-\n 
--i,--image \tSelect the docker image to run [bionic|focal], example: -i bionic"
+-l,--local \tRun a local ROS workspace inside the container [workspace], example: -l ros_ws"
 
 # Default
-ROBOT_NAME=spot
+ROBOT_NAME=
+ROBOT_MODEL=spot
 DEVICE=keyboard
 WORLD_NAME=empty
 GUI=false
@@ -73,38 +72,33 @@ while [ -n "$1" ]; do # while loop starts
 
 	case "$1" in
 
-         -r|--robot)
-		ROBOT_NAME="$2"
+	-r|--robot)
+		ROBOT_MODEL="$2"
 		shift
 		;;
 
- 	 -d|--device)
-    		DEVICE="$2"
+ 	-d|--device)
+		DEVICE="$2"
 		shift
 		;;
 
-	 -w|--world)
+	-w|--world)
 		WORLD_NAME="$2"
 		shift
 		;;
 
 	-g|--gui)    
-	        GUI=true
+		GUI=true
 		;;
 
 	-n|--net)    
-	        DOCKER_NET=host
+		DOCKER_NET=host
 		;;
 
 	-l|--local)    
-	        ROS_WS="$2"
+		ROS_WS="$2"
 		RUN_LOCAL_WS=true
-                shift
-		;;
-
-        -i|--image)    
-	        IMAGE_TAG="$2"
-                shift
+		shift
 		;;
 
 	*) echo "Option $1 not recognized!" 
@@ -117,11 +111,11 @@ while [ -n "$1" ]; do # while loop starts
 done
 
 # Checks
-if [[ ( $ROBOT_NAME == "aliengo") ||  ( $ROBOT_NAME == "spot") ||  ( $ROBOT_NAME == "go1")]] 
+if [[ ( $ROBOT_MODEL == "spot") ||  ( $ROBOT_MODEL == "go1")]] 
 then 
-	echo "Selected robot: $ROBOT_NAME"
+	echo "Selected robot: $ROBOT_MODEL"
 else
-	echo "Wrong robot option!"
+	echo "Wrong robot model option!"
 	echo -e $USAGE
 	exit 0
 fi
@@ -144,10 +138,8 @@ else
 	exit 0
 fi
 
-if [[ ( $IMAGE_TAG == "bionic") ]] 
-then 
-	ROS=melodic
-elif [[ ( $IMAGE_TAG == "focal") ]]
+
+if [[ ( $IMAGE_TAG == "focal") ]]
 then
 	ROS=noetic
 else

@@ -34,7 +34,7 @@ echo '
 ROS=noetic
 CONTAINER_NAME="wolf-app"
 IMAGE_TAG="focal"
-ROBOT_MODEL=spot
+ROBOT_MODEL=go1
 ROBOT_NAME=
 WORLD_NAME=office
 MAPPING=true

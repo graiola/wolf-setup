@@ -45,5 +45,4 @@ nimbro_topic_transport
 
 # 3D NAV
 wolf_3dnav_core
-wolf_3dnav_planner
-wolf_3dnav_plugin
+wolf_3dnav_ros

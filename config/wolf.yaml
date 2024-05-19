@@ -158,13 +158,8 @@ wolf_3dnav_core:
     xenial: ros-kinetic-wolf-3dnav-core
     bionic: ros-melodic-wolf-3dnav-core
     focal:  ros-noetic-wolf-3dnav-core
-wolf_3dnav_planner:
+wolf_3dnav_ros:
   ubuntu:
-    xenial: ros-kinetic-wolf-3dnav-planner
-    bionic: ros-melodic-wolf-3dnav-planner
-    focal:  ros-noetic-wolf-3dnav-planner
-wolf_3dnav_plugin:
-  ubuntu:
-    xenial: ros-kinetic-wolf-3dnav-plugin
-    bionic: ros-melodic-wolf-3dnav-plugin
-    focal:  ros-noetic-wolf-3dnav-plugin
+    xenial: ros-kinetic-wolf-3dnav-ros
+    bionic: ros-melodic-wolf-3dnav-ros
+    focal:  ros-noetic-wolf-3dnav-ros

@@ -70,4 +70,4 @@ docker run --user root:root --hostname $HOSTNAME --ipc=host --net=$NET --device=
 	--volume="/etc/passwd:/etc/passwd:ro" \
 	--volume="/etc/shadow:/etc/shadow:ro" \
 	--volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
-        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/xbot/setup.sh; roslaunch wolf_navigation_utils wolf_navigation.launch mapping:=$MAPPING world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME robot_model:=$ROBOT_MODEL gazebo_gui:=$GAZEBO_GUI type:=3d slope_filter:=true initial_xyz:=[0.0,0.0,0.0] min_obs_height:=0.1 max_obs_height:=0.4 global_planner:=wolf_astar_planner/WolfAstarPlanner"
+        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/xbot/setup.sh; roslaunch wolf_navigation_utils wolf_navigation.launch mapping:=$MAPPING world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME robot_model:=$ROBOT_MODEL gazebo_gui:=$GAZEBO_GUI type:=3d slope_filter:=true initial_xyz:=[0.0,0.0,0.0] min_obs_height:=0.1 max_obs_height:=0.4 global_planner:=wolf_3dnav_planner/Wolf3DNavPlanner"

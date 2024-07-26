@@ -4,4 +4,5 @@ catkin-pkg-modules
 catkin-tools
 pygame
 pybind11
+numpy
 scipy

@@ -11,3 +11,4 @@ liboctomap-dev
 libassimp-dev
 libmpfr-dev
 libomp-dev
+checkinstall

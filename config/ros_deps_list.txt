@@ -20,6 +20,7 @@ rosbash
 ddynamic-reconfigure
 moveit-core
 pybind11-catkin
+genmsg
 # For navigation
 pointcloud-to-laserscan
 velodyne-laserscan

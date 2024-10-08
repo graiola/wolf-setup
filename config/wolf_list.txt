@@ -17,6 +17,7 @@ wolf_rviz_plugin
 wolf_msgs
 wolf_ngva
 wolf_controller_utils
+wolf_wbid
 wolf_estimation
 wolf_gazebo_resources
 wolf_hardware_interface
@@ -29,6 +30,7 @@ wolf_planner_default
 wolf_planner_adaptive
 
 # CONTROLLER
+wolf_controller_core
 wolf_controller
 
 # NAV

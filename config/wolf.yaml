@@ -1,3 +1,13 @@
+wolf_wbid:
+  ubuntu:
+    xenial: ros-kinetic-wolf-wbid
+    bionic: ros-melodic-wolf-wbid
+    focal:  ros-noetic-wolf-wbid
+wolf_controller_core:
+  ubuntu:
+    xenial: ros-kinetic-wolf-controller-core
+    bionic: ros-melodic-wolf-controller-core
+    focal:  ros-noetic-wolf-controller-core
 wolf_controller:
   ubuntu:
     xenial: ros-kinetic-wolf-controller

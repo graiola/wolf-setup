@@ -116,8 +116,8 @@ if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "all") ]]
 then 
 	# Download the debians
 	/bin/bash $SCRIPTPATH/support/get_debians.sh
-	echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
-	sudo $SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/advr/install.sh
+	#echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
+	#sudo $SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/advr/install.sh
 	echo -e "${COLOR_INFO}Install WoLF debian packages${COLOR_RESET}"
 	sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/*.deb
 fi

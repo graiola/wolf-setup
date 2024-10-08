@@ -6,3 +6,4 @@ pygame
 pybind11
 numpy
 scipy
+genmsg

@@ -12,3 +12,4 @@ libassimp-dev
 libmpfr-dev
 libomp-dev
 checkinstall
+python-is-python3

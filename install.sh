@@ -137,3 +137,12 @@ else
     	echo -e "${COLOR_INFO}Add /opt/ocs2/setup.sh to the bashrc ${COLOR_RESET}"
 	echo "source /opt/ocs2/setup.sh" >> ~/.bashrc
 fi
+if grep -Fwq "export XBOT_ROOT=/opt/ros/${ROS_DISTRO}" ~/.bashrc
+then 
+ 	echo -e "${COLOR_INFO}Bashrc is already updated with export XBOT_ROOT=/opt/ros/${ROS_DISTRO}${COLOR_RESET}"
+else
+    	echo -e "${COLOR_INFO}Add export XBOT_ROOT=/opt/ros/${ROS_DISTRO} to the bashrc ${COLOR_RESET}"
+	echo "export XBOT_ROOT=/opt/ros/${ROS_DISTRO}" >> ~/.bashrc
+fi
+
+

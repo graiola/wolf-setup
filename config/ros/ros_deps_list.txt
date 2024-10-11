@@ -21,6 +21,7 @@ ddynamic-reconfigure
 moveit-core
 pybind11-catkin
 genmsg
+image-transport
 # For navigation
 pointcloud-to-laserscan
 velodyne-laserscan

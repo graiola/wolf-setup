@@ -76,7 +76,7 @@ fi
 
 if [[ ( $INSTALL_OPT == "base") || ( $INSTALL_OPT == "all") ]]
 then 
-        sudo sh -c 'echo "deb http://packages.ros.org/${ROS_VERSION}/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros-latest.list'
+        sudo sh -c "echo 'deb http://packages.ros.org/${ROS_VERSION}/ubuntu $(lsb_release -cs) main' > /etc/apt/sources.list.d/ros-latest.list"
 	wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
 	sudo apt-get update
 	print_info "Install system libraries"

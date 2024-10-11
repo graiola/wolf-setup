@@ -14,3 +14,10 @@ services:
       dockerfile: ${DOCKERFILE_PATH}/Dockerfile
       args:
         - IMAGE=nvidia/opengl:base-ubuntu20.04
+#  wolf-base-jammy:
+#    image: wolf-base:jammy
+#    build:
+#      context: ${CONTEXT_PATH}
+#      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+#      args:
+#        - IMAGE=nvidia/opengl:base-ubuntu22.04

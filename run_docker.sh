@@ -41,26 +41,7 @@ ROS_WS=
 CONTAINER_NAME="wolf-app"
 IMAGE_TAG="focal"
 
-echo ' 
-###########################################
-#                                         #
-#                  WoLF                   #
-#                                         #
-#  https://github.com/graiola/wolf-setup  #
-#                       .                 #
-#                      / V\               #
-#                    / .  /               #
-#                   <<   |                #
-#                   /    |                #
-#                 /      |                #
-#               /        |                #
-#             /    \  \ /                 #
-#            (      ) | |                 #
-#    ________|   _/_  | |                 #
-#  <__________\______)\__)                #
-#                                         #
-###########################################
-'
+wolf_banner
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
 then 
@@ -101,7 +82,7 @@ while [ -n "$1" ]; do # while loop starts
 		shift
 		;;
 
-	*) echo "Option $1 not recognized!" 
+	*) print_warn "Option $1 not recognized!" 
 		echo -e $USAGE
 		exit 0;;
 
@@ -113,37 +94,37 @@ done
 # Checks
 if [[ ( $ROBOT_MODEL == "spot") ||  ( $ROBOT_MODEL == "go1")]] 
 then 
-	echo "Selected robot: $ROBOT_MODEL"
+	print_info "Selected robot: $ROBOT_MODEL"
 else
-	echo "Wrong robot model option!"
+	print_warn "Wrong robot model option!"
 	echo -e $USAGE
 	exit 0
 fi
 
 if [[ ( $DEVICE == "ps3") ||  ( $DEVICE == "xbox") ||  ( $DEVICE == "twist") ||  ( $DEVICE == "keyboard") ]] 
 then 
-	echo "Selected input device: $DEVICE"
+	print_info "Selected input device: $DEVICE"
 else
-	echo "Wrong input device option!"
+	print_warn "Wrong input device option!"
 	echo -e $USAGE
 	exit 0
 fi
 
 if [[ ( $WORLD_NAME == "empty") ||  ( $WORLD_NAME == "ruins") ||  ( $WORLD_NAME == "pyramid") ||  ( $WORLD_NAME == "ramps") ||  ( $WORLD_NAME == "stairs") ||  ( $WORLD_NAME == "office") ]] 
 then 
-	echo "Selected world: $WORLD_NAME"
+	print_info "Selected world: $WORLD_NAME"
 else
-	echo "Wrong world option!"
+	print_warn "Wrong world option!"
 	echo -e $USAGE
 	exit 0
 fi
 
 
-if [[ ( $IMAGE_TAG == "focal") ]]
+if [[ ( $IMAGE_TAG == "focal") || ( $IMAGE_TAG == "jammy") ]]
 then
 	ROS=noetic
 else
-	echo "Wrong image option!"
+	print_warn "Wrong image option!"
 	echo -e $USAGE
 	exit 0
 fi
@@ -169,10 +150,10 @@ if $RUN_LOCAL_WS;
 then 
 	if [ -f "$HOME/$ROS_WS/devel/setup.bash" ];
 	then
-		echo "Selected ros workspace: $ROS_WS"
+		print_info "Selected ros workspace: $ROS_WS"
 		run_local_ros_workspace $ROS_WS $ROS
 	else
-		echo "The file $HOME/$ROS_WS/devel/setup.bash does not exist!"
+		print_warn "The file $HOME/$ROS_WS/devel/setup.bash does not exist!"
 		echo -e $USAGE
 		exit 0
 	fi

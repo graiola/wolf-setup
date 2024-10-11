@@ -17,10 +17,16 @@ Help Options:
 \n\n
 Application Options:
 \n 
--b,--branch \tBranch to build, example: -b devel"
+-b,--branch \tBranch to build, example: -b devel
+\n 
+-r,--ros \tRos version to build, example: -r 1|2"
 
 # Default
 BRANCH_OPT=devel
+ROS_VERSION_OPT=ros
+ROS_DISTRO_OPT=noetic
+UBUNTU_OPT=focal
+ROS_OPT=1
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
 then 
@@ -34,18 +40,35 @@ while [ -n "$1" ]; do # while loop starts
 		BRANCH_OPT="$2"
 		shift
 		;;
-	*) echo "Option $1 not recognized!" 
+	-r|--ros)
+		ROS_OPT="$2"
+		shift
+		;;
+	*) print_warn "Option $1 not recognized!" 
 		echo -e $USAGE
 		exit 0;;
 	esac
 	shift
 done
 
-
 BUILDER_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-builder.yaml
 
-#BRANCH=$BRANCH_OPT ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE down
-#BRANCH=$BRANCH_OPT ROS_DISTRO=melodic UBUNTU=bionic docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans
+if [[ ( $ROS_OPT == 1 ) ]] 
+then 
+	print_info "Build debians for ROS1"
+	ROS_VERSION_OPT=ros
+	ROS_DISTRO_OPT=noetic
+	UBUNTU_OPT=focal
+elif [[ ( $ROS_OPT == 2 ) ]]
+then
+	print_info "Build debians for ROS2"
+	ROS_VERSION_OPT=ros2
+	ROS_DISTRO_OPT=humble
+	UBUNTU_OPT=jammy
+else
+	echo -e $USAGE
+	exit 0
+fi
 
-BRANCH=$BRANCH_OPT ROS_DISTRO=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE down
-BRANCH=$BRANCH_OPT ROS_DISTRO=noetic UBUNTU=focal docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans
+BRANCH=$BRANCH_OPT ROS_VERSION=$ROS_VERSION_OPT ROS_DISTRO=$ROS_DISTRO_OPT UBUNTU=$UBUNTU_OPT docker-compose -f $BUILDER_COMPOSE down
+BRANCH=$BRANCH_OPT ROS_VERSION=$ROS_VERSION_OPT ROS_DISTRO=$ROS_DISTRO_OPT UBUNTU=$UBUNTU_OPT docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans

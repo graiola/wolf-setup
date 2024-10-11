@@ -25,26 +25,7 @@ Application Options:
 INSTALL_OPT=all
 BRANCH_OPT=devel
 
-echo ' 
-###########################################
-#                                         #
-#                  WoLF                   #
-#                                         #
-#  https://github.com/graiola/wolf-setup  #
-#                       .                 #
-#                      / V\               #
-#                    / .  /               #
-#                   <<   |                #
-#                   /    |                #
-#                 /      |                #
-#               /        |                #
-#             /    \  \ /                 #
-#            (      ) | |                 #
-#    ________|   _/_  | |                 #
-#  <__________\______)\__)                #
-#                                         #
-###########################################
-'
+wolf_banner
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
 then 
@@ -62,7 +43,7 @@ while [ -n "$1" ]; do # while loop starts
 		BRANCH_OPT="$2"
 		shift
 		;;
-	*) echo "Option $1 not recognized!" 
+	*) print_warn "Option $1 not recognized!" 
 		echo -e $USAGE
 		exit 0;;
 	esac
@@ -72,77 +53,71 @@ done
 # Checks
 if [[ ( $INSTALL_OPT == "base") ||  ( $INSTALL_OPT == "app") ||  ( $INSTALL_OPT == "all")]] 
 then 
-	echo "Selected install option: $INSTALL_OPT"
+	print_info "Selected install option: $INSTALL_OPT"
 else
-	echo "Wrong install option!"
+	print_warn "Wrong install option!"
 	echo -e $USAGE
 	exit 0
 fi
 
 # Check ubuntu version and select the right ROS
 UBUNTU=$(lsb_release -cs)
-if   [ $UBUNTU == "bionic" ]; then
-	ROS_DISTRO=melodic
-	PYTHON_NAME=python
+if   [ $UBUNTU == "jammy" ]; then
+	ROS_VERSION=ros2
+	ROS_DISTRO=humble
+	PYTHON_NAME=python3
 elif [ $UBUNTU == "focal" ]; then
+	ROS_VERSION=ros
 	ROS_DISTRO=noetic
 	PYTHON_NAME=python3
 else
-    echo -e "${COLOR_WARN}Wrong Ubuntu! This script supports Ubuntu 18.04 - 20.04${COLOR_RESET}"
+    print_warn "Wrong Ubuntu! This script supports Ubuntu 20.04 - 22.04"
 fi
 
 if [[ ( $INSTALL_OPT == "base") || ( $INSTALL_OPT == "all") ]]
 then 
-	sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros-latest.list'
+        sudo sh -c 'echo "deb http://packages.ros.org/${ROS_VERSION}/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros-latest.list'
 	wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
 	sudo apt-get update
-	echo -e "${COLOR_INFO}Install system libraries${COLOR_RESET}"
-	cat $SCRIPTPATH/config/sys_deps_list.txt | grep -v \# | xargs sudo apt-get install -y
-	echo -e "${COLOR_INFO}Install python libraries${COLOR_RESET}"
-	cat $SCRIPTPATH/config/python_deps_list.txt | grep -v \# | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
-	echo -e "${COLOR_INFO}Install ROS packages${COLOR_RESET}"
-	cat $SCRIPTPATH/config/ros_deps_list.txt | grep -v \# | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
+	print_info "Install system libraries"
+	cat $SCRIPTPATH/config/${ROS_VERSION}/sys_deps_list.txt | grep -v \# | xargs sudo apt-get install -y
+	print_info "Install python libraries"
+	cat $SCRIPTPATH/config/${ROS_VERSION}/python_deps_list.txt | grep -v \# | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
+	print_info "Install ROS packages"
+	cat $SCRIPTPATH/config/${ROS_VERSION}/ros_deps_list.txt | grep -v \# | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
 	sudo ldconfig
 	sudo rosdep init || true
 	rosdep update
-	#sudo sh -c 'echo "deb http://xbot.cloud/xbot2-nightly/ubuntu/$(lsb_release -sc) /" > /etc/apt/sources.list.d/xbot-nightly.list'
-	#sudo sh -c 'echo "deb http://xbot.cloud/xbot2/ubuntu/$(lsb_release -sc) /" > /etc/apt/sources.list.d/xbot.list'
-	#wget -q -O - http://xbot.cloud/xbot2/ubuntu/KEY.gpg | sudo apt-key add -
-	#sudo apt-get update
-	#sudo apt-get install xbot2_desktop_full -y
 fi
 
 if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "all") ]]
 then 
 	# Download the debians
 	/bin/bash $SCRIPTPATH/support/get_debians.sh
-	#echo -e "${COLOR_INFO}Install ADVR debian packages${COLOR_RESET}"
-	#sudo $SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/advr/install.sh
-	echo -e "${COLOR_INFO}Install WoLF debian packages${COLOR_RESET}"
+	print_info" Install WoLF debian packages"
 	sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/*.deb
 fi
 
 # Setup Bashrc
 if grep -Fwq "/opt/ros/${ROS_DISTRO}/setup.bash" ~/.bashrc
 then 
-	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/ros/${ROS_DISTRO}/setup.bash${COLOR_RESET}"
+	print_info "Bashrc is already updated with /opt/ros/${ROS_DISTRO}/setup.bash"
 else
-	echo -e "${COLOR_INFO}Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc${COLOR_RESET}"
+	print_info "Add /opt/ros/${ROS_DISTRO}/setup.bash to the bashrc"
 	echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 fi
 if grep -Fwq "/opt/ocs2/setup.sh" ~/.bashrc
 then 
- 	echo -e "${COLOR_INFO}Bashrc is already updated with /opt/ocs2/setup.sh${COLOR_RESET}"
+ 	print_info "Bashrc is already updated with /opt/ocs2/setup.sh"
 else
-    	echo -e "${COLOR_INFO}Add /opt/ocs2/setup.sh to the bashrc ${COLOR_RESET}"
+	print_info "Add /opt/ocs2/setup.sh to the bashrc"
 	echo "source /opt/ocs2/setup.sh" >> ~/.bashrc
 fi
 if grep -Fwq "export XBOT_ROOT=/opt/ros/${ROS_DISTRO}" ~/.bashrc
 then 
- 	echo -e "${COLOR_INFO}Bashrc is already updated with export XBOT_ROOT=/opt/ros/${ROS_DISTRO}${COLOR_RESET}"
+	print_info "Bashrc is already updated with export XBOT_ROOT=/opt/ros/${ROS_DISTRO}"
 else
-    	echo -e "${COLOR_INFO}Add export XBOT_ROOT=/opt/ros/${ROS_DISTRO} to the bashrc ${COLOR_RESET}"
+	print_info "Add export XBOT_ROOT=/opt/ros/${ROS_DISTRO} to the bashrc"
 	echo "export XBOT_ROOT=/opt/ros/${ROS_DISTRO}" >> ~/.bashrc
 fi
-
 

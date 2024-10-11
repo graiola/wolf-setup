@@ -5,12 +5,13 @@ FROM $IMAGE
 MAINTAINER Gennaro Raiola <gennaro.raiola@gmail.com>
 
 RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \ 
-	apt-utils \ 
-	build-essential \
+        apt-utils \ 
+        build-essential \
         software-properties-common \
         sudo \
         nano \
         wget \
+        mlocate \
         git \
         openssh-client \
         gpg-agent \

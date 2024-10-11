@@ -36,7 +36,7 @@ while [ -n "$1" ]; do # while loop starts
     		BUILD_OPT="$2"
 		shift
 		;;
-	*) echo "Option $1 not recognized!" 
+	*) print_warn "Option $1 not recognized!" 
 		echo -e $USAGE
 		exit 0;;
 	esac
@@ -46,9 +46,9 @@ done
 # Checks
 if [[ ( $BUILD_OPT == "base") ||  ( $BUILD_OPT == "app") ||  ( $BUILD_OPT == "all")]] 
 then 
-	echo "Selected build option: $BUILD_OPT"
+	print_info "Selected build option: $BUILD_OPT"
 else
-	echo "Wrong build option!"
+	print_warn "Wrong build option!"
 	echo -e $USAGE
 	exit 0
 fi

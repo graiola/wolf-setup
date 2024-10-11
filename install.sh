@@ -94,7 +94,7 @@ if [[ ( $INSTALL_OPT == "app") || ( $INSTALL_OPT == "all") ]]
 then 
 	# Download the debians
 	/bin/bash $SCRIPTPATH/support/get_debians.sh
-	print_info" Install WoLF debian packages"
+	print_info "Install WoLF debian packages"
 	sudo dpkg -i --force-overwrite $SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/*.deb
 fi
 

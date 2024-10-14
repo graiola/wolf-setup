@@ -30,6 +30,8 @@ Application Options:
 BRANCH=devel
 OS=ubuntu
 ROS_WS=ros_ws
+ROS_VERSION_NAME=ros
+ROS_DISTRO=noetic
 SINGLE_PKG=
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
@@ -48,11 +50,11 @@ while [ -n "$1" ]; do # while loop starts
 		ROS_WS="$2"
 		shift
 		;;
-        -p|--pkg)
-                SINGLE_PKG="$2"
-                shift
-                ;;
-	*) echo "Option $1 not recognized!" 
+	-p|--pkg)
+		SINGLE_PKG="$2"
+		shift
+		;;
+	*) echo print_warn "Option $1 not recognized!" 
 		echo -e $USAGE
 		exit 0;;
 	esac
@@ -64,31 +66,36 @@ clean_file $SCRIPTPATH/../debs/wolf.zip
 clean_folder $SCRIPTPATH/../debs/$BRANCH
 
 # Check ubuntu version and select the right ROS
-OS_VERSION=$(lsb_release -cs)
-if   [ $OS_VERSION == "bionic" ]; then
-	PYTHON_NAME=python
-elif [ $OS_VERSION == "focal" ]; then
+UBUNTU=$(lsb_release -cs)
+if   [ $UBUNTU == "jammy" ]; then
+	ROS_VERSION_NAME=ros2
+	ROS_DISTRO=humble
+	PYTHON_NAME=python3
+elif [ $UBUNTU == "focal" ]; then
+	ROS_VERSION_NAME=ros
+	ROS_DISTRO=noetic
 	PYTHON_NAME=python3
 else
-	echo -e "${COLOR_WARN}Wrong Ubuntu! This script supports Ubuntu 18.04 - 20.04${COLOR_RESET}"
-	exit 0
+	print_warn "Wrong Ubuntu! This script supports Ubuntu 20.04 - 22.04"
+	exit
 fi
 
 sudo apt-get update && sudo apt-get install -y ${PYTHON_NAME}-bloom fakeroot
 
 unset ROS_PACKAGE_PATH
 source /opt/ros/$ROS_DISTRO/setup.bash
-source /opt/xbot/setup.sh
 source /opt/ocs2/setup.sh
 source $HOME/$ROS_WS/devel/setup.bash
-export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/xbot/lib/cmake:/opt/ocs2/share
+export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/ocs2/share
 
-echo -e "${COLOR_WARN}+++++++++++++ ROS DISTRO:${COLOR_RESET}"
-echo $ROS_DISTRO
+echo -e "${COLOR_WARN}+++++++++++++ ROS:${COLOR_RESET}"
+echo -e $ROS_VERSION_NAME
+echo -e $ROS_DISTRO
+echo -e $ROS_WS
 echo -e "${COLOR_WARN}+++++++++++++:${COLOR_RESET}"
 
 echo -e "${COLOR_WARN}+++++++++++++ ROS PACKAGE PATH:${COLOR_RESET}"
-echo $ROS_PACKAGE_PATH
+echo -e $ROS_PACKAGE_PATH
 echo -e "${COLOR_WARN}+++++++++++++:${COLOR_RESET}"
 
 rosdep update
@@ -120,7 +127,7 @@ then
 
 else
 
-    PKGS=$(cat $SCRIPTPATH/../config/wolf_list.txt | grep -v \#)
+    PKGS=$(cat $SCRIPTPATH/../config/$ROS_VERSION_NAME/wolf_list.txt | grep -v \#)
 
     for PKG in $PKGS
     do
@@ -130,7 +137,7 @@ else
             then
                build
             else
-                echo -e "${COLOR_WARN}${PKG} is not available${COLOR_RESET}"
+                print_warn "${PKG} is not available"
             fi
 
     done

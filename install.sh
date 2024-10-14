@@ -63,28 +63,29 @@ fi
 # Check ubuntu version and select the right ROS
 UBUNTU=$(lsb_release -cs)
 if   [ $UBUNTU == "jammy" ]; then
-	ROS_VERSION=ros2
+	ROS_VERSION_NAME=ros2
 	ROS_DISTRO=humble
 	PYTHON_NAME=python3
 elif [ $UBUNTU == "focal" ]; then
-	ROS_VERSION=ros
+	ROS_VERSION_NAME=ros
 	ROS_DISTRO=noetic
 	PYTHON_NAME=python3
 else
-    print_warn "Wrong Ubuntu! This script supports Ubuntu 20.04 - 22.04"
+	print_warn "Wrong Ubuntu! This script supports Ubuntu 20.04 - 22.04"
+	exit
 fi
 
 if [[ ( $INSTALL_OPT == "base") || ( $INSTALL_OPT == "all") ]]
 then 
-        sudo sh -c "echo 'deb http://packages.ros.org/${ROS_VERSION}/ubuntu $(lsb_release -cs) main' > /etc/apt/sources.list.d/ros-latest.list"
+        sudo sh -c "echo 'deb http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu $(lsb_release -cs) main' > /etc/apt/sources.list.d/ros-latest.list"
 	wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
 	sudo apt-get update
 	print_info "Install system libraries"
-	cat $SCRIPTPATH/config/${ROS_VERSION}/sys_deps_list.txt | grep -v \# | xargs sudo apt-get install -y
+	cat $SCRIPTPATH/config/${ROS_VERSION_NAME}/sys_deps_list.txt | grep -v \# | xargs sudo apt-get install -y
 	print_info "Install python libraries"
-	cat $SCRIPTPATH/config/${ROS_VERSION}/python_deps_list.txt | grep -v \# | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
+	cat $SCRIPTPATH/config/${ROS_VERSION_NAME}/python_deps_list.txt | grep -v \# | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
 	print_info "Install ROS packages"
-	cat $SCRIPTPATH/config/${ROS_VERSION}/ros_deps_list.txt | grep -v \# | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
+	cat $SCRIPTPATH/config/${ROS_VERSION_NAME}/ros_deps_list.txt | grep -v \# | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
 	sudo ldconfig
 	sudo rosdep init || true
 	rosdep update

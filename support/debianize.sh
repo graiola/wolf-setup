@@ -66,12 +66,12 @@ clean_file $SCRIPTPATH/../debs/wolf.zip
 clean_folder $SCRIPTPATH/../debs/$BRANCH
 
 # Check ubuntu version and select the right ROS
-UBUNTU=$(lsb_release -cs)
-if   [ $UBUNTU == "jammy" ]; then
+OS_VERSION=$(lsb_release -cs)
+if   [ $OS_VERSION == "jammy" ]; then
 	ROS_VERSION_NAME=ros2
 	ROS_DISTRO=humble
 	PYTHON_NAME=python3
-elif [ $UBUNTU == "focal" ]; then
+elif [ $OS_VERSION == "focal" ]; then
 	ROS_VERSION_NAME=ros
 	ROS_DISTRO=noetic
 	PYTHON_NAME=python3

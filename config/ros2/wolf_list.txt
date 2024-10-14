@@ -18,10 +18,10 @@ wolf_msgs
 wolf_ngva
 wolf_controller_utils
 wolf_wbid
-wolf_estimation
 wolf_gazebo_resources
 wolf_hardware_interface
 wolf_gazebo_interface
+wolf_estimation
 
 # PLANNER
 wolf_planner_interface

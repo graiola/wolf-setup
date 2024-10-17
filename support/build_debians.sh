@@ -51,7 +51,7 @@ while [ -n "$1" ]; do # while loop starts
 	shift
 done
 
-BUILDER_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-builder.yaml
+BUILDER_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-debs-builder.yaml
 
 if [[ ( $ROS_OPT == 1 ) ]] 
 then 

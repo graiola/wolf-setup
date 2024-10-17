@@ -1,7 +1,6 @@
 rosdep
-catkin-pkg
-catkin-pkg-modules
-catkin-tools
+colcon-core
+colcon-ros
 pygame
 pybind11
 numpy

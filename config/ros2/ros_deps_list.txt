@@ -1,12 +1,11 @@
 # This is the list of ROS packages we need to install:
-desktop-full
-ros-control
-ros-controllers
+ros2-control
+ros2-controllers
 realtime-tools
 gazebo-dev
 gazebo-plugins
 gazebo-ros
-gazebo-ros-control
+gazebo-ros2-control
 gazebo-ros-pkgs
 joy
 spacenav-node
@@ -16,10 +15,8 @@ rviz-visual-tools
 plotjuggler
 plotjuggler-ros
 plotjuggler-msgs
-rosbash
-ddynamic-reconfigure
 moveit-core
-pybind11-catkin
+pybind11-vendor
 genmsg
 # For navigation
 pointcloud-to-laserscan
@@ -27,24 +24,14 @@ velodyne-laserscan
 velodyne-pointcloud
 velodyne-gazebo-plugins
 velodyne-description
-hector-mapping
-hector-gazebo-plugins
-move-base
-move-base-flex
-global-planner
-dwa-local-planner
-teb-local-planner
-map-server
-amcl
-gmapping
-costmap-converter
-costmap-2d
+move-base-msgs
+nav2-core
+nav2-map-server
+nav2-amcl
+nav2-costmap-2d
 robot-localization
 pcl-ros
 pcl-conversions
-rviz-satellite
-sparse-bundle-adjustment
-fuse-loss
 slam-toolbox
 slam-toolbox-msgs
 slam-toolbox-rviz

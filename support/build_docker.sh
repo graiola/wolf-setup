@@ -9,61 +9,93 @@ set -e
 
 source $SCRIPTPATH/fun.cfg
 
-USAGE="Usage: \n build_docker [OPTIONS...] 
+USAGE="Usage: \n build_docker [OPTIONS...]
 \n\n
 Help Options:
-\n 
+\n
 -h,--help \tShow help options
 \n\n
 Application Options:
-\n 
--b,--build \tBuild options [base|app|all], example: -b all"
+\n
+-b,--build \tBuild options [base|app|default=all], example: -b all
+\n
+-d,--distro \tDistro to build [bionic|default=focal|jammy], example: -d focal"
 
-# Default
-BUILD_OPT=all
-BASE_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-base.yaml
-APP_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-app.yaml
+# Default options
+BUILD_OPT="all"
+DISTRO_OPT="focal"
+DOCKER_COMPOSE_FILE="$SCRIPTPATH/../dockerfiles/dc-image-builder.yaml"
 
-if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
-then 
-	echo -e $USAGE
-	exit 0
+if [[ ( $1 == "--help") ||  $1 == "-h" ]]; then
+    echo -e "$USAGE"
+    exit 0
 fi
 
-while [ -n "$1" ]; do # while loop starts
-	case "$1" in
-         -b|--build)
-    		BUILD_OPT="$2"
-		shift
-		;;
-	*) print_warn "Option $1 not recognized!" 
-		echo -e $USAGE
-		exit 0;;
-	esac
-	shift
+# Parse options
+while [[ -n "$1" ]]; do
+    case "$1" in
+        -b|--build)
+            BUILD_OPT="$2"
+            shift
+            ;;
+        -d|--distro)
+            DISTRO_OPT="$2"
+            shift
+            ;;
+        *)
+            print_warn "Option $1 not recognized!"
+            echo -e "$USAGE"
+            exit 1
+            ;;
+    esac
+    shift
 done
 
-# Checks
-if [[ ( $BUILD_OPT == "base") ||  ( $BUILD_OPT == "app") ||  ( $BUILD_OPT == "all")]] 
-then 
-	print_info "Selected build option: $BUILD_OPT"
-else
-	print_warn "Wrong build option!"
-	echo -e $USAGE
-	exit 0
+# Validate build option
+if [[ "$BUILD_OPT" != "base" && "$BUILD_OPT" != "app" && "$BUILD_OPT" != "all" ]]; then
+    print_warn "Invalid build option: $BUILD_OPT!"
+    echo -e "$USAGE"
+    exit 1
 fi
 
-if [[ ( $BUILD_OPT == "base") || ( $BUILD_OPT == "all") ]]
-then 
-	DOCKERFILE_PATH=$SCRIPTPATH/../dockerfiles/base CONTEXT_PATH=$SCRIPTPATH/.. docker-compose -f $BASE_COMPOSE build --no-cache
-fi
-if [[ ( $BUILD_OPT == "app") || ( $BUILD_OPT == "all") ]]
-then 
-	DOCKERFILE_PATH=$SCRIPTPATH/../dockerfiles/app CONTEXT_PATH=$SCRIPTPATH/.. docker-compose -f $APP_COMPOSE build --no-cache
-        #docker tag wolf-app:bionic serger87/wolf-app:bionic
-	docker tag wolf-app:focal serger87/wolf-app:focal
-        #docker push serger87/wolf-app:bionic
-	docker push serger87/wolf-app:focal
+# Validate distro option
+if [[ "$DISTRO_OPT" != "bionic" && "$DISTRO_OPT" != "focal" && "$DISTRO_OPT" != "jammy" ]]; then
+    print_warn "Invalid distro: $DISTRO_OPT!"
+    echo -e "$USAGE"
+    exit 1
 fi
 
+print_info "Selected build option: $BUILD_OPT"
+print_info "Selected distro: $DISTRO_OPT"
 
+# Function to build base image
+build_base() {
+    print_info "Building base image for $DISTRO_OPT..."
+    SERVICE_NAME="wolf-base-$DISTRO_OPT"
+    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/base" CONTEXT_PATH="$SCRIPTPATH/.." \
+        docker-compose -f "$DOCKER_COMPOSE_FILE" build --no-cache "$SERVICE_NAME"
+}
+
+# Function to build app image
+build_app() {
+    print_info "Building app image for $DISTRO_OPT..."
+    SERVICE_NAME="wolf-app-$DISTRO_OPT"
+    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/app" CONTEXT_PATH="$SCRIPTPATH/.." \
+        docker-compose -f "$DOCKER_COMPOSE_FILE" build --no-cache "$SERVICE_NAME"
+
+    IMAGE_TAG="serger87/wolf-app:$DISTRO_OPT"
+    print_info "Tagging and pushing the app image as $IMAGE_TAG"
+    docker tag "wolf-app:$DISTRO_OPT" "$IMAGE_TAG"
+    docker push "$IMAGE_TAG"
+}
+
+# Build services based on the selected option
+if [[ "$BUILD_OPT" == "base" || "$BUILD_OPT" == "all" ]]; then
+    build_base
+fi
+
+if [[ "$BUILD_OPT" == "app" || "$BUILD_OPT" == "all" ]]; then
+    build_app
+fi
+
+print_info "Build process completed."

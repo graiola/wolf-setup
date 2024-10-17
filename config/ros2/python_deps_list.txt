@@ -1,6 +1,6 @@
-rosdep
+rosdep2
 colcon-core
-colcon-ros
+colcon-common-extensions
 pygame
 pybind11
 numpy

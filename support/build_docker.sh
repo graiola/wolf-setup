@@ -19,11 +19,14 @@ Application Options:
 \n
 -b,--build \tBuild options [base|app|default=all], example: -b all
 \n
--d,--distro \tDistro to build [bionic|default=focal|jammy], example: -d focal"
+-d,--distro \tDistro to build [bionic|default=focal|jammy], example: -d focal
+\n
+--no-cache \tBuild the images without using cache"
 
 # Default options
 BUILD_OPT="all"
 DISTRO_OPT="focal"
+NO_CACHE_FLAG=""
 DOCKER_COMPOSE_FILE="$SCRIPTPATH/../dockerfiles/dc-image-builder.yaml"
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]]; then
@@ -41,6 +44,9 @@ while [[ -n "$1" ]]; do
         -d|--distro)
             DISTRO_OPT="$2"
             shift
+            ;;
+        --no-cache)
+            NO_CACHE_FLAG="--no-cache"
             ;;
         *)
             print_warn "Option $1 not recognized!"
@@ -73,7 +79,7 @@ build_base() {
     print_info "Building base image for $DISTRO_OPT..."
     SERVICE_NAME="wolf-base-$DISTRO_OPT"
     DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/base" CONTEXT_PATH="$SCRIPTPATH/.." \
-        docker-compose -f "$DOCKER_COMPOSE_FILE" build --no-cache "$SERVICE_NAME"
+        docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE_NAME"
 }
 
 # Function to build app image
@@ -81,7 +87,7 @@ build_app() {
     print_info "Building app image for $DISTRO_OPT..."
     SERVICE_NAME="wolf-app-$DISTRO_OPT"
     DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/app" CONTEXT_PATH="$SCRIPTPATH/.." \
-        docker-compose -f "$DOCKER_COMPOSE_FILE" build --no-cache "$SERVICE_NAME"
+        docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE_NAME"
 
     IMAGE_TAG="serger87/wolf-app:$DISTRO_OPT"
     print_info "Tagging and pushing the app image as $IMAGE_TAG"

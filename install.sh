@@ -66,10 +66,12 @@ if   [ $UBUNTU == "jammy" ]; then
 	ROS_VERSION_NAME=ros2
 	ROS_DISTRO=humble
 	PYTHON_NAME=python3
+        LIST_FILE=/etc/apt/sources.list.d/ros2.list
 elif [ $UBUNTU == "focal" ]; then
 	ROS_VERSION_NAME=ros
 	ROS_DISTRO=noetic
 	PYTHON_NAME=python3
+        LIST_FILE=/etc/apt/sources.list.d/ros-latest.list
 else
 	print_warn "Wrong Ubuntu! This script supports Ubuntu 20.04 - 22.04"
 	exit
@@ -77,7 +79,7 @@ fi
 
 if [[ ( $INSTALL_OPT == "base") || ( $INSTALL_OPT == "all") ]]
 then 
-        sudo sh -c "echo 'deb http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu $(lsb_release -cs) main' > /etc/apt/sources.list.d/ros-latest.list"
+        sudo sh -c "echo 'deb http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu $(lsb_release -cs) main' > $LIST_FILE"
 	wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -O - | sudo apt-key add -
 	sudo apt-get update
 	print_info "Install system libraries"

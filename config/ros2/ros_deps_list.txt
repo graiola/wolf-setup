@@ -8,7 +8,7 @@ gazebo-ros
 gazebo-ros2-control
 gazebo-ros-pkgs
 joy
-spacenav-node
+spacenav
 robot-state-publisher
 joint-state-publisher-gui
 rviz-visual-tools
@@ -17,14 +17,12 @@ plotjuggler-ros
 plotjuggler-msgs
 moveit-core
 pybind11-vendor
-genmsg
 # For navigation
 pointcloud-to-laserscan
 velodyne-laserscan
 velodyne-pointcloud
 velodyne-gazebo-plugins
 velodyne-description
-move-base-msgs
 nav2-core
 nav2-map-server
 nav2-amcl
@@ -33,12 +31,9 @@ robot-localization
 pcl-ros
 pcl-conversions
 slam-toolbox
-slam-toolbox-msgs
-slam-toolbox-rviz
 cv-bridge
 twist-mux
 srdfdom
-tf-remapper-cpp
 rtabmap-ros
 rtabmap-slam
 # OCS2

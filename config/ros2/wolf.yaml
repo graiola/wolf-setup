@@ -1,3 +1,7 @@
+wolf_rviz_plugin:
+  ubuntu:
+    focal: ros-foxy-wolf-rviz-plugin
+    jammy: ros-humble-wolf-rviz-plugin
 wolf_wbid:
   ubuntu:
     focal: ros-foxy-wolf-wbid

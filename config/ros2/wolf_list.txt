@@ -12,6 +12,7 @@ wolf_description_utils
 # SUPPORT
 rt_logger
 rt_gui
+wolf_rviz_plugin
 wolf_msgs
 wolf_ngva
 wolf_controller_utils

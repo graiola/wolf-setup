@@ -11,7 +11,6 @@ RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-
         sudo \
         nano \
         wget \
-        mlocate \
         git \
         openssh-client \
         gpg-agent \

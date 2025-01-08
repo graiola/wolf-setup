@@ -21,7 +21,7 @@ Move the wolf.yaml file to the apache server:
 
 ## Github:
 
-`sudo echo "yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/wolf.yaml" >> /etc/ros/rosdep/sources.list.d/20-default.list `
+`sudo echo "yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/$ROS_VERSION/wolf.yaml" >> /etc/ros/rosdep/sources.list.d/20-default.list `
 
 # OCS2
 

@@ -1,3 +1,4 @@
+pip
 rosdep2
 colcon-core
 colcon-common-extensions

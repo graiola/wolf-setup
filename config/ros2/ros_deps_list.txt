@@ -1,5 +1,8 @@
 # This is the list of ROS packages we need to install:
+desktop-full
 ament-lint-auto
+tinyxml-vendor
+libstatistics-collector
 ros2-control
 ros2-controllers
 realtime-tools
@@ -17,7 +20,9 @@ plotjuggler
 plotjuggler-ros
 plotjuggler-msgs
 moveit-core
+moveit-msgs
 pybind11-vendor
+kdl-parser
 # For navigation
 pointcloud-to-laserscan
 velodyne-laserscan

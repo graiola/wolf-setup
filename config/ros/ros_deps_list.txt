@@ -18,7 +18,8 @@ plotjuggler-ros
 plotjuggler-msgs
 rosbash
 ddynamic-reconfigure
-moveit-core
+geometric-shapes=0.7.7-1focal.20240812.155737
+moveit-core=1.1.16-1focal.20241007.223609
 pybind11-catkin
 genmsg
 image-transport

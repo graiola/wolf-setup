@@ -21,11 +21,14 @@ Application Options:
 \n
 -d,--distro \tDistro to build [bionic|default=focal|jammy], example: -d focal
 \n
+-r,--ros \tROS distro to install [default=noetic|foxy|humble], example: -r noetic
+\n
 --no-cache \tBuild the images without using cache"
 
 # Default options
 BUILD_OPT="all"
 DISTRO_OPT="focal"
+ROS_DISTRO_OPT="noetic"
 NO_CACHE_FLAG=""
 DOCKER_COMPOSE_FILE="$SCRIPTPATH/../dockerfiles/dc-image-builder.yaml"
 
@@ -43,6 +46,10 @@ while [[ -n "$1" ]]; do
             ;;
         -d|--distro)
             DISTRO_OPT="$2"
+            shift
+            ;;
+        -r|--ros)
+            ROS_DISTRO_OPT="$2"
             shift
             ;;
         --no-cache)
@@ -71,22 +78,30 @@ if [[ "$DISTRO_OPT" != "bionic" && "$DISTRO_OPT" != "focal" && "$DISTRO_OPT" != 
     exit 1
 fi
 
+# Validate ros distro option
+if [[ "$ROS_DISTRO_OPT" != "noetic" && "$ROS_DISTRO_OPT" != "foxy" && "$ROS_DISTRO_OPT" != "humble" ]]; then
+    print_warn "Invalid ROS distro: $ROS_DISTRO_OPT!"
+    echo -e "$USAGE"
+    exit 1
+fi
+
 print_info "Selected build option: $BUILD_OPT"
 print_info "Selected distro: $DISTRO_OPT"
+print_info "Selected ROS distro: $ROS_DISTRO_OPT"
 
 # Function to build base image
 build_base() {
-    print_info "Building base image for $DISTRO_OPT..."
+    print_info "Building base image for $DISTRO_OPT with $ROS_DISTRO_OPT..."
     SERVICE_NAME="wolf-base-$DISTRO_OPT"
-    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/base" CONTEXT_PATH="$SCRIPTPATH/.." \
+    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/base" CONTEXT_PATH="$SCRIPTPATH/.." ROS_DISTRO="$ROS_DISTRO_OPT" \
         docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE_NAME"
 }
 
 # Function to build app image
 build_app() {
-    print_info "Building app image for $DISTRO_OPT..."
+    print_info "Building app image for $DISTRO_OPT with $ROS_DISTRO_OPT..."
     SERVICE_NAME="wolf-app-$DISTRO_OPT"
-    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/app" CONTEXT_PATH="$SCRIPTPATH/.." \
+    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/app" CONTEXT_PATH="$SCRIPTPATH/.." ROS_DISTRO="$ROS_DISTRO_OPT" \
         docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE_NAME"
 
     IMAGE_TAG="serger87/wolf-app:$DISTRO_OPT"

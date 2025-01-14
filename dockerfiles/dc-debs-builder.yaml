@@ -1,29 +1,84 @@
 version: "3.4"
 services:
- wolf-builder:
-    image: wolf-base:${UBUNTU}
+  wolf-builder-focal:
+    image: wolf-base:focal
     user: "root:root"
     volumes:
       - $HOME/.ssh:/root/.ssh
       - /tmp/debs:/tmp/debs
-    command: bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash &&
-                      mkdir -p /tmp/debs/${BRANCH}/${UBUNTU} &&
-                      rm -rf ocs2_ws/src && mkdir -p ocs2_ws/src && catkin_init_workspace ocs2_ws/src &&
-                      git clone -b main --recursive git@github.com:graiola/ocs2.git ocs2_ws/src/ocs2 &&
-                      git clone -b main --recursive git@github.com:graiola/ocs2_robotic_assets.git ocs2_ws/src/ocs2_robotic_assets &&
-                      cd ocs2_ws &&
-                      catkin_make -DCATKIN_WHITELIST_PACKAGES='ocs2_thirdparty;ocs2_core;ocs2_legged_robot_ros;ocs2_self_collision_visualization;ocs2_robotic_tools;ocs2_oc;ocs2_pinocchio_interface;ocs2_self_collision;ocs2_ros_interfaces;ocs2_msgs;ocs2_mpc;ocs2_ddp;ocs2_qp_solver;ocs2_sqp;blasfeo_catkin;hpipm_catkin;ocs2_ipm;ocs2_centroidal_model;ocs2_robotic_assets;ocs2_legged_robot' -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/ocs2 &&
-                      cd build && sudo checkinstall --pkgname=wolf_ocs2 --pkgversion=1.0.0 --pkgarch=amd64 -y && sudo dpkg -i --force-overwrite wolf-ocs2* && mv wolf-ocs2* /tmp/debs/${BRANCH}/${UBUNTU}/ &&
-                      cd ~ &&
-                      rm -rf ros_ws/src && mkdir -p ros_ws/src && catkin_init_workspace ros_ws/src &&
-                      git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
-                      cd ros_ws &&
-                      /bin/bash ./src/wolf/setup/support/get_debians.sh &&
-                      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
-                      source /opt/ocs2/setup.sh &&
-                      catkin build -DCMAKE_BUILD_TYPE=Release ;
-                      sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/${ROS_VERSION}/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
-                      ./src/wolf/setup/support/debianize.sh -b ${BRANCH} &&
-                      mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
-                      echo 'Debians generated and moved to /tmp folder'
-                     "
+    command: >
+      bash -c "
+      source /opt/ros/${ROS_DISTRO}/setup.bash &&
+      mkdir -p /tmp/debs/${BRANCH}/${UBUNTU} &&
+      rm -rf ocs2_ws/src &&
+      mkdir -p ocs2_ws/src &&
+      catkin_init_workspace ocs2_ws/src &&
+      git clone -b main --recursive git@github.com:graiola/ocs2.git ocs2_ws/src/ocs2 &&
+      git clone -b main --recursive git@github.com:graiola/ocs2_robotic_assets.git ocs2_ws/src/ocs2_robotic_assets &&
+      cd ocs2_ws &&
+      catkin_make -DCATKIN_WHITELIST_PACKAGES='ocs2_thirdparty;ocs2_core;ocs2_legged_robot_ros;ocs2_self_collision_visualization;ocs2_robotic_tools;ocs2_oc;ocs2_pinocchio_interface;ocs2_self_collision;ocs2_ros_interfaces;ocs2_msgs;ocs2_mpc;ocs2_ddp;ocs2_qp_solver;ocs2_sqp;blasfeo_catkin;hpipm_catkin;ocs2_ipm;ocs2_centroidal_model;ocs2_robotic_assets;ocs2_legged_robot' \
+                  -DCMAKE_BUILD_TYPE=Release \
+                  -DCMAKE_INSTALL_PREFIX=/opt/ocs2 &&
+      cd build &&
+      sudo checkinstall --pkgname=wolf_ocs2 --pkgversion=1.0.0 --pkgarch=amd64 -y &&
+      sudo dpkg -i --force-overwrite wolf-ocs2* &&
+      mv wolf-ocs2* /tmp/debs/${BRANCH}/${UBUNTU}/ &&
+      cd ~ &&
+      rm -rf ros_ws/src &&
+      mkdir -p ros_ws/src &&
+      catkin_init_workspace ros_ws/src &&
+      git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
+      cd ros_ws &&
+      /bin/bash ./src/wolf/setup/support/get_debians.sh &&
+      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
+      source /opt/ocs2/setup.sh &&
+      catkin build -DCMAKE_BUILD_TYPE=Release &&
+      sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/ros/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
+      ./src/wolf/setup/support/debianize_ros.sh -b ${BRANCH} &&
+      mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
+      echo 'Debians generated and moved to /tmp folder'
+      "
+
+  wolf-builder-jammy:
+    image: wolf-base:jammy
+    user: "root:root"
+    volumes:
+      - $HOME/.ssh:/root/.ssh
+      - /tmp/debs:/tmp/debs
+    command: >
+      bash -c "
+      source /opt/ros/${ROS_DISTRO}/setup.bash &&
+      mkdir -p /tmp/debs/${BRANCH}/${UBUNTU} &&
+      cd ~ &&
+      rm -rf ros_ws/src &&
+      mkdir -p ros_ws/src &&
+      git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
+      cd ros_ws &&
+      /bin/bash ./src/wolf/setup/support/get_debians.sh &&
+      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
+      colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-w" --packages-ignore nimbro_cam_transport nimbro_cam_transport nimbro_log_transport nimbro_topic_transport nimbro_service_transport tf_throttle wolf_planner_interface wolf_planner wolf_navigation_utils wolf_gazebo_interface task_interface task_homing task_exploration task_goto task_waypoints wolf_3dnav_ros &&
+      sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/ros2/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
+      ./src/wolf/setup/support/debianize_ros2.sh -b ${BRANCH} &&
+      mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
+      echo 'Debians generated and moved to /tmp folder'
+      "
+
+
+  #wolf-builder-jammy:
+  #  image: wolf-base:jammy
+  #  user: "root:root"
+  #  volumes:
+  #    - $HOME/.ssh:/root/.ssh
+  #    - /tmp/debs:/tmp/debs
+  #    - $HOME/ros_ws/src/wolf:/root/ros_ws/src/wolf
+  #  command: >
+  #    bash -c "
+  #    source /opt/ros/${ROS_DISTRO}/setup.bash &&
+  #    cd ~ &&
+  #    cd ros_ws &&
+  #    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-w" --packages-ignore nimbro_cam_transport nimbro_cam_transport nimbro_log_transport nimbro_topic_transport nimbro_service_transport tf_throttle wolf_planner_interface wolf_planner wolf_navigation_utils wolf_gazebo_interface task_interface task_homing task_exploration task_goto task_waypoints wolf_3dnav_ros &&
+  #    sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/ros2/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
+  #    ./src/wolf/setup/support/debianize_ros2.sh -b ${BRANCH} &&
+  #    mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
+  #    echo 'Debians generated and moved to /tmp folder'
+  #    "

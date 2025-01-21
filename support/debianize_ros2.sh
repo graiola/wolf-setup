@@ -102,6 +102,10 @@ function build_package() {
     return 1
   }
 
+echo -e "override_dh_usrlocal:" >> debian/rules
+echo -e "override_dh_shlibdeps:" >> debian/rules
+echo -e "	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info" >> debian/rules
+
   # Ensure debian/rules file uses tabs, not spaces
   sed -i 's/^    /\t/' debian/rules
 

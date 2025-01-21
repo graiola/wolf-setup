@@ -17,11 +17,13 @@ Help Options:
 \n\n
 Application Options:
 \n
--b,--build \tBuild options [base|app|default=all], example: -b all
+-i,--image \tImage(s) to build [base|app|default=all], example: -i all
 \n
 -d,--distro \tDistro to build [bionic|default=focal|jammy], example: -d focal
 \n
 -r,--ros \tROS distro to install [default=noetic|foxy|humble], example: -r noetic
+\n
+-b,--branch \tBranch to install in the app image, example: -b devel
 \n
 --no-cache \tBuild the images without using cache"
 
@@ -31,6 +33,7 @@ DISTRO_OPT="focal"
 ROS_DISTRO_OPT="noetic"
 NO_CACHE_FLAG=""
 DOCKER_COMPOSE_FILE="$SCRIPTPATH/../dockerfiles/dc-image-builder.yaml"
+BRANCH_OPT="devel"
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]]; then
     echo -e "$USAGE"
@@ -40,8 +43,12 @@ fi
 # Parse options
 while [[ -n "$1" ]]; do
     case "$1" in
-        -b|--build)
+        -i|--image)
             BUILD_OPT="$2"
+            shift
+            ;;
+        -b|--branch)
+            BRANCH_OPT="$2"
             shift
             ;;
         -d|--distro)
@@ -88,6 +95,7 @@ fi
 print_info "Selected build option: $BUILD_OPT"
 print_info "Selected distro: $DISTRO_OPT"
 print_info "Selected ROS distro: $ROS_DISTRO_OPT"
+print_info "Selected BRANCH: $BRANCH_OPT"
 
 # Function to build base image
 build_base() {
@@ -101,7 +109,7 @@ build_base() {
 build_app() {
     print_info "Building app image for $DISTRO_OPT with $ROS_DISTRO_OPT..."
     SERVICE_NAME="wolf-app-$DISTRO_OPT"
-    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/app" CONTEXT_PATH="$SCRIPTPATH/.." ROS_DISTRO="$ROS_DISTRO_OPT" \
+    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/app" CONTEXT_PATH="$SCRIPTPATH/.." ROS_DISTRO="$ROS_DISTRO_OPT" BRANCH="$BRANCH_OPT"  \
         docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE_NAME"
 
     IMAGE_TAG="serger87/wolf-app:$DISTRO_OPT"

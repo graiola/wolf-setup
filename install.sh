@@ -82,6 +82,7 @@ if [[  -z "$ROS_DISTRO_OPT" ]]; then
 fi
 
 print_info "Selected ROS distro option: $ROS_DISTRO_OPT"
+print_info "Selected BRANCH option: $BRANCH_OPT"
 
 # Set ROS-related variables
 case "$ROS_DISTRO_OPT" in

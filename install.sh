@@ -104,14 +104,14 @@ esac
 
 # Install base components
 if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
-    sudo apt install software-properties-common
-    sudo add-apt-repository universe
-    sudo add-apt-repository restricted
-    sudo add-apt-repository multiverse
-    sudo sh -c 'echo "deb http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu $(lsb_release -sc) main" | sudo tee $LIST_FILE'
-    curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
-    #echo "deb [signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu $(lsb_release -cs) main" | sudo tee "$LIST_FILE"
-    #wget -qO - https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo tee /usr/share/keyrings/ros-archive-keyring.gpg
+    #sudo apt install software-properties-common
+    #sudo add-apt-repository universe
+    #sudo add-apt-repository restricted
+    #sudo add-apt-repository multiverse
+    #sudo sh -c 'echo "deb http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu $(lsb_release -sc) main" | sudo tee $LIST_FILE'
+    #curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+    echo "deb [signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu $(lsb_release -cs) main" | sudo tee "$LIST_FILE"
+    wget -qO - https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo tee /usr/share/keyrings/ros-archive-keyring.gpg
     sudo apt-get update
     print_info "Installing system libraries..."
     grep -v '#' "$SCRIPTPATH/config/${ROS_VERSION_NAME}/sys_deps_list.txt" | xargs sudo apt-get install -y

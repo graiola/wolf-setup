@@ -132,7 +132,7 @@ if [[ "$INSTALL_OPT" == "app" || "$INSTALL_OPT" == "all" ]]; then
 fi
 
 # Update Bashrc
-for LINE in "/opt/ros/${ROS_DISTRO}/setup.bash" "/opt/ocs2/setup.sh" "export XBOT_ROOT=/opt/ros/${ROS_DISTRO}"; do
+for LINE in "source /opt/ros/${ROS_DISTRO}/setup.bash" "source /opt/ocs2/setup.sh" "export XBOT_ROOT=/opt/ros/${ROS_DISTRO}"; do
     if ! grep -Fwq "$LINE" ~/.bashrc; then
         print_info "Adding $LINE to .bashrc"
         echo "$LINE" >> ~/.bashrc

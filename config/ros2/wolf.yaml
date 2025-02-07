@@ -54,10 +54,18 @@ rt_logger:
   ubuntu:
     focal: ros-foxy-rt-logger
     jammy: ros-humble-rt-logger
-rt_gui:
+rt_gui_core:
   ubuntu:
-    focal: ros-foxy-rt-gui
-    jammy: ros-humble-rt-gui
+    focal: ros-foxy-rt-gui-core
+    jammy: ros-humble-rt-gui-core
+rt_gui_msgs:
+  ubuntu:
+    focal: ros-foxy-rt-gui-msgs
+    jammy: ros-humble-rt-gui-msgs
+rt_gui_ros:
+  ubuntu:
+    focal: ros-foxy-rt-gui-ros
+    jammy: ros-humble-rt-gui-ros
 wolf_msgs:
   ubuntu:
     jammy: ros-humble-wolf-msgs
@@ -74,7 +82,7 @@ wolf_3dnav_core:
   ubuntu:
     jammy: ros-humble-wolf-3dnav-core
     focal: ros-foxy-wolf-3dnav-core
-wolf_3dnav_ros:
+wolf_3dnav_ros2:
   ubuntu:
-    jammy: ros-humble-wolf-3dnav-ros
-    focal: ros-foxy-wolf-3dnav-ros
+    jammy: ros-humble-wolf-3dnav-ros2
+    focal: ros-foxy-wolf-3dnav-ros2

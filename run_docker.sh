@@ -56,7 +56,7 @@ function run_local_ros_workspace()
         --device=/dev/ttyUSB0 \
         --workdir="/home/$USER" \
         --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-        --volume="$HOME/$1:$HOME/$1" \
+        --volume="$HOME/$1/src:$HOME/$1/src" \
         --volume="/etc/group:/etc/group:rw" \
         --volume="/etc/passwd:/etc/passwd:rw" \
         --volume="/etc/shadow:/etc/shadow:rw" \
@@ -66,7 +66,7 @@ function run_local_ros_workspace()
         --volume="$HOME/.gazebo:$HOME/.gazebo" \
         --volume="$HOME/.ignition:$HOME/.ignition" \
         --volume="$HOME/.rviz:$HOME/.rviz" \
-        -it $FULL_IMAGE_NAME $SHELL -c "eval export HOME=$HOME; cd $HOME; export XBOT_ROOT=/opt/ros/$1; source /opt/ros/$2/setup.bash; bash"
+        -it $FULL_IMAGE_NAME $SHELL -c "eval export HOME=$HOME; cd $HOME; export XBOT_ROOT=$HOME/$1/install.sh; source /opt/ros/$2/setup.bash; bash"
 }
 
 function run_docker_ros_workspace()
@@ -75,7 +75,7 @@ function run_docker_ros_workspace()
         --gpus all \
         --device=/dev/ttyUSB0 \
         --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-        -it $FULL_IMAGE_NAME $SHELL -c "export XBOT_ROOT=/opt/ros/$1; source /opt/ros/$1/setup.bash; roslaunch wolf_controller wolf_controller_bringup.launch robot_model:=$ROBOT_MODEL world_name:=$WORLD_NAME full_gui:=$GUI input_device:=$DEVICE"
+        -it $FULL_IMAGE_NAME $SHELL -c "export XBOT_ROOT=/opt/ros/$1; source /opt/ros/$1/setup.bash; $CMD robot_model:=$ROBOT_MODEL world_name:=$WORLD_NAME full_gui:=$GUI input_device:=$DEVICE"
 }
 
 wolf_banner
@@ -168,8 +168,10 @@ if [[ ! " ${valid_tags[*]} " =~ " $IMAGE_TAG " ]]; then
     exit 1
 elif [[ $IMAGE_TAG == "focal" ]]; then
     ROS=noetic
+    CMD='roslaunch wolf_controller wolf_controller_bringup.launch'
 elif [[ $IMAGE_TAG == "jammy" ]]; then
     ROS=humble
+    CMD='ros2 launch wolf_controller wolf_controller_bringup.launch.xml'
 fi
 
 # Define the full Docker image name

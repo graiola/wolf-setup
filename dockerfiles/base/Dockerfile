@@ -1,4 +1,5 @@
 ARG IMAGE
+ARG ROS
 
 FROM $IMAGE
 
@@ -12,6 +13,7 @@ RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-
         nano \
         wget \
         git \
+        curl \
         openssh-client \
         gpg-agent \
         tzdata \
@@ -29,4 +31,12 @@ ADD . /root/
 
 WORKDIR /root/
 
-RUN ./install.sh -i base
+# Pass ROS argument to the environment
+ARG ROS
+ENV ROS=$ROS
+
+# Debug the value of ROS
+RUN echo "ROS version is: $ROS"
+
+# Use the environment variable in the command
+RUN ./install.sh -i base -r $ROS

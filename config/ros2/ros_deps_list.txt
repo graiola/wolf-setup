@@ -11,6 +11,8 @@ gazebo-plugins
 gazebo-ros
 gazebo-ros2-control
 gazebo-ros-pkgs
+gazebo-set-joint-positions-plugin
+ign-ros2-control
 joy
 spacenav
 robot-state-publisher

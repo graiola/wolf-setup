@@ -11,7 +11,9 @@ wolf_description_utils
 
 # SUPPORT
 rt_logger
-rt_gui
+rt_gui_core
+rt_gui_msgs
+rt_gui_ros
 wolf_rviz_plugin
 wolf_msgs
 wolf_ngva
@@ -28,4 +30,4 @@ wolf_controller
 
 # 3D NAV
 wolf_3dnav_core
-wolf_3dnav_ros
+wolf_3dnav_ros2

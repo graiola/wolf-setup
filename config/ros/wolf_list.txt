@@ -11,7 +11,9 @@ wolf_description_utils
 
 # SUPPORT
 rt_logger
-rt_gui
+rt_gui_core
+rt_gui_msgs
+rt_gui_ros
 ai_utils_msgs
 wolf_rviz_plugin
 wolf_msgs

@@ -122,13 +122,13 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     sudo apt-get update
 
     print_info "Installing system libraries..."
-    grep -v '#' "$SCRIPTPATH/config/${ROS_VERSION_NAME}/sys_deps_list.txt" | xargs sudo apt-get install -y
+    grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/sys_deps_list.txt" | xargs sudo apt-get install -y
 
     print_info "Installing Python libraries..."
-    grep -v '#' "$SCRIPTPATH/config/${ROS_VERSION_NAME}/python_deps_list.txt" | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
+    grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/python_deps_list.txt" | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
 
     print_info "Installing ROS packages..."
-    grep -v '#' "$SCRIPTPATH/config/${ROS_VERSION_NAME}/ros_deps_list.txt" | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
+    grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/ros_deps_list.txt" | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
 
     sudo ldconfig
     sudo rosdep init || true

@@ -1,0 +1,33 @@
+# NOTE: the order of the packages in this list is important
+# since the packages depend on each other
+# TODO: auto-generate the wolf.yaml out of this list
+
+# DESCRIPTIONS
+kinova_description
+sensors_description
+spot_description
+go1_description
+wolf_description_utils
+
+# SUPPORT
+rt_logger
+rt_gui_core
+rt_gui_msgs
+rt_gui_ros
+wolf_rviz_plugin
+wolf_msgs
+wolf_ngva
+wolf_controller_utils
+wolf_wbid
+wolf_gazebo_resources
+wolf_hardware_interface
+wolf_gazebo_interface
+wolf_estimation
+
+# CONTROLLER
+wolf_controller_core
+wolf_controller
+
+# 3D NAV
+wolf_3dnav_core
+wolf_3dnav_ros2

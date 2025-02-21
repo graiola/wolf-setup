@@ -1,0 +1,15 @@
+iputils-ping
+libqt5opengl5-dev
+libmatio-dev
+unzip
+spacenavd
+libreadline-dev
+libqwt-qt5-dev
+pybind11-dev
+liburdfdom-dev 
+liboctomap-dev 
+libassimp-dev
+libmpfr-dev
+libomp-dev
+checkinstall
+python-is-python3

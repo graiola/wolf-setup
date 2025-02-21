@@ -1,0 +1,88 @@
+wolf_rviz_plugin:
+  ubuntu:
+    focal: ros-foxy-wolf-rviz-plugin
+    jammy: ros-humble-wolf-rviz-plugin
+wolf_wbid:
+  ubuntu:
+    focal: ros-foxy-wolf-wbid
+    jammy: ros-humble-wolf-wbid
+wolf_controller_core:
+  ubuntu:
+    focal: ros-foxy-wolf-controller-core
+    jammy: ros-humble-wolf-controller-core
+wolf_controller:
+  ubuntu:
+    focal: ros-foxy-wolf-controller
+    jammy: ros-humble-wolf-controller
+wolf_controller_utils:
+  ubuntu:
+    focal: ros-foxy-wolf-controller-utils
+    jammy: ros-humble-wolf-controller-utils
+wolf_gazebo_interface:
+  ubuntu:
+    focal: ros-foxy-wolf-gazebo-interface
+    jammy: ros-humble-wolf-gazebo-interface
+wolf_gazebo_resources:
+  ubuntu:
+    focal: ros-foxy-wolf-gazebo-resources
+    jammy: ros-humble-wolf-gazebo-resources
+wolf_hardware_interface:
+  ubuntu:
+    focal: ros-foxy-wolf-hardware-interface
+    jammy: ros-humble-wolf-hardware-interface
+sensors_description:
+  ubuntu:
+    focal: ros-foxy-sensors-description
+    jammy: ros-humble-sensors-description
+spot_description:
+  ubuntu:
+    focal: ros-foxy-spot-description
+    jammy: ros-humble-spot-description
+go1_description:
+ ubuntu:
+    focal: ros-foxy-go1-description
+    jammy: ros-humble-go1-description
+kinova_description:
+  ubuntu:
+    focal: ros-foxy-kinova-description
+    jammy: ros-humble-kinova-description
+wolf_description_utils:
+  ubuntu:
+    focal: ros-foxy-wolf-description-utils
+    jammy: ros-humble-wolf-description-utils
+rt_logger:
+  ubuntu:
+    focal: ros-foxy-rt-logger
+    jammy: ros-humble-rt-logger
+rt_gui_core:
+  ubuntu:
+    focal: ros-foxy-rt-gui-core
+    jammy: ros-humble-rt-gui-core
+rt_gui_msgs:
+  ubuntu:
+    focal: ros-foxy-rt-gui-msgs
+    jammy: ros-humble-rt-gui-msgs
+rt_gui_ros:
+  ubuntu:
+    focal: ros-foxy-rt-gui-ros
+    jammy: ros-humble-rt-gui-ros
+wolf_msgs:
+  ubuntu:
+    jammy: ros-humble-wolf-msgs
+    focal: ros-foxy-wolf-msgs
+wolf_estimation:
+  ubuntu:
+    focal: ros-foxy-wolf-estimation
+    jammy: ros-humble-wolf-estimation
+wolf_ngva:
+  ubuntu:
+    focal: ros-foxy-wolf-ngva
+    jammy: ros-humble-wolf-ngva
+wolf_3dnav_core:
+  ubuntu:
+    jammy: ros-humble-wolf-3dnav-core
+    focal: ros-foxy-wolf-3dnav-core
+wolf_3dnav_ros2:
+  ubuntu:
+    jammy: ros-humble-wolf-3dnav-ros2
+    focal: ros-foxy-wolf-3dnav-ros2

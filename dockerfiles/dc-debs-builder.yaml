@@ -54,7 +54,7 @@ services:
       mkdir -p ros_ws/src &&
       git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
       cd ros_ws &&
-      colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-w"
+      colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-w" &&
       sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/${ROS_DISTRO}/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
       ./src/wolf/setup/support/debianize_ros2.sh -b ${BRANCH} &&
       mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&

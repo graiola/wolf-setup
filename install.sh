@@ -82,6 +82,7 @@ if [[  -z "$ROS_DISTRO_OPT" ]]; then
 fi
 
 print_info "Selected ROS distro option: $ROS_DISTRO_OPT"
+print_info "Selected UBUNTU distro option: $UBUNTU"
 print_info "Selected BRANCH option: $BRANCH_OPT"
 
 # Set ROS-related variables
@@ -104,8 +105,7 @@ esac
 
 # Install base components
 if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
-# Define variables
-    LIST_FILE="/etc/apt/sources.list.d/ros2.list"
+    # Define variables
     KEY_FILE="/usr/share/keyrings/ros-archive-keyring.gpg"
     ROS_REPO="http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu"
 
@@ -114,8 +114,12 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
         print_info "ROS repository is already present. Skipping repository setup."
     else
         print_info "Adding ROS repository..."
-        echo "deb [signed-by=${KEY_FILE}] ${ROS_REPO} $(lsb_release -cs) main" | sudo tee "$LIST_FILE"
-        wget -qO - https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo tee "$KEY_FILE"
+        # Create the keyrings directory if it doesn't exist
+        sudo mkdir -p /usr/share/keyrings
+        # Download and add the GPG key
+        sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o "$KEY_FILE"
+        # Add the ROS repository to the sources list
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=${KEY_FILE}] ${ROS_REPO} $(lsb_release -cs) main" | sudo tee "$LIST_FILE" > /dev/null
     fi
 
     # Update package list
@@ -134,6 +138,8 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     sudo rosdep init || true
     rosdep update
 fi
+
+
 
 # Install application components
 if [[ "$INSTALL_OPT" == "app" || "$INSTALL_OPT" == "all" ]]; then

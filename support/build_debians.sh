@@ -19,11 +19,10 @@ Application Options:
 \n
 -b,--branch \tBranch to build, example: -b devel
 \n
--r,--ros \tRos version to build, example: -r 1|2"
+-r,--ros \tROS distro to install [default=noetic|foxy|humble], example: -r noetic"
 
 # Default
 BRANCH_OPT=devel
-ROS_VERSION_OPT=1
 ROS_DISTRO_OPT=noetic
 UBUNTU_OPT=focal
 SERVICE_OPT=""
@@ -41,7 +40,7 @@ while [ -n "$1" ]; do # while loop starts
                 shift
                 ;;
         -r|--ros)
-                ROS_VERSION_OPT="$2"
+                ROS_DISTRO_OPT="$2"
                 shift
                 ;;
         *) print_warn "Option $1 not recognized!"
@@ -53,25 +52,28 @@ done
 
 BUILDER_COMPOSE=$SCRIPTPATH/../dockerfiles/dc-debs-builder.yaml
 
-# Automatically determine service based on ROS version
-if [[ ( $ROS_VERSION_OPT == 1 ) ]]
+# Validate ros distro option
+if [[ "$ROS_DISTRO_OPT" != "noetic" && "$ROS_DISTRO_OPT" != "foxy" && "$ROS_DISTRO_OPT" != "humble" ]]; then
+    print_warn "Invalid ROS distro: $ROS_DISTRO_OPT!"
+    echo -e "$USAGE"
+    exit 1
+fi
+
+# Automatically determine distro based on ROS
+if [[ ( $ROS_DISTRO_OPT == "noetic" || $ROS_DISTRO_OPT == "foxy" ) ]]
 then
-        print_info "Build debians for ROS1"
-        ROS_DISTRO_OPT=noetic
         UBUNTU_OPT=focal
-        SERVICE_OPT="wolf-builder-focal"
-elif [[ ( $ROS_VERSION_OPT == 2 ) ]]
+elif [[  $ROS_DISTRO_OPT == "humble" ]]
 then
-        print_info "Build debians for ROS2"
-        ROS_DISTRO_OPT=humble
         UBUNTU_OPT=jammy
-        SERVICE_OPT="wolf-builder-jammy"
 else
         echo -e $USAGE
         exit 0
 fi
 
+SERVICE_OPT="wolf-builder-$UBUNTU_OPT"
 print_info "Using service: $SERVICE_OPT"
+print_info "ROS distro: $ROS_DISTRO_OPT"
 
 # Proper usage of docker-compose commands
 BRANCH=$BRANCH_OPT ROS_VERSION=$ROS_VERSION_OPT ROS_DISTRO=$ROS_DISTRO_OPT UBUNTU=$UBUNTU_OPT docker-compose -f $BUILDER_COMPOSE down

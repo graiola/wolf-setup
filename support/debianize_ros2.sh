@@ -131,7 +131,7 @@ echo -e "	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info" >> debian/
 if [[ -n $SINGLE_PKG ]]; then
   build_package $SINGLE_PKG
 else
-  PKGS=$(cat $SCRIPTPATH/../config/ros2/wolf_list.txt | grep -v \#)
+  PKGS=$(cat $SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt | grep -v \#)
   for PKG in $PKGS; do
     build_package $PKG || {
       echo "Skipping $PKG due to errors."

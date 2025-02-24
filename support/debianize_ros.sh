@@ -30,7 +30,6 @@ Application Options:
 BRANCH=devel
 OS=ubuntu
 ROS_WS=ros_ws
-ROS_VERSION_NAME=ros
 ROS_DISTRO=noetic
 SINGLE_PKG=
 
@@ -68,11 +67,9 @@ clean_folder $SCRIPTPATH/../debs/$BRANCH
 # Check ubuntu version and select the right ROS
 OS_VERSION=$(lsb_release -cs)
 if   [ $OS_VERSION == "jammy" ]; then
-	ROS_VERSION_NAME=ros2
 	ROS_DISTRO=humble
 	PYTHON_NAME=python3
 elif [ $OS_VERSION == "focal" ]; then
-	ROS_VERSION_NAME=ros
 	ROS_DISTRO=noetic
 	PYTHON_NAME=python3
 else
@@ -89,7 +86,6 @@ source $HOME/$ROS_WS/devel/setup.bash
 export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/ocs2/share
 
 echo -e "${COLOR_WARN}+++++++++++++ ROS:${COLOR_RESET}"
-echo -e $ROS_VERSION_NAME
 echo -e $ROS_DISTRO
 echo -e $ROS_WS
 echo -e "${COLOR_WARN}+++++++++++++:${COLOR_RESET}"
@@ -127,7 +123,7 @@ then
 
 else
 
-    PKGS=$(cat $SCRIPTPATH/../config/$ROS_VERSION_NAME/wolf_list.txt | grep -v \#)
+    PKGS=$(cat $SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt | grep -v \#)
 
     for PKG in $PKGS
     do

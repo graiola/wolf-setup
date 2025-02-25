@@ -70,6 +70,7 @@ else
 fi
 
 # Install necessary tools
+export DEBIAN_FRONTEND=noninteractive
 sudo apt-get update && sudo apt-get install -y debhelper build-essential dh-make python3-bloom fakeroot ros-$ROS_DISTRO-ros-base
 
 # Source ROS 2 environment

@@ -19,13 +19,16 @@ Application Options:
 \n
 -b,--branch \tBranch to build, example: -b devel
 \n
--r,--ros \tROS distro to install [default=noetic|foxy|humble], example: -r noetic"
+-r,--ros \tROS distro to install [default=noetic|foxy|humble], example: -r noetic
+\n
+-l,--local_ws \tLocal ROS workspace to use for the build, note: it makes the branch option useless, example: -l ros_ws"
 
 # Default
 BRANCH_OPT=devel
 ROS_DISTRO_OPT=noetic
 UBUNTU_OPT=focal
 SERVICE_OPT=""
+ROS_WS_OPT=""
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]]
 then
@@ -41,6 +44,10 @@ while [ -n "$1" ]; do # while loop starts
                 ;;
         -r|--ros)
                 ROS_DISTRO_OPT="$2"
+                shift
+                ;;
+        -l|--local_ws)
+                ROS_WS_OPT="$2"
                 shift
                 ;;
         *) print_warn "Option $1 not recognized!"
@@ -71,10 +78,16 @@ else
         exit 0
 fi
 
-SERVICE_OPT="wolf-builder-$UBUNTU_OPT"
+if [[ "$ROS_WS_OPT" != "" ]]
+then
+	SERVICE_OPT="wolf-builder-$UBUNTU_OPT-local"
+else
+	SERVICE_OPT="wolf-builder-$UBUNTU_OPT"
+fi
+
 print_info "Using service: $SERVICE_OPT"
 print_info "ROS distro: $ROS_DISTRO_OPT"
 
 # Proper usage of docker-compose commands
-BRANCH=$BRANCH_OPT ROS_VERSION=$ROS_VERSION_OPT ROS_DISTRO=$ROS_DISTRO_OPT UBUNTU=$UBUNTU_OPT docker-compose -f $BUILDER_COMPOSE down
-BRANCH=$BRANCH_OPT ROS_VERSION=$ROS_VERSION_OPT ROS_DISTRO=$ROS_DISTRO_OPT UBUNTU=$UBUNTU_OPT docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans $SERVICE_OPT
+BRANCH=$BRANCH_OPT ROS_WS=$ROS_WS_OPT ROS_VERSION=$ROS_VERSION_OPT ROS_DISTRO=$ROS_DISTRO_OPT UBUNTU=$UBUNTU_OPT docker-compose -f $BUILDER_COMPOSE down
+BRANCH=$BRANCH_OPT ROS_WS=$ROS_WS_OPT ROS_VERSION=$ROS_VERSION_OPT ROS_DISTRO=$ROS_DISTRO_OPT UBUNTU=$UBUNTU_OPT docker-compose -f $BUILDER_COMPOSE up --force-recreate --remove-orphans $SERVICE_OPT

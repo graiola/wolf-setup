@@ -1,4 +1,5 @@
 version: "3.4"
+
 services:
   wolf-builder-focal:
     image: wolf-base:focal
@@ -29,12 +30,33 @@ services:
       catkin_init_workspace ros_ws/src &&
       git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
       cd ros_ws &&
-      /bin/bash ./src/wolf/setup/support/get_debians.sh &&
-      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
       source /opt/ocs2/setup.sh &&
       catkin build -DCMAKE_BUILD_TYPE=Release &&
-      sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/${ROS_DISTRO}/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
+      echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/${ROS_DISTRO}/wolf.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list &&
       ./src/wolf/setup/support/debianize_ros.sh -b ${BRANCH} &&
+      mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
+      echo 'Debians generated and moved to /tmp folder'
+      "
+
+  wolf-builder-focal-local:
+    image: wolf-base:focal
+    user: "root:root"
+    volumes:
+      - $HOME/.ssh:/root/.ssh
+      - /tmp/debs:/tmp/debs
+      - $HOME/${ROS_WS}/src/wolf:/root/${ROS_WS}/src/wolf
+    command: >
+      bash -c "
+      source /opt/ros/${ROS_DISTRO}/setup.bash &&
+      mkdir -p /tmp/debs/${BRANCH}/${UBUNTU} &&
+      cd ~ &&
+      cd ${ROS_WS} &&
+      /bin/bash ./src/wolf/setup/support/get_debians.sh &&
+      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/wolf-ocs2* &&
+      source /opt/ocs2/setup.sh &&
+      catkin build -DCMAKE_BUILD_TYPE=Release &&
+      echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/${ROS_DISTRO}/wolf.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list &&
+      ./src/wolf/setup/support/debianize_ros.sh -b ${BRANCH} -w ${ROS_WS} &&
       mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
       echo 'Debians generated and moved to /tmp folder'
       "
@@ -54,31 +76,30 @@ services:
       mkdir -p ros_ws/src &&
       git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
       cd ros_ws &&
-      colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-w" &&
-      sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/${ROS_DISTRO}/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
+      colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS='-w' &&
+      echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/${ROS_DISTRO}/wolf.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list &&
       ./src/wolf/setup/support/debianize_ros2.sh -b ${BRANCH} &&
       mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
       echo 'Debians generated and moved to /tmp folder'
       "
 
+  wolf-builder-jammy-local:
+    image: wolf-base:jammy
+    user: "root:root"
+    volumes:
+      - $HOME/.ssh:/root/.ssh
+      - /tmp/debs:/tmp/debs
+      - $HOME/${ROS_WS}/src/wolf:/root/${ROS_WS}/src/wolf
+    command: >
+      bash -c "
+      source /opt/ros/${ROS_DISTRO}/setup.bash &&
+      mkdir -p /tmp/debs/${BRANCH}/${UBUNTU} &&
+      cd ~ &&
+      cd ${ROS_WS} &&
+      colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS='-w' &&
+      echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/ros2/wolf.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list &&
+      ./src/wolf/setup/support/debianize_ros2.sh -b ${BRANCH} &&
+      mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
+      echo 'Debians generated and moved to /tmp folder'
+      "
 
-  # FOR TESTING LOCAL VOLUME (avoid git clone)
-  #wolf-builder-jammy:
-  #  image: wolf-base:jammy
-  #  user: "root:root"
-  #  volumes:
-  #    - $HOME/.ssh:/root/.ssh
-  #    - /tmp/debs:/tmp/debs
-  #    - $HOME/ros_ws/src/wolf:/root/ros_ws/src/wolf
-  #  command: >
-  #    bash -c "
-  #    source /opt/ros/${ROS_DISTRO}/setup.bash &&
-  #    mkdir -p /tmp/debs/${BRANCH}/${UBUNTU} &&
-  #    cd ~ &&
-  #    cd ros_ws &&
-  #    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-w" --packages-ignore nimbro_cam_transport nimbro_cam_transport nimbro_log_transport nimbro_topic_transport nimbro_service_transport tf_throttle wolf_planner_interface wolf_planner wolf_navigation_utils wolf_gazebo_interface task_interface task_homing task_exploration task_goto task_waypoints wolf_3dnav_ros &&
-  #    sudo echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/ros2/wolf.yaml' >> /etc/ros/rosdep/sources.list.d/20-default.list &&
-  #    ./src/wolf/setup/support/debianize_ros2.sh -b ${BRANCH} &&
-  #    mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
-  #    echo 'Debians generated and moved to /tmp folder'
-  #    "

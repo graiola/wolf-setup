@@ -80,9 +80,13 @@ fi
 sudo apt-get update && sudo apt-get install -y ${PYTHON_NAME}-bloom fakeroot
 
 unset ROS_PACKAGE_PATH
-source /opt/ros/$ROS_DISTRO/setup.bash
 source /opt/ocs2/setup.sh
-source $HOME/$ROS_WS/devel/setup.bash
+# Source ROS environment
+source /opt/ros/$ROS_DISTRO/setup.bash
+source ~/$ROS_WS/devel/setup.bash || {
+  echo "Workspace not built or devel/setup.bash not found."
+  exit 1
+}
 export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/ocs2/share
 
 echo -e "${COLOR_WARN}+++++++++++++ ROS:${COLOR_RESET}"

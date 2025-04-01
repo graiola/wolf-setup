@@ -31,7 +31,9 @@ services:
       git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
       cd ros_ws &&
       source /opt/ocs2/setup.sh &&
-      catkin config --install; catkin build -DCMAKE_BUILD_TYPE=Release &&
+      catkin config --install; catkin build rt_gui_ros -DCMAKE_BUILD_TYPE=Release &&
+      source ./install/setup.bash &&
+      catkin build -DCMAKE_BUILD_TYPE=Release &&
       echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/${ROS_DISTRO}/wolf.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list &&
       ./src/wolf/setup/support/debianize_ros.sh -b ${BRANCH} &&
       mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&
@@ -54,7 +56,9 @@ services:
       /bin/bash ./src/wolf/setup/support/get_debians.sh &&
       sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/wolf-ocs2* &&
       source /opt/ocs2/setup.sh &&
-      catkin config --install; catkin build -DCMAKE_BUILD_TYPE=Release &&
+      catkin config --install; catkin build rt_gui_ros -DCMAKE_BUILD_TYPE=Release &&
+      source ./install/setup.bash &&
+      catkin build -DCMAKE_BUILD_TYPE=Release &&
       echo 'yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/${ROS_DISTRO}/wolf.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list &&
       ./src/wolf/setup/support/debianize_ros.sh -b ${BRANCH} -w ${ROS_WS} &&
       mv ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/*.deb /tmp/debs/${BRANCH}/${UBUNTU}/ &&

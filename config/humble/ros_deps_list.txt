@@ -18,9 +18,6 @@ spacenav
 robot-state-publisher
 joint-state-publisher-gui
 rviz-visual-tools
-plotjuggler
-plotjuggler-ros
-plotjuggler-msgs
 moveit-core
 moveit-msgs
 pybind11-vendor
@@ -47,3 +44,13 @@ rtabmap-slam
 # OCS2
 pinocchio
 hpp-fcl
+# Extra
+camera-info-manager
+image-transport
+rqt
+cv-bridge
+rqt-common-plugins
+perception
+#plotjuggler
+#plotjuggler-ros
+#plotjuggler-msgs

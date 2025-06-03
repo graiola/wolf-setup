@@ -1,130 +1,76 @@
 #!/bin/bash
 
-# Get this script's path
-pushd `dirname $0` > /dev/null
-SCRIPTPATH=`pwd`
-popd > /dev/null
-
 set -e
 
-source $SCRIPTPATH/fun.cfg
+# Get this script's path
+SCRIPTPATH="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPTPATH/fun.cfg"
 
-USAGE="Usage: \n build_docker [OPTIONS...]
-\n\n
-Help Options:
-\n
--h,--help \tShow help options
-\n\n
-Application Options:
-\n
--i,--image \tImage(s) to build [base|app|default=all], example: -i all
-\n
--d,--distro \tDistro to build [bionic|default=focal|jammy], example: -d focal
-\n
--r,--ros \tROS distro to install [default=noetic|foxy|humble], example: -r noetic
-\n
--b,--branch \tBranch to install in the app image, example: -b devel
-\n
---no-cache \tBuild the images without using cache"
+USAGE="Usage: build_docker [OPTIONS...]
+Options:
+  -h, --help           Show help options
+  -i, --image          Image(s) to build [base|app|all] (default: all)
+  -d, --distro         Distro to build [bionic|focal|jammy] (default: focal)
+  -r, --ros            ROS distro [noetic|foxy|humble] (default: noetic)
+  -b, --branch         Branch to install in the app image (default: devel)
+  -p, --push           Push the built image(s)
+      --no-cache       Build without using cache"
 
-# Default options
+# Defaults
 BUILD_OPT="all"
 DISTRO_OPT="focal"
 ROS_DISTRO_OPT="noetic"
+BRANCH_OPT="devel"
+PUSH_OPT="no"
 NO_CACHE_FLAG=""
 DOCKER_COMPOSE_FILE="$SCRIPTPATH/../dockerfiles/dc-image-builder.yaml"
-BRANCH_OPT="devel"
 
-if [[ ( $1 == "--help") ||  $1 == "-h" ]]; then
-    echo -e "$USAGE"
-    exit 0
-fi
+# Help
+[[ "$1" == "-h" || "$1" == "--help" ]] && echo -e "$USAGE" && exit 0
 
-# Parse options
-while [[ -n "$1" ]]; do
+# Parse args
+while [[ $# -gt 0 ]]; do
     case "$1" in
-        -i|--image)
-            BUILD_OPT="$2"
-            shift
-            ;;
-        -b|--branch)
-            BRANCH_OPT="$2"
-            shift
-            ;;
-        -d|--distro)
-            DISTRO_OPT="$2"
-            shift
-            ;;
-        -r|--ros)
-            ROS_DISTRO_OPT="$2"
-            shift
-            ;;
-        --no-cache)
-            NO_CACHE_FLAG="--no-cache"
-            ;;
-        *)
-            print_warn "Option $1 not recognized!"
-            echo -e "$USAGE"
-            exit 1
-            ;;
+        -i|--image)  BUILD_OPT="$2"; shift ;;
+        -d|--distro) DISTRO_OPT="$2"; shift ;;
+        -r|--ros)    ROS_DISTRO_OPT="$2"; shift ;;
+        -b|--branch) BRANCH_OPT="$2"; shift ;;
+        -p|--push)   PUSH_OPT="yes" ;;
+        --no-cache)  NO_CACHE_FLAG="--no-cache" ;;
+        *) print_warn "Unknown option: $1"; echo -e "$USAGE"; exit 1 ;;
     esac
     shift
 done
 
-# Validate build option
-if [[ "$BUILD_OPT" != "base" && "$BUILD_OPT" != "app" && "$BUILD_OPT" != "all" ]]; then
-    print_warn "Invalid build option: $BUILD_OPT!"
-    echo -e "$USAGE"
-    exit 1
-fi
+# Validation
+[[ ! "$BUILD_OPT" =~ ^(base|app|all)$ ]] && print_warn "Invalid image: $BUILD_OPT" && echo -e "$USAGE" && exit 1
+[[ ! "$DISTRO_OPT" =~ ^(bionic|focal|jammy)$ ]] && print_warn "Invalid distro: $DISTRO_OPT" && echo -e "$USAGE" && exit 1
+[[ ! "$ROS_DISTRO_OPT" =~ ^(noetic|foxy|humble)$ ]] && print_warn "Invalid ROS distro: $ROS_DISTRO_OPT" && echo -e "$USAGE" && exit 1
 
-# Validate distro option
-if [[ "$DISTRO_OPT" != "bionic" && "$DISTRO_OPT" != "focal" && "$DISTRO_OPT" != "jammy" ]]; then
-    print_warn "Invalid distro: $DISTRO_OPT!"
-    echo -e "$USAGE"
-    exit 1
-fi
+print_info "Build: $BUILD_OPT | Distro: $DISTRO_OPT | ROS: $ROS_DISTRO_OPT | Branch: $BRANCH_OPT | Push: $PUSH_OPT"
 
-# Validate ros distro option
-if [[ "$ROS_DISTRO_OPT" != "noetic" && "$ROS_DISTRO_OPT" != "foxy" && "$ROS_DISTRO_OPT" != "humble" ]]; then
-    print_warn "Invalid ROS distro: $ROS_DISTRO_OPT!"
-    echo -e "$USAGE"
-    exit 1
-fi
+build_image() {
+    local TYPE="$1"
+    local SERVICE="wolf-${TYPE}-$DISTRO_OPT"
+    local TAG="serger87/wolf-${TYPE}:$DISTRO_OPT"
+    local DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/$TYPE"
+    
+    print_info "Building $TYPE image..."
+    DOCKERFILE_PATH="$DOCKERFILE_PATH" CONTEXT_PATH="$SCRIPTPATH/.." \
+    ROS_DISTRO="$ROS_DISTRO_OPT" BRANCH="$BRANCH_OPT" \
+    docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE"
 
-print_info "Selected build option: $BUILD_OPT"
-print_info "Selected distro: $DISTRO_OPT"
-print_info "Selected ROS distro: $ROS_DISTRO_OPT"
-print_info "Selected BRANCH: $BRANCH_OPT"
-
-# Function to build base image
-build_base() {
-    print_info "Building base image for $DISTRO_OPT with $ROS_DISTRO_OPT..."
-    SERVICE_NAME="wolf-base-$DISTRO_OPT"
-    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/base" CONTEXT_PATH="$SCRIPTPATH/.." ROS_DISTRO="$ROS_DISTRO_OPT" \
-        docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE_NAME"
+    if [[ "$PUSH_OPT" == "yes" ]]; then
+        print_info "Tagging and pushing $TYPE image as $TAG"
+        docker tag "$SERVICE" "$TAG"
+        docker push "$TAG"
+    else
+        print_info "Skipping push for $TYPE image"
+    fi
 }
 
-# Function to build app image
-build_app() {
-    print_info "Building app image for $DISTRO_OPT with $ROS_DISTRO_OPT..."
-    SERVICE_NAME="wolf-app-$DISTRO_OPT"
-    DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/app" CONTEXT_PATH="$SCRIPTPATH/.." ROS_DISTRO="$ROS_DISTRO_OPT" BRANCH="$BRANCH_OPT"  \
-        docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE_NAME"
-
-    IMAGE_TAG="serger87/wolf-app:$DISTRO_OPT"
-    print_info "Tagging and pushing the app image as $IMAGE_TAG"
-    docker tag "wolf-app:$DISTRO_OPT" "$IMAGE_TAG"
-    docker push "$IMAGE_TAG"
-}
-
-# Build services based on the selected option
-if [[ "$BUILD_OPT" == "base" || "$BUILD_OPT" == "all" ]]; then
-    build_base
-fi
-
-if [[ "$BUILD_OPT" == "app" || "$BUILD_OPT" == "all" ]]; then
-    build_app
-fi
+[[ "$BUILD_OPT" == "base" || "$BUILD_OPT" == "all" ]] && build_image "base"
+[[ "$BUILD_OPT" == "app" || "$BUILD_OPT" == "all" ]] && build_image "app"
 
 print_info "Build process completed."
+

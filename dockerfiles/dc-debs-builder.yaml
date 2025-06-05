@@ -30,6 +30,8 @@ services:
       catkin_init_workspace ros_ws/src &&
       git clone -b ${BRANCH} --recursive git@github.com:graiola/wolf.git ros_ws/src/wolf &&
       cd ros_ws &&
+      /bin/bash ./src/wolf/setup/support/get_debians.sh &&
+      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
       source /opt/ocs2/setup.sh &&
       catkin config --install; catkin build rt_gui_ros -DCMAKE_BUILD_TYPE=Release &&
       source ./install/setup.bash &&
@@ -55,6 +57,7 @@ services:
       cd ${ROS_WS} &&
       /bin/bash ./src/wolf/setup/support/get_debians.sh &&
       sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/wolf-ocs2* &&
+      sudo dpkg -i --force-overwrite src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb &&
       source /opt/ocs2/setup.sh &&
       catkin config --install; catkin build rt_gui_ros -DCMAKE_BUILD_TYPE=Release &&
       source ./install/setup.bash &&

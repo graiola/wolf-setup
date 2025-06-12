@@ -62,7 +62,7 @@ build_image() {
 
     if [[ "$PUSH_OPT" == "yes" ]]; then
         print_info "Tagging and pushing $TYPE image as $TAG"
-        docker tag "$SERVICE" "$TAG"
+        docker tag "wolf-${TYPE}" "$TAG"
         docker push "$TAG"
     else
         print_info "Skipping push for $TYPE image"

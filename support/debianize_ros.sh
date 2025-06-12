@@ -9,7 +9,7 @@ pushd `dirname $0` > /dev/null
 SCRIPTPATH=`pwd`
 popd > /dev/null
 
-source $SCRIPTPATH/fun.cfg
+source "$SCRIPTPATH/fun.cfg"
 
 USAGE="Usage: \n debianize [OPTIONS...]
 \n\n
@@ -33,113 +33,123 @@ ROS_WS=ros_ws
 ROS_DISTRO=noetic
 SINGLE_PKG=
 
-if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
-then 
-	echo -e $USAGE
+# Help
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then 
+	echo -e "$USAGE"
 	exit 0
 fi
 
-while [ -n "$1" ]; do # while loop starts
+# Parse args
+while [ -n "$1" ]; do
 	case "$1" in
-	-b|--branch)
-		BRANCH="$2"
-		shift
-		;;
-	-w|--workspace)
-		ROS_WS="$2"
-		shift
-		;;
-	-p|--pkg)
-		SINGLE_PKG="$2"
-		shift
-		;;
-	*) echo print_warn "Option $1 not recognized!" 
-		echo -e $USAGE
-		exit 0;;
+	-b|--branch) BRANCH="$2"; shift ;;
+	-w|--workspace) ROS_WS="$2"; shift ;;
+	-p|--pkg) SINGLE_PKG="$2"; shift ;;
+	*) echo "Option $1 not recognized!"; echo -e "$USAGE"; exit 1 ;;
 	esac
 	shift
 done
 
-# Clean
-clean_file $SCRIPTPATH/../debs/wolf.zip
-clean_folder $SCRIPTPATH/../debs/$BRANCH
+# Clean previous builds
+clean_file "$SCRIPTPATH/../debs/wolf.zip"
+clean_folder "$SCRIPTPATH/../debs/$BRANCH"
 
-# Check ubuntu version and select the right ROS
+# Check Ubuntu version
 OS_VERSION=$(lsb_release -cs)
-if   [ $OS_VERSION == "jammy" ]; then
+if [[ "$OS_VERSION" == "jammy" ]]; then
 	ROS_DISTRO=humble
 	PYTHON_NAME=python3
-elif [ $OS_VERSION == "focal" ]; then
+elif [[ "$OS_VERSION" == "focal" ]]; then
 	ROS_DISTRO=noetic
 	PYTHON_NAME=python3
 else
-	print_warn "Wrong Ubuntu! This script supports Ubuntu 20.04 - 22.04"
-	exit
+	print_warn "Wrong Ubuntu! This script supports Ubuntu 20.04 (focal) and 22.04 (jammy)"
+	exit 1
 fi
 
+# Dependencies
 sudo apt-get update && sudo apt-get install -y ${PYTHON_NAME}-bloom fakeroot
 
+# Source environments
 unset ROS_PACKAGE_PATH
 source /opt/ocs2/setup.sh
-# Source ROS environment
 source /opt/ros/$ROS_DISTRO/setup.bash
-source ~/$ROS_WS/devel/setup.bash || {
-  echo "Workspace not built or devel/setup.bash not found."
+source "$HOME/$ROS_WS/install/setup.bash" || {
+  echo "Workspace not built or install/setup.bash not found."
   exit 1
 }
 export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:/opt/ocs2/share
 
-echo -e "${COLOR_WARN}+++++++++++++ ROS:${COLOR_RESET}"
-echo -e $ROS_DISTRO
-echo -e $ROS_WS
-echo -e "${COLOR_WARN}+++++++++++++:${COLOR_RESET}"
+print_info "+++++++++++++ ROS:"
+echo "$ROS_DISTRO"
+echo "$ROS_WS"
+print_info "+++++++++++++"
 
-echo -e "${COLOR_WARN}+++++++++++++ ROS PACKAGE PATH:${COLOR_RESET}"
-echo -e $ROS_PACKAGE_PATH
-echo -e "${COLOR_WARN}+++++++++++++:${COLOR_RESET}"
+print_info "+++++++++++++ ROS PACKAGE PATH:"
+echo "$ROS_PACKAGE_PATH"
+print_info "+++++++++++++"
 
+# rosdep update
+sudo rosdep fix-permissions
 rosdep update
 
-function build()
-{
+function build() {
+    # Ensure we're in a valid ROS package
+    if [[ ! -f "package.xml" ]]; then
+        print_warn "No package.xml found in $(pwd), skipping."
+        return 1
+    fi
 
-    bloom-generate rosdebian --os-name $OS --os-version $OS_VERSION --ros-distro $ROS_DISTRO
+    # Resolve dependencies
+    rosdep install --from-paths . --ignore-src -r -y || {
+        print_warn "rosdep failed for $(basename $(pwd))"
+        return 1
+    }
 
-    echo -e "override_dh_usrlocal:" >> debian/rules
-    echo -e "override_dh_shlibdeps:" >> debian/rules
-    echo -e "	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info" >> debian/rules
+    # Generate Debian files
+    print_info "Generate debian"
+    bloom-generate debian --os-name $OS --os-version $OS_VERSION || return 1
 
-    fakeroot debian/rules binary
-    #dpkg-buildpackage -nc -d -uc -us
-    sudo dpkg -i ../*.deb
+    # Patch debian rules
+    {
+        echo -e "override_dh_usrlocal:"
+        echo -e "override_dh_shlibdeps:"
+        echo -e "\tdh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info"
+    } >> debian/rules
 
-    mkdir -p $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION && mv ../*.deb $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION
+    # Build and move .deb
+    fakeroot debian/rules binary || return 1
+    sudo dpkg -i ../*.deb || return 1
 
-    rm -rf debian obj-x86_64-linux-gnu
+    mkdir -p "$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
+    mv ../*.deb "$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
+
+    # Clean up
+    rm -rf debian obj-*
 }
 
-
-if [[ ( $SINGLE_PKG != "") ]]
-then
-
-    roscd $SINGLE_PKG
+# Build single package or list
+if [[ -n "$SINGLE_PKG" ]]; then
+    roscd "$SINGLE_PKG" 2>/dev/null || {
+        print_warn "Package $SINGLE_PKG not found"
+        exit 1
+    }
     build
-
 else
+    PKG_LIST_FILE="$SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt"
+    if [[ ! -f "$PKG_LIST_FILE" ]]; then
+        echo "Package list not found: $PKG_LIST_FILE"
+        exit 1
+    fi
 
-    PKGS=$(cat $SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt | grep -v \#)
-
-    for PKG in $PKGS
-    do
-            roscd $PKG
-
-            if [[ $? == 0 ]]
-            then
-               build
-            else
-                print_warn "${PKG} is not available"
-            fi
-
+    for PKG in $(grep -v '^#' "$PKG_LIST_FILE"); do
+        roscd "$PKG" 2>/dev/null
+        if [[ $? -eq 0 ]]; then
+            echo "Building package: $PKG"
+            build || print_warn "Build failed for $PKG"
+        else
+            print_warn "Package $PKG is not available"
+        fi
     done
+fi
 
- fi

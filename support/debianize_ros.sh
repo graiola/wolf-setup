@@ -67,7 +67,7 @@ build_pkg() {
 
   # Build with catkin
   cd "$HOME/$ROS_WS"
-  catkin_make --pkg "$PKG_NAME" -DCMAKE_INSTALL_PREFIX=install || return 1
+  catkin config --install; catkin build "$PKG_NAME" -DCMAKE_BUILD_TYPE=Release || return 1
 
   # Build DEB
   PKG_DEB_NAME="ros-${ROS_DISTRO}-$(echo $PKG_NAME | tr '_' '-')"
@@ -102,7 +102,7 @@ else
 
   while read -r PKG; do
     [[ "$PKG" =~ ^#.*$ || -z "$PKG" ]] && continue
-    build_pkg "$PKG" || echo "⚠ Failed to build $PKG"
+    build_pkg "$PKG"
   done < "$PKG_LIST"
 fi
 

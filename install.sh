@@ -145,7 +145,11 @@ fi
 if [[ "$INSTALL_OPT" == "app" || "$INSTALL_OPT" == "all" ]]; then
     /bin/bash "$SCRIPTPATH/support/get_debians.sh"
     print_info "Installing WoLF debian packages..."
-    sudo dpkg -i --force-overwrite "$SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/"*.deb
+    # Step 1: Pre-install all .debs (some may fail due to missing deps)
+    sudo dpkg -i --force-overwrite "$SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/"*.deb || true
+    
+    # Step 2: Fix broken dependencies using apt
+    sudo apt-get install -f -y
 fi
 
 # Update Bashrc

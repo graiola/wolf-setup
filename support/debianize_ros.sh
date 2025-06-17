@@ -65,39 +65,50 @@ build_pkg() {
   VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" package.xml)
   [[ -z "$VERSION" ]] && VERSION="0.1.0"
 
+  # Extract run_depend tags as ROS-style package dependencies
+  DEPENDS=$(grep -oPm1 "(?<=<depend>).*?(?=</depend>)" package.xml |
+            sed -e 's/_/-/g' -e "s/^/ros-${ROS_DISTRO}-/" |
+            paste -sd ', ' -)
+  [[ -z "$DEPENDS" ]] && DEPENDS=""
+
   # Build with catkin
   cd "$HOME/$ROS_WS"
   catkin config --install
   catkin clean -y
   catkin build "$PKG_NAME" --cmake-args -DCMAKE_BUILD_TYPE=Release || return 1
 
-  # Build DEB
+  # Prepare deb package name
   PKG_DEB_NAME="ros-${ROS_DISTRO}-$(echo $PKG_NAME | tr '_' '-')"
   INSTALL_DIR="$HOME/$ROS_WS/install"
   DEB_DIR="$HOME/$ROS_WS/debbuild/$PKG_NAME"
   OUTPUT_DEB="${OUT_DIR}/${PKG_DEB_NAME}_${VERSION}_${OS_VERSION}_amd64.deb"
 
-  # Clean up previous builds
+  # Clean up
   rm -rf "$DEB_DIR"
   rm -f "${OUT_DIR}/${PKG_DEB_NAME}_"*"_amd64.deb"
 
+  # Create structure
   mkdir -p "$DEB_DIR/DEBIAN" "$DEB_DIR/opt/ros/$ROS_DISTRO"
   cp -a "$INSTALL_DIR"/* "$DEB_DIR/opt/ros/$ROS_DISTRO/"
 
+  # Generate control file
   cat <<EOF > "$DEB_DIR/DEBIAN/control"
 Package: $PKG_DEB_NAME
 Version: $VERSION
-Section: base
+Section: misc
 Priority: optional
 Architecture: amd64
 Maintainer: ROS Maintainers <ros@ros.org>
-Description: Auto-generated .deb for $PKG_NAME
+Depends: ${DEPENDS}
+Description: Auto-generated .deb for ROS package $PKG_NAME
 EOF
 
+  # Build the package
   dpkg-deb --build "$DEB_DIR" "$OUTPUT_DEB"
   rm -rf "$DEB_DIR"
   echo "✔ Built $OUTPUT_DEB"
 }
+
 
 # Build either a single package or a list
 if [[ -n "$SINGLE_PKG" ]]; then

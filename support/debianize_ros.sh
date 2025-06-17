@@ -67,14 +67,21 @@ build_pkg() {
 
   # Build with catkin
   cd "$HOME/$ROS_WS"
-  catkin config --install; catkin build "$PKG_NAME" -DCMAKE_BUILD_TYPE=Release || return 1
+  catkin config --install
+  catkin clean -y
+  catkin build "$PKG_NAME" --cmake-args -DCMAKE_BUILD_TYPE=Release || return 1
 
   # Build DEB
   PKG_DEB_NAME="ros-${ROS_DISTRO}-$(echo $PKG_NAME | tr '_' '-')"
   INSTALL_DIR="$HOME/$ROS_WS/install"
   DEB_DIR="$HOME/$ROS_WS/debbuild/$PKG_NAME"
-  mkdir -p "$DEB_DIR/DEBIAN" "$DEB_DIR/opt/ros/$ROS_DISTRO"
+  OUTPUT_DEB="${OUT_DIR}/${PKG_DEB_NAME}_${VERSION}_${OS_VERSION}_amd64.deb"
 
+  # Clean up previous builds
+  rm -rf "$DEB_DIR"
+  rm -f "${OUT_DIR}/${PKG_DEB_NAME}_"*"_amd64.deb"
+
+  mkdir -p "$DEB_DIR/DEBIAN" "$DEB_DIR/opt/ros/$ROS_DISTRO"
   cp -a "$INSTALL_DIR"/* "$DEB_DIR/opt/ros/$ROS_DISTRO/"
 
   cat <<EOF > "$DEB_DIR/DEBIAN/control"
@@ -87,10 +94,9 @@ Maintainer: ROS Maintainers <ros@ros.org>
 Description: Auto-generated .deb for $PKG_NAME
 EOF
 
-  dpkg-deb --build "$DEB_DIR"
-  mv "$DEB_DIR.deb" "$OUT_DIR/${PKG_DEB_NAME}_${VERSION}_amd64.deb"
+  dpkg-deb --build "$DEB_DIR" "$OUTPUT_DEB"
   rm -rf "$DEB_DIR"
-  echo "✔ Built $PKG_DEB_NAME $VERSION"
+  echo "✔ Built $OUTPUT_DEB"
 }
 
 # Build either a single package or a list

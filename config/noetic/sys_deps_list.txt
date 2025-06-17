@@ -8,6 +8,7 @@ libqwt-qt5-dev
 pybind11-dev
 liburdfdom-dev 
 liboctomap-dev 
+libopencv-dev
 libassimp-dev
 libmpfr-dev
 libomp-dev

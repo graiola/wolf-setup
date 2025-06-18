@@ -70,15 +70,22 @@ fi
 print_info "Selected install option: $INSTALL_OPT"
 
 # Determine ROS distro
-if [[  -z "$ROS_DISTRO_OPT" ]]; then
-    if [[ "$UBUNTU" == "jammy" ]]; then
-        ROS_DISTRO_OPT="humble"
-    elif [[ "$UBUNTU" == "focal" ]]; then
-        ROS_DISTRO_OPT="noetic"
-    else
-        print_warn "Unsupported Ubuntu version! Only 20.04 (focal) and 22.04 (jammy) are supported."
-        exit 1
-    fi
+if [[ -z "$ROS_DISTRO_OPT" ]]; then
+    case "$UBUNTU" in
+        jammy)
+            ROS_DISTRO_OPT="humble"
+            ;;
+        focal)
+            ROS_DISTRO_OPT="noetic"
+            ;;
+        noble)
+            ROS_DISTRO_OPT="one"
+            ;;
+        *)
+            print_warn "Unsupported Ubuntu version! Only focal (20.04), jammy (22.04), and noble (24.04) are supported."
+            exit 1
+            ;;
+    esac
 fi
 
 print_info "Selected ROS distro option: $ROS_DISTRO_OPT"
@@ -97,8 +104,13 @@ foxy|humble)
     ROS_DISTRO="$ROS_DISTRO_OPT"
     LIST_FILE="/etc/apt/sources.list.d/ros2.list"
     ;;
+one)
+    ROS_VERSION_NAME="ros"
+    ROS_DISTRO="$ROS_DISTRO_OPT"
+    LIST_FILE="/etc/apt/sources.list.d/ros1.list"
+    ;;
 *)
-    print_warn "Unsupported ROS distro! Only noetic, foxy, and humble are supported."
+    print_warn "Unsupported ROS distro! Only noetic, foxy, humble, and one are supported."
     exit 1
     ;;
 esac
@@ -114,12 +126,18 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
         print_info "ROS repository is already present. Skipping repository setup."
     else
         print_info "Adding ROS repository..."
-        sudo mkdir -p /usr/share/keyrings
-        # Corrected GPG key handling
-        sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | \
-            sudo gpg --dearmor -o "$KEY_FILE"
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=${KEY_FILE}] ${ROS_REPO} $(lsb_release -cs) main" | \
-            sudo tee "$LIST_FILE" > /dev/null
+        if [[ "$ROS_DISTRO" == "one" ]]; then
+            sudo mkdir -p /etc/apt/keyrings
+            sudo curl -sSL https://ros.packages.techfak.net/gpg.key -o /etc/apt/keyrings/ros-one-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ros-one-keyring.gpg] https://ros.packages.techfak.net $(lsb_release -cs) main" | sudo tee "$LIST_FILE"
+            echo "# deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ros-one-keyring.gpg] https://ros.packages.techfak.net $(lsb_release -cs) main-dbg" | sudo tee -a "$LIST_FILE"
+        else
+            sudo mkdir -p /usr/share/keyrings
+            sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | \
+                sudo gpg --dearmor -o "$KEY_FILE"
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=${KEY_FILE}] ${ROS_REPO} $(lsb_release -cs) main" | \
+                sudo tee "$LIST_FILE" > /dev/null
+        fi
     fi
 
     sudo apt-get update
@@ -136,19 +154,18 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     sudo ldconfig
     sudo rosdep init || true
     rosdep update
+
+    if [[ "$ROS_DISTRO" == "one" ]]; then
+        echo "yaml https://ros.packages.techfak.net/ros-one.yaml one" | sudo tee /etc/ros/rosdep/sources.list.d/1-ros-one.list
+        rosdep update
+    fi
 fi
-
-
-
 
 # Install application components
 if [[ "$INSTALL_OPT" == "app" || "$INSTALL_OPT" == "all" ]]; then
     /bin/bash "$SCRIPTPATH/support/get_debians.sh"
     print_info "Installing WoLF debian packages..."
-    # Step 1: Pre-install all .debs (some may fail due to missing deps)
     sudo dpkg -i --force-overwrite "$SCRIPTPATH/debs/$BRANCH_OPT/$UBUNTU/"*.deb || true
-    
-    # Step 2: Fix broken dependencies using apt
     sudo apt-get install -f -y
 fi
 
@@ -161,3 +178,4 @@ for LINE in "source /opt/ros/${ROS_DISTRO}/setup.bash" "source /opt/ocs2/setup.s
         print_info "$LINE is already in .bashrc"
     fi
 done
+

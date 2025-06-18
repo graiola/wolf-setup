@@ -9,6 +9,7 @@ services:
         - IMAGE=nvidia/opengl:base-ubuntu18.04
         - ROS=${ROS_DISTRO}
         - BRANCH=${BRANCH}
+
   wolf-base-focal:
     image: wolf-base:focal
     build:
@@ -18,6 +19,7 @@ services:
         - IMAGE=nvidia/opengl:base-ubuntu20.04
         - ROS=${ROS_DISTRO}
         - BRANCH=${BRANCH}
+
   wolf-base-jammy:
     image: wolf-base:jammy
     build:
@@ -27,6 +29,17 @@ services:
         - IMAGE=nvidia/opengl:base-ubuntu22.04
         - ROS=${ROS_DISTRO}
         - BRANCH=${BRANCH}
+
+  wolf-base-noble:
+    image: wolf-base:noble
+    build:
+      context: ${CONTEXT_PATH}
+      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+      args:
+        - IMAGE=nvidia/opengl:base-ubuntu24.04
+        - ROS=${ROS_DISTRO}
+        - BRANCH=${BRANCH}
+
   wolf-app-bionic:
     image: wolf-app:bionic
     build:
@@ -36,6 +49,7 @@ services:
         - IMAGE=wolf-base:bionic
         - ROS=${ROS_DISTRO}
         - BRANCH=${BRANCH}
+
   wolf-app-focal:
     image: wolf-app:focal
     build:
@@ -45,6 +59,7 @@ services:
         - IMAGE=wolf-base:focal
         - ROS=${ROS_DISTRO}
         - BRANCH=${BRANCH}
+
   wolf-app-jammy:
     image: wolf-app:jammy
     build:
@@ -54,3 +69,14 @@ services:
         - IMAGE=wolf-base:jammy
         - ROS=${ROS_DISTRO}
         - BRANCH=${BRANCH}
+
+  wolf-app-noble:
+    image: wolf-app:noble
+    build:
+      context: ${CONTEXT_PATH}
+      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+      args:
+        - IMAGE=wolf-base:noble
+        - ROS=${ROS_DISTRO}
+        - BRANCH=${BRANCH}
+

@@ -10,16 +10,16 @@ USAGE="Usage: build_docker [OPTIONS...]
 Options:
   -h, --help           Show help options
   -i, --image          Image(s) to build [base|app|all] (default: all)
-  -d, --distro         Distro to build [bionic|focal|jammy] (default: focal)
-  -r, --ros            ROS distro [noetic|foxy|humble] (default: noetic)
+  -d, --distro         Distro to build [bionic|focal|jammy|noble] (default: jammy)
+  -r, --ros            ROS distro [noetic|one|foxy|humble] (default: one)
   -b, --branch         Branch to install in the app image (default: devel)
   -p, --push           Push the built image(s)
       --no-cache       Build without using cache"
 
 # Defaults
 BUILD_OPT="all"
-DISTRO_OPT="focal"
-ROS_DISTRO_OPT="noetic"
+DISTRO_OPT="jammy"
+ROS_DISTRO_OPT="one"
 BRANCH_OPT="devel"
 PUSH_OPT="no"
 NO_CACHE_FLAG=""
@@ -44,33 +44,44 @@ done
 
 # Validation
 [[ ! "$BUILD_OPT" =~ ^(base|app|all)$ ]] && print_warn "Invalid image: $BUILD_OPT" && echo -e "$USAGE" && exit 1
-[[ ! "$DISTRO_OPT" =~ ^(bionic|focal|jammy)$ ]] && print_warn "Invalid distro: $DISTRO_OPT" && echo -e "$USAGE" && exit 1
-[[ ! "$ROS_DISTRO_OPT" =~ ^(noetic|foxy|humble)$ ]] && print_warn "Invalid ROS distro: $ROS_DISTRO_OPT" && echo -e "$USAGE" && exit 1
+[[ ! "$DISTRO_OPT" =~ ^(bionic|focal|jammy|noble)$ ]] && print_warn "Invalid distro: $DISTRO_OPT" && echo -e "$USAGE" && exit 1
+[[ ! "$ROS_DISTRO_OPT" =~ ^(noetic|one|foxy|humble)$ ]] && print_warn "Invalid ROS distro: $ROS_DISTRO_OPT" && echo -e "$USAGE" && exit 1
 
 print_info "Build: $BUILD_OPT | Distro: $DISTRO_OPT | ROS: $ROS_DISTRO_OPT | Branch: $BRANCH_OPT | Push: $PUSH_OPT"
 
+# Build helper
 build_image() {
     local TYPE="$1"
-    local SERVICE="wolf-${TYPE}-$DISTRO_OPT"
-    local TAG="serger87/wolf-${TYPE}:$DISTRO_OPT"
+    local SERVICE="wolf-${TYPE}-${DISTRO_OPT}"
+    local IMAGE_NAME="wolf-${TYPE}-${ROS_DISTRO_OPT}"
+    local TAG="${IMAGE_NAME}:${DISTRO_OPT}"
+    local FULL_TAG="serger87/${TAG}"
     local DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/$TYPE"
-    
+
+    # Determine ROS version (1 or 2)
+    if [[ "$ROS_DISTRO_OPT" == "noetic" || "$ROS_DISTRO_OPT" == "one" ]]; then
+        ROS_VERSION="1"
+    else
+        ROS_VERSION="2"
+    fi
+
     print_info "Building $TYPE image..."
     DOCKERFILE_PATH="$DOCKERFILE_PATH" CONTEXT_PATH="$SCRIPTPATH/.." \
-    ROS_DISTRO="$ROS_DISTRO_OPT" BRANCH="$BRANCH_OPT" \
+    ROS_DISTRO="$ROS_DISTRO_OPT" BRANCH="$BRANCH_OPT" ROS_VERSION="$ROS_VERSION" \
     docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE"
 
     if [[ "$PUSH_OPT" == "yes" ]]; then
-        print_info "Tagging and pushing $TYPE image as $TAG"
-        docker tag "wolf-${TYPE}:$DISTRO_OPT" "$TAG"
-        docker push "$TAG"
+        print_info "Tagging and pushing $TYPE image as $FULL_TAG"
+        docker tag "$IMAGE_NAME:$DISTRO_OPT" "$FULL_TAG"
+        docker push "$FULL_TAG"
     else
         print_info "Skipping push for $TYPE image"
     fi
 }
 
+# Build targets
 [[ "$BUILD_OPT" == "base" || "$BUILD_OPT" == "all" ]] && build_image "base"
-[[ "$BUILD_OPT" == "app" || "$BUILD_OPT" == "all" ]] && build_image "app"
+[[ "$BUILD_OPT" == "app"  || "$BUILD_OPT" == "all" ]] && build_image "app"
 
 print_info "Build process completed."
 

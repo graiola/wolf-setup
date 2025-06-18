@@ -13,7 +13,7 @@ wolf_banner
 
 # Options
 ROS=noetic
-CONTAINER_NAME="wolf-app"
+CONTAINER_NAME="wolf-app-noetic"
 IMAGE_TAG="focal"
 ROBOT_MODEL=spot
 ROBOT_NAME=
@@ -31,8 +31,13 @@ if [ `sudo systemctl is-active docker` = "inactive" ]; then
   sudo systemctl start docker
 fi
 
-# Be sure there is no update on the image
-docker pull $IMAGE_NAME
+# Only pull if the image is not already present locally
+if ! docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
+  echo "Image $IMAGE_NAME not found locally. Pulling..."
+  docker pull "$IMAGE_NAME"
+else
+  echo "Image $IMAGE_NAME already exists locally. Skipping pull."
+fi
 
 # Cleanup the docker container before launching it
 docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true

@@ -1,32 +1,77 @@
+version: "3.8"
+
 x-common: &common
   user: "root:root"
   volumes:
-    - $HOME/.ssh:/root/.ssh
+    - $HOME/.ssh:/root/.ssh:ro
     - /tmp/debs:/tmp/debs
   environment:
     - ROS_VERSION=${ROS_VERSION}
+    - ROS_DISTRO=${ROS_DISTRO}
     - BRANCH=${BRANCH}
     - UBUNTU=${UBUNTU}
   command: ["/debs-builder-entrypoint.sh"]
 
+x-local-volumes: &local-volumes
+  - $HOME/.ssh:/root/.ssh:ro
+  - /tmp/debs:/tmp/debs
+  - $HOME/${ROS_WS}/src/wolf:/root/${ROS_WS}/src/wolf
+  - ./debs-builder-entrypoint.sh:/debs-builder-entrypoint.sh:ro
+
+x-local-env: &local-env
+  - ROS_VERSION=${ROS_VERSION}
+  - ROS_DISTRO=${ROS_DISTRO}
+  - ROS_WS=${ROS_WS}
+  - BRANCH=${BRANCH}
+  - UBUNTU=${UBUNTU}
+  - ROS_LOCAL=true
+
 services:
+  # CI/Build Server Builders
+
+  wolf-builder-bionic:
+    <<: *common
+    image: wolf-base-noetic:bionic
+
+  wolf-builder-focal:
+    <<: *common
+    image: wolf-base-noetic:focal
+
   wolf-builder-jammy:
     <<: *common
-    image: wolf-base:jammy
+    image: wolf-base-humble:jammy
 
   wolf-builder-noble:
     <<: *common
-    image: wolf-base:noble
+    image: wolf-base-one:noble
+
+  # Local development variants
+
+  wolf-builder-bionic-local:
+    image: wolf-base-noetic:bionic
+    user: "root:root"
+    volumes: *local-volumes
+    environment: *local-env
+    command: ["/debs-builder-entrypoint.sh"]
+
+  wolf-builder-focal-local:
+    image: wolf-base-noetic:focal
+    user: "root:root"
+    volumes: *local-volumes
+    environment: *local-env
+    command: ["/debs-builder-entrypoint.sh"]
 
   wolf-builder-jammy-local:
-    <<: *common
-    image: wolf-base:jammy
-    volumes:
-      - $HOME/.ssh:/root/.ssh
-      - /tmp/debs:/tmp/debs
-      - $HOME/${ROS_WS}/src/wolf:/root/${ROS_WS}/src/wolf
-    environment:
-      - ROS_VERSION=${ROS_VERSION}
-      - BRANCH=${BRANCH}
-      - UBUNTU=${UBUNTU}
-      - ROS_LOCAL=true
+    image: wolf-base-humble:jammy
+    user: "root:root"
+    volumes: *local-volumes
+    environment: *local-env
+    command: ["/debs-builder-entrypoint.sh"]
+
+  wolf-builder-noble-local:
+    image: wolf-base-one:noble
+    user: "root:root"
+    volumes: *local-volumes
+    environment: *local-env
+    command: ["/debs-builder-entrypoint.sh"]
+

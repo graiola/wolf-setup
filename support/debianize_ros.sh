@@ -47,6 +47,11 @@ source /opt/ros/$ROS_DISTRO/setup.bash || exit 1
 OUT_DIR="$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
 mkdir -p "$OUT_DIR"
 
+# Install xmllint if missing
+if ! command -v xmllint >/dev/null 2>&1; then
+  sudo apt-get update && sudo apt-get install -y libxml2-utils
+fi
+
 # Update dependencies
 sudo rosdep update
 rosdep install --from-paths "$HOME/$ROS_WS/src" --ignore-src -r -y || {
@@ -61,37 +66,55 @@ build_pkg() {
 
   cd "$PKG_PATH" || return 1
 
-  # Extract version from package.xml
+  # Extract version
   VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" package.xml)
   [[ -z "$VERSION" ]] && VERSION="0.1.0"
 
-  # Extract run_depend tags as ROS-style package dependencies
-  DEPENDS=$(grep -oPm1 "(?<=<depend>).*?(?=</depend>)" package.xml |
-            sed -e 's/_/-/g' -e "s/^/ros-${ROS_DISTRO}-/" |
-            paste -sd ', ' -)
-  [[ -z "$DEPENDS" ]] && DEPENDS=""
-
-  # Build with catkin
+  # Build the package
   cd "$HOME/$ROS_WS"
   catkin config --install
   catkin clean -y
   catkin build "$PKG_NAME" --cmake-args -DCMAKE_BUILD_TYPE=Release || return 1
 
-  # Prepare deb package name
+  # Get found CMake flags
+  CMAKE_CACHE="$HOME/$ROS_WS/build/$PKG_NAME/CMakeCache.txt"
+  FOUND_FLAGS=$(grep '_FOUND:BOOL=ON' "$CMAKE_CACHE" | sed 's/:BOOL=ON//' | tr '[:upper:]' '[:lower:]')
+
+  # Collect conditional dependencies (based on *_FOUND)
+  RESOLVED_DEPENDS=""
+  CONDITIONAL_DEPENDS=$(xmllint --xpath "//depend[@condition]" package.xml 2>/dev/null | \
+    sed -nE 's/.*condition="\$([A-Za-z0-9_]+)_FOUND == True".*>([^<]+)<.*/\1:\2/p')
+
+  IFS=$'\n'
+  for entry in $CONDITIONAL_DEPENDS; do
+    VAR="${entry%%:*}"
+    DEP="${entry##*:}"
+    if echo "$FOUND_FLAGS" | grep -q "${VAR,,}_found"; then
+      RESOLVED_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$DEP" | tr '_' '-')"
+    fi
+  done
+  unset IFS
+
+  # Collect unconditional dependencies
+  UNCONDITIONAL_DEPENDS=$(xmllint --xpath 'string-join(//depend[not(@condition)], " ")' package.xml 2>/dev/null | \
+    tr ' ' '\n' | sed -e 's/_/-/g' -e "s/^/ros-${ROS_DISTRO}-/" | xargs)
+
+  # Combine and clean
+  ALL_DEPENDS=$(echo "$UNCONDITIONAL_DEPENDS $RESOLVED_DEPENDS" | xargs | tr ' ' ', ')
+
+  # Prepare .deb layout
   PKG_DEB_NAME="ros-${ROS_DISTRO}-$(echo $PKG_NAME | tr '_' '-')"
   INSTALL_DIR="$HOME/$ROS_WS/install"
   DEB_DIR="$HOME/$ROS_WS/debbuild/$PKG_NAME"
   OUTPUT_DEB="${OUT_DIR}/${PKG_DEB_NAME}_${VERSION}_${OS_VERSION}_amd64.deb"
 
-  # Clean up
   rm -rf "$DEB_DIR"
   rm -f "${OUT_DIR}/${PKG_DEB_NAME}_"*"_amd64.deb"
 
-  # Create structure
   mkdir -p "$DEB_DIR/DEBIAN" "$DEB_DIR/opt/ros/$ROS_DISTRO"
   cp -a "$INSTALL_DIR"/* "$DEB_DIR/opt/ros/$ROS_DISTRO/"
 
-  # Generate control file
+  # Final control file
   cat <<EOF > "$DEB_DIR/DEBIAN/control"
 Package: $PKG_DEB_NAME
 Version: $VERSION
@@ -99,18 +122,16 @@ Section: misc
 Priority: optional
 Architecture: amd64
 Maintainer: ROS Maintainers <ros@ros.org>
-Depends: ${DEPENDS}
+Depends: ${ALL_DEPENDS}
 Description: Auto-generated .deb for ROS package $PKG_NAME
 EOF
 
-  # Build the package
   dpkg-deb --build "$DEB_DIR" "$OUTPUT_DEB"
   rm -rf "$DEB_DIR"
   echo "✔ Built $OUTPUT_DEB"
 }
 
-
-# Build either a single package or a list
+# Build either a single package or all in list
 if [[ -n "$SINGLE_PKG" ]]; then
   build_pkg "$SINGLE_PKG"
 else

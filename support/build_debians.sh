@@ -21,12 +21,14 @@ Application Options:
 \n
 -r,--ros \tROS distro to install [noetic|foxy|humble|one], example: -r noetic
 \n
+-d,--distro \tUbuntu distro to use [focal|jammy|noble], overrides ROS default, example: -d noble
+\n
 -l,--local_ws \tLocal ROS workspace to use for the build, note: it makes the branch option useless, example: -l ros_ws"
 
 # Defaults
 BRANCH_OPT=devel
 ROS_DISTRO_OPT=noetic
-UBUNTU_OPT=focal
+UBUNTU_OPT=""
 ROS_VERSION_OPT=""
 SERVICE_OPT=""
 ROS_WS_OPT=""
@@ -47,6 +49,10 @@ while [ -n "$1" ]; do
             ROS_DISTRO_OPT="$2"
             shift
             ;;
+        -d|--distro)
+            UBUNTU_OPT="$2"
+            shift
+            ;;
         -l|--local_ws)
             ROS_WS_OPT="$2"
             shift
@@ -62,30 +68,57 @@ done
 
 BUILDER_COMPOSE="$SCRIPTPATH/../dockerfiles/dc-debs-builder.yaml"
 
-# Determine UBUNTU and ROS version from ROS_DISTRO
-case "$ROS_DISTRO_OPT" in
-    noetic)
-        UBUNTU_OPT=focal
-        ROS_VERSION_OPT=1
-        ;;
-    foxy)
-        UBUNTU_OPT=focal
-        ROS_VERSION_OPT=2
-        ;;
-    humble)
-        UBUNTU_OPT=jammy
-        ROS_VERSION_OPT=2
-        ;;
-    one)
-        UBUNTU_OPT=noble
-        ROS_VERSION_OPT=2
-        ;;
-    *)
-        print_warn "Invalid ROS distro: $ROS_DISTRO_OPT!"
-        echo -e "$USAGE"
-        exit 1
-        ;;
-esac
+# Determine UBUNTU and ROS version from ROS_DISTRO if UBUNTU not manually set
+if [[ -z "$UBUNTU_OPT" ]]; then
+    case "$ROS_DISTRO_OPT" in
+        noetic)
+            UBUNTU_OPT=focal
+            ROS_VERSION_OPT=1
+            ;;
+        foxy)
+            UBUNTU_OPT=focal
+            ROS_VERSION_OPT=2
+            ;;
+        humble)
+            UBUNTU_OPT=jammy
+            ROS_VERSION_OPT=2
+            ;;
+        one)
+            UBUNTU_OPT=noble
+            ROS_VERSION_OPT=2
+            ;;
+        *)
+            print_warn "Invalid ROS distro: $ROS_DISTRO_OPT!"
+            echo -e "$USAGE"
+            exit 1
+            ;;
+    esac
+else
+    case "$UBUNTU_OPT" in
+        focal|jammy|noble)
+            ;;
+        *)
+            print_warn "Invalid Ubuntu distro: $UBUNTU_OPT!"
+            echo -e "$USAGE"
+            exit 1
+            ;;
+    esac
+
+    # Try to infer ROS version even if manually overridden
+    case "$ROS_DISTRO_OPT" in
+        noetic)
+            ROS_VERSION_OPT=1
+            ;;
+        foxy|humble|one)
+            ROS_VERSION_OPT=2
+            ;;
+        *)
+            print_warn "Invalid ROS distro: $ROS_DISTRO_OPT!"
+            echo -e "$USAGE"
+            exit 1
+            ;;
+    esac
+fi
 
 # Determine Compose service
 if [[ -n "$ROS_WS_OPT" ]]; then
@@ -96,6 +129,7 @@ fi
 
 print_info "Using service: $SERVICE_OPT"
 print_info "ROS distro: $ROS_DISTRO_OPT"
+print_info "Ubuntu distro: $UBUNTU_OPT"
 
 # Run Compose
 BRANCH=$BRANCH_OPT \

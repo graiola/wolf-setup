@@ -23,7 +23,7 @@ pybind11-catkin
 genmsg
 image-transport
 # For navigation
-#pointcloud-to-laserscan
+pointcloud-to-laserscan
 move-base
 global-planner
 dwa-local-planner
@@ -38,7 +38,7 @@ pcl-ros
 pcl-conversions
 sparse-bundle-adjustment
 cv-bridge
-#twist-mux
+twist-mux
 srdfdom
 # OCS2
 pinocchio

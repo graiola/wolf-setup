@@ -63,7 +63,8 @@ function build_bloom() {
   } >> debian/rules
 
   fakeroot debian/rules binary || return 1
-  sudo dpkg -i ../*.deb || return 1
+
+  sudo apt install -y ../*.deb || sudo apt --fix-broken install -y || return 1
 
   mkdir -p "$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
   mv ../*.deb "$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
@@ -85,31 +86,31 @@ function build_manual() {
   VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" package.xml)
   [[ -z "$VERSION" ]] && VERSION="0.1.0"
 
-  # Clean install/build output
+  # Clean workspace if needed
   cd "$HOME/$ROS_WS"
-  rm -rf install devel build
-  catkin clean -y --yes
+  if [ -d build ] || [ -d devel ] || [ -d install ]; then
+    catkin clean -y --yes
+  fi
   catkin config --install
   catkin build "$PKG_NAME" --no-deps --cmake-args -DCMAKE_BUILD_TYPE=Release || return 1
 
   # === DEPENDENCY RESOLUTION ===
   local UNCONDITIONAL_DEPENDS=""
-  local RAW_DEPENDS
-  RAW_DEPENDS=$(xmllint --xpath '//depend[not(@condition)]/text()' "$PKG_PATH/package.xml" 2>/dev/null | tr ' ' '\n')
+  RAW_DEPENDS=$(xmllint --xpath '//depend[not(@condition)]' "$PKG_PATH/package.xml" 2>/dev/null | sed -n 's:.*>\(.*\)<.*:\1:p' | xargs)
 
   for dep in $RAW_DEPENDS; do
     [[ -n "$dep" && "$dep" != "roscpp" ]] && UNCONDITIONAL_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$dep" | tr '_' '-')"
   done
 
-  local CONDITIONAL_DEPENDS
-  RESOLVED_DEPENDS=""
+  local CONDITIONAL_XML
   CONDITIONAL_XML=$(xmllint --format "$PKG_PATH/package.xml" 2>/dev/null | grep -oP '<depend[^>]*condition="[^"]+"[^>]*>[^<]+</depend>')
+  RESOLVED_DEPENDS=""
 
   while read -r line; do
     DEP=$(echo "$line" | sed -n 's/.*>\(.*\)<.*/\1/p' | xargs)
-    if [[ -n "$DEP" ]]; then
+    if [[ -n "$DEP" && "$DEP" != "roscpp" ]]; then
       if rospack find "$DEP" &>/dev/null; then
-        [[ "$DEP" != "roscpp" ]] && RESOLVED_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$DEP" | tr '_' '-')"
+        RESOLVED_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$DEP" | tr '_' '-')"
       fi
     fi
   done <<< "$CONDITIONAL_XML"
@@ -127,9 +128,16 @@ function build_manual() {
   rm -rf "$DEB_DIR"
   rm -f "$OUTPUT_DEB"
   mkdir -p "$DEB_DIR/DEBIAN" "$DEB_DIR/opt/ros/$ROS_DISTRO"
-  
+
   cp -a "$INSTALL_DIR/share/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/share/"
-  cp -a "$INSTALL_DIR/lib/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/lib/" 2>/dev/null || true
+  [ -d "$INSTALL_DIR/lib/$PKG_NAME" ] && cp -a "$INSTALL_DIR/lib/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/lib/"
+  [ -d "$INSTALL_DIR/include/$PKG_NAME" ] && cp -a "$INSTALL_DIR/include/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/include/"
+
+  # Avoid packaging artifacts from catkin setup
+  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/_setup_util.py
+  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/setup.*
+  rm -rf "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/catkin_tools_prebuild
+  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/package.xml
 
   cat <<EOF > "$DEB_DIR/DEBIAN/control"
 Package: $PKG_DEB_NAME
@@ -151,7 +159,7 @@ EOF
   rm -rf "$DEB_DIR"
   print_info "✔ Built $OUTPUT_DEB"
 
-  sudo dpkg -i --force-overwrite "$OUTPUT_DEB"
+  sudo apt install -y "$OUTPUT_DEB" || sudo apt --fix-broken install -y
 }
 
 # === EXECUTION ===

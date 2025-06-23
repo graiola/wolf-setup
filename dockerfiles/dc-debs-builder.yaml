@@ -5,6 +5,7 @@ x-common: &common
   volumes:
     - $HOME/.ssh:/root/.ssh:ro
     - /tmp/debs:/tmp/debs
+    - ./debs-builder-entrypoint.sh:/debs-builder-entrypoint.sh:ro
   environment:
     - ROS_VERSION=${ROS_VERSION}
     - ROS_DISTRO=${ROS_DISTRO}
@@ -16,7 +17,6 @@ x-local-volumes: &local-volumes
   - $HOME/.ssh:/root/.ssh:ro
   - /tmp/debs:/tmp/debs
   - $HOME/${ROS_WS}/src/wolf:/root/${ROS_WS}/src/wolf
-  - ./debs-builder-entrypoint.sh:/debs-builder-entrypoint.sh:ro
 
 x-local-env: &local-env
   - ROS_VERSION=${ROS_VERSION}

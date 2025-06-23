@@ -86,39 +86,38 @@ function build_manual() {
   VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" package.xml)
   [[ -z "$VERSION" ]] && VERSION="0.1.0"
 
-  # Clean workspace if needed
+  # Clean and build only this package
   cd "$HOME/$ROS_WS"
-  if [ -d build ] || [ -d devel ] || [ -d install ]; then
-    catkin clean -y --yes
-  fi
+  catkin clean -y --yes
   catkin config --install
   catkin build "$PKG_NAME" --no-deps --cmake-args -DCMAKE_BUILD_TYPE=Release || return 1
 
-  # === DEPENDENCY RESOLUTION ===
+  # === Dependency Resolution ===
   local UNCONDITIONAL_DEPENDS=""
-  RAW_DEPENDS=$(xmllint --xpath '//depend[not(@condition)]' "$PKG_PATH/package.xml" 2>/dev/null | sed -n 's:.*>\(.*\)<.*:\1:p' | xargs)
+  local RAW_DEPENDS
+  RAW_DEPENDS=$(xmllint --xpath '//depend[not(@condition)]/text()' "$PKG_PATH/package.xml" 2>/dev/null | tr ' ' '\n')
 
   for dep in $RAW_DEPENDS; do
     [[ -n "$dep" && "$dep" != "roscpp" ]] && UNCONDITIONAL_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$dep" | tr '_' '-')"
   done
 
+  local CONDITIONAL_DEPENDS=""
   local CONDITIONAL_XML
   CONDITIONAL_XML=$(xmllint --format "$PKG_PATH/package.xml" 2>/dev/null | grep -oP '<depend[^>]*condition="[^"]+"[^>]*>[^<]+</depend>')
-  RESOLVED_DEPENDS=""
 
   while read -r line; do
     DEP=$(echo "$line" | sed -n 's/.*>\(.*\)<.*/\1/p' | xargs)
-    if [[ -n "$DEP" && "$DEP" != "roscpp" ]]; then
+    if [[ -n "$DEP" ]]; then
       if rospack find "$DEP" &>/dev/null; then
-        RESOLVED_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$DEP" | tr '_' '-')"
+        [[ "$DEP" != "roscpp" ]] && CONDITIONAL_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$DEP" | tr '_' '-')"
       fi
     fi
   done <<< "$CONDITIONAL_XML"
 
   local ALL_DEPENDS
-  ALL_DEPENDS=$(echo "$UNCONDITIONAL_DEPENDS $RESOLVED_DEPENDS" | xargs | tr ' ' ', ')
+  ALL_DEPENDS=$(echo "$UNCONDITIONAL_DEPENDS $CONDITIONAL_DEPENDS" | xargs | tr ' ' ', ')
 
-  # === .deb PACKAGE GENERATION ===
+  # === Build .deb ===
   local PKG_DEB_NAME="ros-${ROS_DISTRO}-$(echo "$PKG_NAME" | tr '_' '-')"
   local INSTALL_DIR="$HOME/$ROS_WS/install"
   local DEB_DIR="$HOME/$ROS_WS/debbuild/$PKG_NAME"
@@ -126,19 +125,30 @@ function build_manual() {
 
   mkdir -p "$(dirname "$OUTPUT_DEB")"
   rm -rf "$DEB_DIR"
-  rm -f "$OUTPUT_DEB"
   mkdir -p "$DEB_DIR/DEBIAN" "$DEB_DIR/opt/ros/$ROS_DISTRO"
 
-  cp -a "$INSTALL_DIR/share/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/share/"
-  [ -d "$INSTALL_DIR/lib/$PKG_NAME" ] && cp -a "$INSTALL_DIR/lib/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/lib/"
-  [ -d "$INSTALL_DIR/include/$PKG_NAME" ] && cp -a "$INSTALL_DIR/include/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/include/"
+  # Copy only THIS package's installed files
+  #[[ -d "$INSTALL_DIR/include/$PKG_NAME" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/include" && cp -a "$INSTALL_DIR/include/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/include/"
+  #[[ -d "$INSTALL_DIR/lib/$PKG_NAME" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/lib" && cp -a "$INSTALL_DIR/lib/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/lib/"
+  #[[ -d "$INSTALL_DIR/lib" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/lib" && cp -a "$INSTALL_DIR/lib/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/lib/"
+  #[[ -d "$INSTALL_DIR/share/$PKG_NAME" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/share" && cp -a "$INSTALL_DIR/share/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/share/"
 
-  # Avoid packaging artifacts from catkin setup
-  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/_setup_util.py
-  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/setup.*
-  rm -rf "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/catkin_tools_prebuild
-  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/package.xml
+  # Copy headers
+  [[ -d "$INSTALL_DIR/include/$PKG_NAME" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/include" && cp -a "$INSTALL_DIR/include/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/include/"
 
+  # Copy libraries and CMake exports (catch both .so and cmake config)
+  [[ -d "$INSTALL_DIR/lib" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/lib" && cp -a "$INSTALL_DIR/lib/"* "$DEB_DIR/opt/ros/$ROS_DISTRO/lib/"
+
+  # Copy package metadata (including cmake exports)
+  [[ -d "$INSTALL_DIR/share/$PKG_NAME" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/share" && cp -a "$INSTALL_DIR/share/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/share/"
+
+  # Clean out ROS root pollution
+  #rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/_setup_util.py
+  #rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/setup.*
+  #rm -rf "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/catkin_tools_prebuild
+  #rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/package.xml
+
+  # Create control file
   cat <<EOF > "$DEB_DIR/DEBIAN/control"
 Package: $PKG_DEB_NAME
 Version: $VERSION
@@ -146,21 +156,24 @@ Section: misc
 Priority: optional
 Architecture: amd64
 Maintainer: ROS Maintainers <ros@ros.org>
-Depends: ${ALL_DEPENDS}
+Depends: $ALL_DEPENDS
 Description: Auto-generated .deb for ROS package $PKG_NAME
 EOF
 
   print_info "Building $PKG_NAME"
   print_info "Unconditional: $UNCONDITIONAL_DEPENDS"
-  print_info "Conditional:   $RESOLVED_DEPENDS"
+  print_info "Conditional:   $CONDITIONAL_DEPENDS"
   print_info "Dependencies:  $ALL_DEPENDS"
 
   dpkg-deb --build "$DEB_DIR" "$OUTPUT_DEB"
   rm -rf "$DEB_DIR"
   print_info "✔ Built $OUTPUT_DEB"
 
-  sudo apt install -y "$OUTPUT_DEB" || sudo apt --fix-broken install -y
+  sudo dpkg -i --force-overwrite "$OUTPUT_DEB"
+  
+  sudo ldconfig
 }
+
 
 # === EXECUTION ===
 if $USE_BLOOM; then

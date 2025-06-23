@@ -88,17 +88,11 @@ function build_manual() {
   # Clean install/build output
   cd "$HOME/$ROS_WS"
   rm -rf install devel build
-
-  # Build only this package
   catkin clean -y --yes
   catkin config --install
   catkin build "$PKG_NAME" --no-deps --cmake-args -DCMAKE_BUILD_TYPE=Release || return 1
 
-  # Dependency extraction
-  local CMAKE_CACHE="$HOME/$ROS_WS/build/$PKG_NAME/CMakeCache.txt"
-  local FOUND_FLAGS
-  FOUND_FLAGS=$(grep '_FOUND:BOOL=ON' "$CMAKE_CACHE" | sed 's/:BOOL=ON//' | tr '[:upper:]' '[:lower:]' | tr '\n' ' ')
-
+  # === DEPENDENCY RESOLUTION ===
   local UNCONDITIONAL_DEPENDS=""
   local RAW_DEPENDS
   RAW_DEPENDS=$(xmllint --xpath '//depend[not(@condition)]/text()' "$PKG_PATH/package.xml" 2>/dev/null | tr ' ' '\n')
@@ -108,22 +102,22 @@ function build_manual() {
   done
 
   local CONDITIONAL_DEPENDS
-  CONDITIONAL_DEPENDS=$(xmllint --xpath '//*[local-name()="depend" or local-name()="exec_depend"][@condition]' "$PKG_PATH/package.xml" 2>/dev/null || true)
+  RESOLVED_DEPENDS=""
+  CONDITIONAL_XML=$(xmllint --format "$PKG_PATH/package.xml" 2>/dev/null | grep -oP '<depend[^>]*condition="[^"]+"[^>]*>[^<]+</depend>')
 
-  local RESOLVED_DEPENDS=""
-  if [[ -n "$CONDITIONAL_DEPENDS" ]]; then
-    while read -r line; do
-      DEP=$(echo "$line" | sed -n 's/.*>\(.*\)<.*/\1/p')
-      VAR=$(echo "$line" | grep -oP 'condition="\$?\K[^_"]+(?=_FOUND)' | tr '[:upper:]' '[:lower:]')
-      if [[ -n "$DEP" && -n "$VAR" && "$FOUND_FLAGS" == *"${VAR}_found"* ]]; then
+  while read -r line; do
+    DEP=$(echo "$line" | sed -n 's/.*>\(.*\)<.*/\1/p' | xargs)
+    if [[ -n "$DEP" ]]; then
+      if rospack find "$DEP" &>/dev/null; then
         [[ "$DEP" != "roscpp" ]] && RESOLVED_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$DEP" | tr '_' '-')"
       fi
-    done <<< "$(echo "$CONDITIONAL_DEPENDS" | xmllint --format - | grep -oP '<[^>]+condition=.*?>[^<]+'</)"
-  fi
+    fi
+  done <<< "$CONDITIONAL_XML"
 
   local ALL_DEPENDS
   ALL_DEPENDS=$(echo "$UNCONDITIONAL_DEPENDS $RESOLVED_DEPENDS" | xargs | tr ' ' ', ')
 
+  # === .deb PACKAGE GENERATION ===
   local PKG_DEB_NAME="ros-${ROS_DISTRO}-$(echo "$PKG_NAME" | tr '_' '-')"
   local INSTALL_DIR="$HOME/$ROS_WS/install"
   local DEB_DIR="$HOME/$ROS_WS/debbuild/$PKG_NAME"
@@ -146,7 +140,11 @@ Depends: ${ALL_DEPENDS}
 Description: Auto-generated .deb for ROS package $PKG_NAME
 EOF
 
-  print_info "Building $PKG_NAME with dependencies: $ALL_DEPENDS"
+  print_info "Building $PKG_NAME"
+  print_info "Unconditional: $UNCONDITIONAL_DEPENDS"
+  print_info "Conditional:   $RESOLVED_DEPENDS"
+  print_info "Dependencies:  $ALL_DEPENDS"
+
   dpkg-deb --build "$DEB_DIR" "$OUTPUT_DEB"
   rm -rf "$DEB_DIR"
   print_info "✔ Built $OUTPUT_DEB"

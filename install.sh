@@ -25,7 +25,7 @@ Application Options:
 
 # Default
 INSTALL_OPT="all"
-BRANCH_OPT="devel"
+BRANCH_OPT="ros1-noetic"
 ROS_DISTRO_OPT=
 PYTHON_NAME="python3"
 UBUNTU=$(lsb_release -cs)

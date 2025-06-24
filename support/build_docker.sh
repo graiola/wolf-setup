@@ -49,6 +49,9 @@ done
 
 print_info "Build: $BUILD_OPT | Distro: $DISTRO_OPT | ROS: $ROS_DISTRO_OPT | Branch: $BRANCH_OPT | Push: $PUSH_OPT"
 
+# Cleanup
+sudo rm -rf $SCRIPTPATH/../debs
+
 # Build helper
 build_image() {
     local TYPE="$1"

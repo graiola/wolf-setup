@@ -3,8 +3,8 @@
 # This script builds Debian packages for ROS 2 workspaces.
 
 # Get this script's path
-pushd `dirname $0` > /dev/null
-SCRIPTPATH=`pwd`
+pushd "$(dirname "$0")" > /dev/null
+SCRIPTPATH=$(pwd)
 popd > /dev/null
 
 USAGE="Usage: \n build_debian [OPTIONS...]
@@ -20,6 +20,8 @@ Application Options:
 -w, --workspace\tWorkspace to build, example: -w ros_ws
 \n
 -p, --pkg\tSelect package to compile, example: -p package_name
+\n
+-a, --all\tBuild the entire workspace into a single .deb package
 "
 
 # Default Values
@@ -29,9 +31,10 @@ OS=ubuntu
 OS_VERSION=$(lsb_release -cs)
 ROS_DISTRO=humble
 SINGLE_PKG=
+BUILD_ALL=true
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]]; then
-  echo -e $USAGE
+  echo -e "$USAGE"
   exit 0
 fi
 
@@ -50,9 +53,12 @@ while [ -n "$1" ]; do
       SINGLE_PKG="$2"
       shift
       ;;
+    -a|--all)
+      BUILD_ALL=true
+      ;;
     *)
       echo "Option $1 not recognized!"
-      echo -e $USAGE
+      echo -e "$USAGE"
       exit 1
       ;;
   esac
@@ -83,61 +89,106 @@ source ~/$ROS_WS/install/setup.bash || {
 rosdep update
 
 # Clean previous build artifacts
-rm -rf $SCRIPTPATH/../debs/$BRANCH
-mkdir -p $SCRIPTPATH/../debs/$BRANCH
+rm -rf "$SCRIPTPATH/../debs/$BRANCH"
+mkdir -p "$SCRIPTPATH/../debs/$BRANCH"
 
-# Build Debian Packages
+# === Build Functions ===
+
 function build_package() {
   local PKG=$1
-  PACKAGE_PATH=$(find $HOME/$ROS_WS/src -type d -name "$PKG" ! -path '*.git*' | head -n 1)
-  cd $PACKAGE_PATH || {
+  PACKAGE_PATH=$(find "$HOME/$ROS_WS/src" -type d -name "$PKG" ! -path '*.git*' | head -n 1)
+  cd "$PACKAGE_PATH" || {
     echo "Package $PKG not found in the workspace."
     return 1
   }
 
   echo "Generating Debian package for $PKG..."
 
-  # Run bloom to generate Debian files
   bloom-generate rosdebian --os-name $OS --os-version $OS_VERSION --ros-distro $ROS_DISTRO || {
     echo "Bloom generation failed for $PKG."
     return 1
   }
 
-echo -e "override_dh_usrlocal:" >> debian/rules
-echo -e "override_dh_shlibdeps:" >> debian/rules
-echo -e "	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info" >> debian/rules
+  echo -e "override_dh_usrlocal:\n" >> debian/rules
+  echo -e "override_dh_shlibdeps:\n\tdh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info" >> debian/rules
 
-  # Ensure debian/rules file uses tabs, not spaces
+  # Ensure debian/rules file uses tabs
   sed -i 's/^    /\t/' debian/rules
 
-  # Build the package
   fakeroot debian/rules binary || {
     echo "Debian package build failed for $PKG."
     return 1
   }
 
-  # Move the generated .deb file
-  mkdir -p $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION
-  mv ../*.deb $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION || {
+  mkdir -p "$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
+  mv ../*.deb "$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION" || {
     echo "Failed to move .deb file for $PKG."
     return 1
   }
 
-  # Clean up
   rm -rf debian obj-x86_64-linux-gnu
   echo "Debian package for $PKG created successfully."
 }
 
-# Build either a single package or all packages
-if [[ -n $SINGLE_PKG ]]; then
-  build_package $SINGLE_PKG
+function build_all_workspace() {
+  local WS_PATH="$HOME/$ROS_WS"
+  local INSTALL_DIR="$WS_PATH/install"
+  local DEB_DIR="$WS_PATH/debbuild/whole_ws"
+  local VERSION="1.0.0"
+  local OUTPUT_DEB="${SCRIPTPATH}/../debs/$BRANCH/$OS_VERSION/ros-${ROS_DISTRO}-wolf-full_${VERSION}_${OS_VERSION}_amd64.deb"
+
+  echo "Building the entire workspace into one Debian package..."
+
+  colcon build --merge-install --install-base "$INSTALL_DIR" || {
+    echo "Workspace build failed"
+    return 1
+  }
+
+  rm -rf "$DEB_DIR"
+  mkdir -p "$DEB_DIR/DEBIAN"
+  mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO"
+  cp -a "$INSTALL_DIR/"* "$DEB_DIR/opt/ros/$ROS_DISTRO"
+
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/_setup_util.py"
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/setup.*"
+  rm -rf "$DEB_DIR/opt/ros/$ROS_DISTRO/share/colcon*"
+
+  mkdir -p "$(dirname "$OUTPUT_DEB")"
+
+  DEPS=$(rosdep check --from-paths "$WS_PATH/src" --rosdistro "$ROS_DISTRO" --ignore-src --reinstall 2>/dev/null | grep "apt:" | awk '{print $2}' | tr '\n' ',' | sed 's/,$//')
+
+  cat <<EOF > "$DEB_DIR/DEBIAN/control"
+Package: ros-${ROS_DISTRO}-wolf-full
+Version: $VERSION
+Section: misc
+Priority: optional
+Architecture: amd64
+Maintainer: ROS Maintainers <ros@ros.org>
+Depends: $DEPS
+Description: Monolithic .deb containing the entire ROS 2 workspace
+EOF
+
+  dpkg-deb --build "$DEB_DIR" "$OUTPUT_DEB"
+  echo "✔ Built $OUTPUT_DEB"
+
+  sudo dpkg -i --force-overwrite "$OUTPUT_DEB"
+  sudo ldconfig
+}
+
+# === Execution ===
+
+if [[ "$BUILD_ALL" == true ]]; then
+  build_all_workspace
+elif [[ -n $SINGLE_PKG ]]; then
+  build_package "$SINGLE_PKG"
 else
-  PKGS=$(cat $SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt | grep -v \#)
+  PKGS=$(cat "$SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt" | grep -v \#)
   for PKG in $PKGS; do
-    build_package $PKG || {
+    build_package "$PKG" || {
       echo "Skipping $PKG due to errors."
     }
   done
 fi
 
 echo "Debian packages generated successfully in $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION."
+

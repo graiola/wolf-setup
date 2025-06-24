@@ -1,120 +1,155 @@
 #!/bin/bash
 
-# This script builds .deb packages from ROS packages without using bloom
-
-# Get script path
 SCRIPTPATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPTPATH/fun.cfg"
 
-# Defaults
 BRANCH=devel
 ROS_WS=ros_ws
 ROS_DISTRO=noetic
 SINGLE_PKG=
+USE_BLOOM=false
+BUILD_ALL=true
 
-# Help text
 USAGE="Usage: debianize [OPTIONS...]
-  -b, --branch     Branch to install (default: devel)
-  -w, --workspace  Workspace to debianize (default: ros_ws)
-  -p, --pkg        Build only one package by name
-  -h, --help       Show this help message"
+  -b, --branch       Branch to install (default: devel)
+  -w, --workspace    Workspace to debianize (default: ros_ws)
+  -p, --pkg          Build only one package by name
+  -u, --use-bloom    Use bloom to generate .deb (default: false)
+  -a, --all          Build entire workspace and create one monolithic .deb
+  -h, --help         Show this help message"
 
-# Parse arguments
 while [ -n "$1" ]; do
   case "$1" in
     -b|--branch) BRANCH="$2"; shift ;;
     -w|--workspace) ROS_WS="$2"; shift ;;
     -p|--pkg) SINGLE_PKG="$2"; shift ;;
+    -u|--use-bloom) USE_BLOOM=true ;;
+    -a|--all) BUILD_ALL=true ;;
     -h|--help) echo -e "$USAGE"; exit 0 ;;
     *) echo "Unknown option: $1"; echo -e "$USAGE"; exit 1 ;;
   esac
   shift
 done
 
-# Detect Ubuntu version and set ROS_DISTRO accordingly
 OS_VERSION=$(lsb_release -cs)
 case "$OS_VERSION" in
   focal) ROS_DISTRO=noetic ;;
   jammy) ROS_DISTRO=humble ;;
-  *) echo "Unsupported Ubuntu version: $OS_VERSION"; exit 1 ;;
+  noble) ROS_DISTRO=one ;;
+  *) print_error "Unsupported Ubuntu version: $OS_VERSION"; exit 1 ;;
 esac
 
-# Set up ROS environment
-source /opt/ros/$ROS_DISTRO/setup.bash || exit 1
-[[ -f "$HOME/$ROS_WS/devel/setup.bash" ]] && source "$HOME/$ROS_WS/devel/setup.bash"
+unset ROS_PACKAGE_PATH
+source "/opt/ros/$ROS_DISTRO/setup.bash"
+[[ -f "$HOME/$ROS_WS/install/setup.bash" ]] && source "$HOME/$ROS_WS/install/setup.bash"
 
-# Prepare output directory
-OUT_DIR="$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
-mkdir -p "$OUT_DIR"
+clean_file "$SCRIPTPATH/../debs/wolf.zip"
+clean_folder "$SCRIPTPATH/../debs/$BRANCH"
 
-# Install xmllint if missing
-if ! command -v xmllint >/dev/null 2>&1; then
-  sudo apt-get update && sudo apt-get install -y libxml2-utils
-fi
+function build_all_workspace() {
+  local WS_PATH="$HOME/$ROS_WS"
+  local INSTALL_DIR="$WS_PATH/install"
+  local DEB_DIR="$WS_PATH/debbuild/whole_ws"
+  local VERSION="1.0.0"
+  local OUTPUT_DEB="${SCRIPTPATH}/../debs/$BRANCH/$OS_VERSION/ros-${ROS_DISTRO}-wolf-full_${VERSION}_${OS_VERSION}_amd64.deb"
 
-# Update dependencies
-sudo rosdep update
-rosdep install --from-paths "$HOME/$ROS_WS/src" --ignore-src -r -y || {
-  echo "rosdep install failed"; exit 1;
+  catkin clean -y --yes
+  catkin config --install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR"
+  catkin build || { print_error "Workspace build failed"; return 1; }
+
+  rm -rf "$DEB_DIR"
+  mkdir -p "$DEB_DIR/DEBIAN"
+  mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO"
+  cp -a "$INSTALL_DIR/"* "$DEB_DIR/opt/ros/$ROS_DISTRO"
+
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/_setup_util.py"
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/setup.*"
+  rm -rf "$DEB_DIR/opt/ros/$ROS_DISTRO/share/catkin_tools_prebuild"
+
+  mkdir -p "$(dirname "$OUTPUT_DEB")"  # <-- Ensure output directory exists!
+
+  cat <<EOF > "$DEB_DIR/DEBIAN/control"
+Package: ros-${ROS_DISTRO}-wolf-full
+Version: $VERSION
+Section: misc
+Priority: optional
+Architecture: amd64
+Maintainer: ROS Maintainers <ros@ros.org>
+Depends: $(rosdep check --from-paths "$WS_PATH/src" --rosdistro $ROS_DISTRO --ignore-src --reinstall 2>/dev/null | grep "apt:" | awk '{print $2}' | tr '\n' ',' | sed 's/,$//')
+Description: Monolithic .deb containing the entire ROS workspace
+EOF
+
+  print_info "Building whole workspace .deb..."
+  dpkg-deb --build "$DEB_DIR" "$OUTPUT_DEB"
+  print_info "✔ Built $OUTPUT_DEB"
+
+  sudo dpkg -i --force-overwrite "$OUTPUT_DEB"
+  sudo ldconfig
 }
 
-# Function to build a single package
-build_pkg() {
-  PKG_NAME="$1"
+function build_manual() {
+  local PKG_NAME="$1"
+  local PKG_PATH
+
+  source "/opt/ros/$ROS_DISTRO/setup.bash"
+
   PKG_PATH=$(rospack find "$PKG_NAME" 2>/dev/null)
-  [[ -z "$PKG_PATH" ]] && { echo "Package $PKG_NAME not found"; return 1; }
+  [[ -z "$PKG_PATH" ]] && PKG_PATH=$(find "$HOME/$ROS_WS/src" -type d -name "$PKG_NAME" | head -n1)
+  [[ -z "$PKG_PATH" ]] && { print_warn "Package '$PKG_NAME' not found."; return 1; }
 
   cd "$PKG_PATH" || return 1
 
-  # Extract version
   VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" package.xml)
   [[ -z "$VERSION" ]] && VERSION="0.1.0"
 
-  # Build the package
   cd "$HOME/$ROS_WS"
+  catkin clean -y --yes
   catkin config --install
-  catkin clean -y
-  catkin build "$PKG_NAME" --cmake-args -DCMAKE_BUILD_TYPE=Release || return 1
+  catkin build "$PKG_NAME" --no-deps --cmake-args -DCMAKE_BUILD_TYPE=Release || return 1
 
-  # Get found CMake flags
-  CMAKE_CACHE="$HOME/$ROS_WS/build/$PKG_NAME/CMakeCache.txt"
-  FOUND_FLAGS=$(grep '_FOUND:BOOL=ON' "$CMAKE_CACHE" | sed 's/:BOOL=ON//' | tr '[:upper:]' '[:lower:]')
+  local UNCONDITIONAL_DEPENDS=""
+  local RAW_DEPENDS
+  RAW_DEPENDS=$(xmllint --xpath '//depend[not(@condition)]/text()' "$PKG_PATH/package.xml" 2>/dev/null | tr ' ' '\n')
 
-  # Collect conditional dependencies (based on *_FOUND)
-  RESOLVED_DEPENDS=""
-  CONDITIONAL_DEPENDS=$(xmllint --xpath "//depend[@condition]" package.xml 2>/dev/null | \
-    sed -nE 's/.*condition="\$([A-Za-z0-9_]+)_FOUND == True".*>([^<]+)<.*/\1:\2/p')
-
-  IFS=$'\n'
-  for entry in $CONDITIONAL_DEPENDS; do
-    VAR="${entry%%:*}"
-    DEP="${entry##*:}"
-    if echo "$FOUND_FLAGS" | grep -q "${VAR,,}_found"; then
-      RESOLVED_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$DEP" | tr '_' '-')"
-    fi
+  for dep in $RAW_DEPENDS; do
+    [[ -n "$dep" && "$dep" != "roscpp" ]] && UNCONDITIONAL_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$dep" | tr '_' '-')"
   done
-  unset IFS
 
-  # Collect unconditional dependencies
-  UNCONDITIONAL_DEPENDS=$(xmllint --xpath 'string-join(//depend[not(@condition)], " ")' package.xml 2>/dev/null | \
-    tr ' ' '\n' | sed -e 's/_/-/g' -e "s/^/ros-${ROS_DISTRO}-/" | xargs)
+  local CONDITIONAL_DEPENDS=""
+  local CONDITIONAL_XML
+  CONDITIONAL_XML=$(xmllint --format "$PKG_PATH/package.xml" 2>/dev/null | grep -oP '<depend[^>]*condition="[^"]+"[^>]*>[^<]+</depend>')
 
-  # Combine and clean
-  ALL_DEPENDS=$(echo "$UNCONDITIONAL_DEPENDS $RESOLVED_DEPENDS" | xargs | tr ' ' ', ')
+  while read -r line; do
+    DEP=$(echo "$line" | sed -n 's/.*>\(.*\)<.*/\1/p' | xargs)
+    if [[ -n "$DEP" ]]; then
+      if rospack find "$DEP" &>/dev/null; then
+        [[ "$DEP" != "roscpp" ]] && CONDITIONAL_DEPENDS+=" ros-${ROS_DISTRO}-$(echo "$DEP" | tr '_' '-')"
+      fi
+    fi
+  done <<< "$CONDITIONAL_XML"
 
-  # Prepare .deb layout
-  PKG_DEB_NAME="ros-${ROS_DISTRO}-$(echo $PKG_NAME | tr '_' '-')"
-  INSTALL_DIR="$HOME/$ROS_WS/install"
-  DEB_DIR="$HOME/$ROS_WS/debbuild/$PKG_NAME"
-  OUTPUT_DEB="${OUT_DIR}/${PKG_DEB_NAME}_${VERSION}_${OS_VERSION}_amd64.deb"
+  local ALL_DEPENDS
+  ALL_DEPENDS=$(echo "$UNCONDITIONAL_DEPENDS $CONDITIONAL_DEPENDS" | xargs | tr ' ' ', ')
 
+  local PKG_DEB_NAME="ros-${ROS_DISTRO}-$(echo "$PKG_NAME" | tr '_' '-')"
+  local INSTALL_DIR="$HOME/$ROS_WS/install"
+  local DEB_DIR="$HOME/$ROS_WS/debbuild/$PKG_NAME"
+  local OUTPUT_DEB="${SCRIPTPATH}/../debs/$BRANCH/$OS_VERSION/${PKG_DEB_NAME}_${VERSION}_${OS_VERSION}_amd64.deb"
+
+  mkdir -p "$(dirname "$OUTPUT_DEB")"
   rm -rf "$DEB_DIR"
-  rm -f "${OUT_DIR}/${PKG_DEB_NAME}_"*"_amd64.deb"
 
   mkdir -p "$DEB_DIR/DEBIAN" "$DEB_DIR/opt/ros/$ROS_DISTRO"
-  cp -a "$INSTALL_DIR"/* "$DEB_DIR/opt/ros/$ROS_DISTRO/"
 
-  # Final control file
+  [[ -d "$INSTALL_DIR/include/$PKG_NAME" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/include" && cp -a "$INSTALL_DIR/include/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/include/"
+  [[ -d "$INSTALL_DIR/lib/$PKG_NAME" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/lib" && cp -a "$INSTALL_DIR/lib/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/lib/"
+  [[ -d "$INSTALL_DIR/share/$PKG_NAME" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/share" && cp -a "$INSTALL_DIR/share/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/share/"
+
+  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/_setup_util.py
+  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/setup.*
+  rm -rf "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/catkin_tools_prebuild
+  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/package.xml
+
   cat <<EOF > "$DEB_DIR/DEBIAN/control"
 Package: $PKG_DEB_NAME
 Version: $VERSION
@@ -122,25 +157,53 @@ Section: misc
 Priority: optional
 Architecture: amd64
 Maintainer: ROS Maintainers <ros@ros.org>
-Depends: ${ALL_DEPENDS}
+Depends: $ALL_DEPENDS
 Description: Auto-generated .deb for ROS package $PKG_NAME
 EOF
 
+  print_info "Building $PKG_NAME"
+  print_info "Unconditional: $UNCONDITIONAL_DEPENDS"
+  print_info "Conditional:   $CONDITIONAL_DEPENDS"
+  print_info "Dependencies:  $ALL_DEPENDS"
+
   dpkg-deb --build "$DEB_DIR" "$OUTPUT_DEB"
   rm -rf "$DEB_DIR"
-  echo "✔ Built $OUTPUT_DEB"
+  print_info "✔ Built $OUTPUT_DEB"
+
+  sudo dpkg -i --force-overwrite "$OUTPUT_DEB"
+  sudo ldconfig
 }
 
-# Build either a single package or all in list
-if [[ -n "$SINGLE_PKG" ]]; then
-  build_pkg "$SINGLE_PKG"
+# === EXECUTION ===
+if $BUILD_ALL; then
+  print_info "Build the whole wolf workspace"
+  build_all_workspace
+  exit $?
+elif $USE_BLOOM; then
+  print_info "Using bloom to build packages"
+  sudo apt-get update && sudo apt-get install -y python3-bloom fakeroot
+  if [[ -n "$SINGLE_PKG" ]]; then
+    roscd "$SINGLE_PKG" && build_bloom
+  else
+    PKG_LIST="$SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt"
+    [[ ! -f "$PKG_LIST" ]] && { print_error "Missing package list: $PKG_LIST"; exit 1; }
+    while read -r PKG; do
+      [[ "$PKG" =~ ^#.*$ || -z "$PKG" ]] && continue
+      roscd "$PKG" && build_bloom || print_warn "Build failed for $PKG"
+    done < "$PKG_LIST"
+  fi
 else
-  PKG_LIST="$SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt"
-  [[ ! -f "$PKG_LIST" ]] && { echo "Missing package list: $PKG_LIST"; exit 1; }
-
-  while read -r PKG; do
-    [[ "$PKG" =~ ^#.*$ || -z "$PKG" ]] && continue
-    build_pkg "$PKG"
-  done < "$PKG_LIST"
+  print_info "Using manual packaging (no bloom)"
+  sudo apt-get update && sudo apt-get install -y libxml2-utils
+  if [[ -n "$SINGLE_PKG" ]]; then
+    build_manual "$SINGLE_PKG"
+  else
+    PKG_LIST="$SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt"
+    [[ ! -f "$PKG_LIST" ]] && { print_error "Missing package list: $PKG_LIST"; exit 1; }
+    while read -r PKG; do
+      [[ "$PKG" =~ ^#.*$ || -z "$PKG" ]] && continue
+      build_manual "$PKG"
+    done < "$PKG_LIST"
+  fi
 fi
 

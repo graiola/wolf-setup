@@ -1,0 +1,185 @@
+wolf_wbid:
+  ubuntu:
+    xenial: ros-kinetic-wolf-wbid
+    bionic: ros-melodic-wolf-wbid
+    focal:  ros-noetic-wolf-wbid
+wolf_controller_core:
+  ubuntu:
+    xenial: ros-kinetic-wolf-controller-core
+    bionic: ros-melodic-wolf-controller-core
+    focal:  ros-noetic-wolf-controller-core
+wolf_controller:
+  ubuntu:
+    xenial: ros-kinetic-wolf-controller
+    bionic: ros-melodic-wolf-controller
+    focal:  ros-noetic-wolf-controller
+wolf_controller_utils:
+  ubuntu:
+    xenial: ros-kinetic-wolf-controller-utils
+    bionic: ros-melodic-wolf-controller-utils
+    focal:  ros-noetic-wolf-controller-utils
+wolf_gazebo_interface:
+  ubuntu:
+    xenial: ros-kinetic-wolf-gazebo-interface
+    bionic: ros-melodic-wolf-gazebo-interface
+    focal:  ros-noetic-wolf-gazebo-interface
+wolf_gazebo_resources:
+  ubuntu:
+    xenial: ros-kinetic-wolf-gazebo-resources
+    bionic: ros-melodic-wolf-gazebo-resources
+    focal:  ros-noetic-wolf-gazebo-resources
+wolf_hardware_interface:
+  ubuntu:
+    xenial: ros-kinetic-wolf-hardware-interface
+    bionic: ros-melodic-wolf-hardware-interface
+    focal:  ros-noetic-wolf-hardware-interface
+sensors_description:
+  ubuntu:
+    xenial: ros-kinetic-sensors-description 
+    bionic: ros-melodic-sensors-description 
+    focal:  ros-noetic-sensors-description
+spot_description:
+  ubuntu:
+    xenial: ros-kinetic-spot-description
+    bionic: ros-melodic-spot-description
+    focal:  ros-noetic-spot-description
+go1_description:
+ ubuntu:
+    xenial: ros-kinetic-go1-description
+    bionic: ros-melodic-go1-description
+    focal:  ros-noetic-go1-description
+kinova_description:
+  ubuntu:
+    xenial: ros-kinetic-kinova-description
+    bionic: ros-melodic-kinova-description
+    focal:  ros-noetic-kinova-description
+wolf_description_utils:
+  ubuntu:
+    xenial: ros-kinetic-wolf-description-utils
+    bionic: ros-melodic-wolf-description-utils
+    focal:  ros-noetic-wolf-description-utils
+wolf_rviz_plugin:
+  ubuntu:
+    xenial: ros-kinetic-wolf-rviz-plugin
+    bionic: ros-melodic-wolf-rviz-plugin
+    focal:  ros-noetic-wolf-rviz-plugin
+wolf_navigation_utils:
+  ubuntu:
+    xenial: ros-kinetic-wolf-navigation-utils
+    bionic: ros-melodic-wolf-navigation-utils
+    focal:  ros-noetic-wolf-navigation-utils
+task_exploration:
+  ubuntu:
+    xenial: ros-kinetic-task-exploration
+    bionic: ros-melodic-task-exploration
+    focal:  ros-noetic-task-exploration
+task_waypoints:
+  ubuntu:
+    xenial: ros-kinetic-task-waypoints
+    bionic: ros-melodic-task-waypoints
+    focal:  ros-noetic-task-waypoints
+task_homing:
+  ubuntu:
+    xenial: ros-kinetic-task-homing
+    bionic: ros-melodic-task-homing
+    focal:  ros-noetic-task-homing
+task_goto:
+  ubuntu:
+    xenial: ros-kinetic-task-goto
+    bionic: ros-melodic-task-goto
+    focal:  ros-noetic-task-goto
+task_interface:
+  ubuntu:
+    xenial: ros-kinetic-task-interface
+    bionic: ros-melodic-task-interface
+    focal:  ros-noetic-task-interface
+rt_logger:
+  ubuntu:
+    xenial: ros-kinetic-rt-logger
+    bionic: ros-melodic-rt-logger
+    focal:  ros-noetic-rt-logger 
+rt_gui_core:
+  ubuntu:
+    xenial: ros-kinetic-rt-gui-core
+    bionic: ros-melodic-rt-gui-core
+    focal:  ros-noetic-rt-gui-core
+rt_gui_msgs:
+  ubuntu:
+    xenial: ros-kinetic-rt-gui-msgs
+    bionic: ros-melodic-rt-gui-msgs
+    focal:  ros-noetic-rt-gui-msgs
+rt_gui_ros:
+  ubuntu:
+    xenial: ros-kinetic-rt-gui-ros
+    bionic: ros-melodic-rt-gui-ros
+    focal:  ros-noetic-rt-gui-ros
+ai_utils_msgs:
+  ubuntu:
+    xenial: ros-kinetic-ai-utils-msgs
+    bionic: ros-melodic-ai-utils-msgs
+    focal:  ros-noetic-ai-utils-msgs
+wolf_msgs:
+  ubuntu:
+    xenial: ros-kinetic-wolf-msgs
+    bionic: ros-melodic-wolf-msgs
+    focal:  ros-noetic-wolf-msgs
+wolf_estimation:
+  ubuntu:
+    xenial: ros-kinetic-wolf-estimation
+    bionic: ros-melodic-wolf-estimation
+    focal:  ros-noetic-wolf-estimation
+wolf_ngva:
+  ubuntu:
+    xenial: ros-kinetic-wolf-ngva
+    bionic: ros-melodic-wolf-ngva
+    focal:  ros-noetic-wolf-ngva
+nimbro_cam_transport:
+  ubuntu:
+    xenial: ros-kinetic-nimbro-cam-transport
+    bionic: ros-melodic-nimbro-cam-transport
+    focal:  ros-noetic-nimbro-cam-transport
+nimbro_log_transport:
+  ubuntu:
+    xenial: ros-kinetic-nimbro-log-transport
+    bionic: ros-melodic-nimbro-log-transport
+    focal:  ros-noetic-nimbro-log-transport
+nimbro_service_transport:
+  ubuntu:
+    xenial: ros-kinetic-nimbro-service-transport
+    bionic: ros-melodic-nimbro-service-transport
+    focal:  ros-noetic-nimbro-service-transport
+nimbro_topic_transport:
+  ubuntu:
+    xenial: ros-kinetic-nimbro-topic-transport
+    bionic: ros-melodic-nimbro-topic-transport
+    focal:  ros-noetic-nimbro-topic-transport
+wolf_planner_interface:
+  ubuntu:
+    xenial: ros-kinetic-wolf-planner-interface
+    bionic: ros-melodic-wolf-planner-interface
+    focal:  ros-noetic-wolf-planner-interface
+wolf_planner:
+  ubuntu:
+    xenial: ros-kinetic-wolf-planner
+    bionic: ros-melodic-wolf-planner
+    focal:  ros-noetic-wolf-planner
+wolf_planner_default:
+  ubuntu:
+    xenial: ros-kinetic-wolf-planner-default
+    bionic: ros-melodic-wolf-planner-default
+    focal:  ros-noetic-wolf-planner-default
+wolf_planner_adaptive:
+  ubuntu:
+    xenial: ros-kinetic-wolf-planner-adaptive
+    bionic: ros-melodic-wolf-planner-adaptive
+    focal:  ros-noetic-wolf-planner-adaptive
+wolf_3dnav_core:
+  ubuntu:
+    xenial: ros-kinetic-wolf-3dnav-core
+    bionic: ros-melodic-wolf-3dnav-core
+    focal:  ros-noetic-wolf-3dnav-core
+wolf_3dnav_ros:
+  ubuntu:
+    xenial: ros-kinetic-wolf-3dnav-ros
+    bionic: ros-melodic-wolf-3dnav-ros
+    focal:  ros-noetic-wolf-3dnav-ros

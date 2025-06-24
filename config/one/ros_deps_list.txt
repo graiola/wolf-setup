@@ -1,0 +1,45 @@
+# This is the list of ROS packages we need to install:
+desktop-full
+ros-control
+ros-controllers
+realtime-tools
+gazebo-dev
+gazebo-plugins
+gazebo-ros
+gazebo-ros-control
+gazebo-ros-pkgs
+joy
+robot-state-publisher
+joint-state-publisher-gui
+rviz-visual-tools
+plotjuggler
+plotjuggler-ros
+plotjuggler-msgs
+rosbash
+ddynamic-reconfigure
+geometric-shapes
+moveit-core
+pybind11-catkin
+genmsg
+image-transport
+# For navigation
+pointcloud-to-laserscan
+move-base
+global-planner
+dwa-local-planner
+teb-local-planner
+map-server
+amcl
+gmapping
+costmap-converter
+costmap-2d
+robot-localization
+pcl-ros
+pcl-conversions
+sparse-bundle-adjustment
+cv-bridge
+twist-mux
+srdfdom
+# OCS2
+pinocchio
+hpp-fcl

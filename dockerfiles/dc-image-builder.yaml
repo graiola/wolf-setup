@@ -1,56 +1,85 @@
 version: "3.4"
+
+x-base-build: &base-build
+  context: ${CONTEXT_PATH}
+  dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+
+x-app-build: &app-build
+  context: ${CONTEXT_PATH}
+  dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+
 services:
+  # Base Images
   wolf-base-bionic:
-    image: wolf-base:bionic
+    image: wolf-base-noetic:bionic
     build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+      <<: *base-build
       args:
         - IMAGE=nvidia/opengl:base-ubuntu18.04
-        - ROS=${ROS_DISTRO}
+        - ROS=noetic
         - BRANCH=${BRANCH}
+
   wolf-base-focal:
-    image: wolf-base:focal
+    image: wolf-base-noetic:focal
     build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+      <<: *base-build
       args:
         - IMAGE=nvidia/opengl:base-ubuntu20.04
-        - ROS=${ROS_DISTRO}
+        - ROS=noetic
         - BRANCH=${BRANCH}
+
   wolf-base-jammy:
-    image: wolf-base:jammy
+    image: wolf-base-humble:jammy
     build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+      <<: *base-build
       args:
         - IMAGE=nvidia/opengl:base-ubuntu22.04
-        - ROS=${ROS_DISTRO}
+        - ROS=humble
         - BRANCH=${BRANCH}
+
+  wolf-base-noble:
+    image: wolf-base-one:noble
+    build:
+      <<: *base-build
+      args:
+        - IMAGE=nvidia/opengl:base-ubuntu24.04
+        - ROS=one
+        - BRANCH=${BRANCH}
+
+  # App Images
   wolf-app-bionic:
-    image: wolf-app:bionic
+    image: wolf-app-noetic:bionic
     build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+      <<: *app-build
       args:
-        - IMAGE=wolf-base:bionic
-        - ROS=${ROS_DISTRO}
+        - IMAGE=wolf-base-noetic:bionic
+        - ROS=noetic
         - BRANCH=${BRANCH}
+
   wolf-app-focal:
-    image: wolf-app:focal
+    image: wolf-app-noetic:focal
     build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+      <<: *app-build
       args:
-        - IMAGE=wolf-base:focal
-        - ROS=${ROS_DISTRO}
+        - IMAGE=wolf-base-noetic:focal
+        - ROS=noetic
         - BRANCH=${BRANCH}
+
   wolf-app-jammy:
-    image: wolf-app:jammy
+    image: wolf-app-humble:jammy
     build:
-      context: ${CONTEXT_PATH}
-      dockerfile: ${DOCKERFILE_PATH}/Dockerfile
+      <<: *app-build
       args:
-        - IMAGE=wolf-base:jammy
-        - ROS=${ROS_DISTRO}
+        - IMAGE=wolf-base-humble:jammy
+        - ROS=humble
         - BRANCH=${BRANCH}
+
+  wolf-app-noble:
+    image: wolf-app-one:noble
+    build:
+      <<: *app-build
+      args:
+        - IMAGE=wolf-base-one:noble
+        - ROS=one
+        - BRANCH=${BRANCH}
+

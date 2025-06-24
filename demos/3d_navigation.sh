@@ -13,7 +13,7 @@ wolf_banner
 
 # Options
 ROS=noetic
-CONTAINER_NAME="wolf-app"
+CONTAINER_NAME="wolf-app-noetic"
 IMAGE_TAG="focal"
 ROBOT_MODEL=go1
 ROBOT_NAME=
@@ -33,13 +33,18 @@ if [ `sudo systemctl is-active docker` = "inactive" ]; then
   sudo systemctl start docker
 fi
 
-# Be sure there is no update on the image
-docker pull $IMAGE_NAME
+# Only pull if the image is not already present locally
+if ! docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
+  echo "Image $IMAGE_NAME not found locally. Pulling..."
+  docker pull "$IMAGE_NAME"
+else
+  echo "Image $IMAGE_NAME already exists locally. Skipping pull."
+fi
 
 # Cleanup the docker container before launching it
 docker rm -f $CONTAINER_NAME > /dev/null 2>&1 || true 
 
-docker run --user root:root --hostname $HOSTNAME --ipc=host --net=$NET --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/$ROS/share/wolf_gazebo_resources/models/ -e SHELL -e DISPLAY -e DOCKER=1 --name $CONTAINER_NAME \
+docker run --user root:root --hostname $HOSTNAME --ipc=host --net=$NET --device=/dev/dri:/dev/dri --privileged -e "QT_X11_NO_MITSHM=1" -e GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/$ROS/share/wolf_gazebo_resources/models/ -e SHELL -e DISPLAY -e DOCKER=1 -e DISABLE_ROS1_EOL_WARNINGS=1 --name $CONTAINER_NAME \
 	--gpus all \
 	--device=/dev/ttyUSB0 \
 	--volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \

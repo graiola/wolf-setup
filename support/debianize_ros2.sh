@@ -31,7 +31,7 @@ OS=ubuntu
 OS_VERSION=$(lsb_release -cs)
 ROS_DISTRO=humble
 SINGLE_PKG=
-BUILD_ALL=true
+BUILD_ALL=false
 
 if [[ ( $1 == "--help") ||  $1 == "-h" ]]; then
   echo -e "$USAGE"
@@ -81,10 +81,14 @@ sudo apt-get update && sudo apt-get install -y debhelper build-essential dh-make
 
 # Source ROS 2 environment
 source /opt/ros/$ROS_DISTRO/setup.bash
-source ~/$ROS_WS/install/setup.bash || {
-  echo "Workspace not built or install/setup.bash not found."
-  exit 1
-}
+
+# Only source workspace if not doing --all
+if [[ "$BUILD_ALL" != true ]]; then
+  source ~/$ROS_WS/install/setup.bash || {
+    echo "Workspace not built or install/setup.bash not found."
+    exit 1
+  }
+fi
 
 rosdep update
 
@@ -111,8 +115,6 @@ function build_package() {
 
   echo -e "override_dh_usrlocal:\n" >> debian/rules
   echo -e "override_dh_shlibdeps:\n\tdh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info" >> debian/rules
-
-  # Ensure debian/rules file uses tabs
   sed -i 's/^    /\t/' debian/rules
 
   fakeroot debian/rules binary || {
@@ -121,10 +123,7 @@ function build_package() {
   }
 
   mkdir -p "$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
-  mv ../*.deb "$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION" || {
-    echo "Failed to move .deb file for $PKG."
-    return 1
-  }
+  find .. -maxdepth 1 -name "*.deb" -exec mv {} "$SCRIPTPATH/../debs/$BRANCH/$OS_VERSION" \;
 
   rm -rf debian obj-x86_64-linux-gnu
   echo "Debian package for $PKG created successfully."
@@ -138,6 +137,9 @@ function build_all_workspace() {
   local OUTPUT_DEB="${SCRIPTPATH}/../debs/$BRANCH/$OS_VERSION/ros-${ROS_DISTRO}-wolf-full_${VERSION}_${OS_VERSION}_amd64.deb"
 
   echo "Building the entire workspace into one Debian package..."
+
+  # Clean up any conflicting install layout
+  rm -rf "$WS_PATH/build" "$WS_PATH/install" "$WS_PATH/log"
 
   colcon build --merge-install --install-base "$INSTALL_DIR" || {
     echo "Workspace build failed"
@@ -175,6 +177,7 @@ EOF
   sudo ldconfig
 }
 
+
 # === Execution ===
 
 if [[ "$BUILD_ALL" == true ]]; then
@@ -182,13 +185,20 @@ if [[ "$BUILD_ALL" == true ]]; then
 elif [[ -n $SINGLE_PKG ]]; then
   build_package "$SINGLE_PKG"
 else
-  PKGS=$(cat "$SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt" | grep -v \#)
-  for PKG in $PKGS; do
+  LIST_FILE="$SCRIPTPATH/../config/$ROS_DISTRO/wolf_list.txt"
+  if [[ ! -f "$LIST_FILE" ]]; then
+    echo "Package list file not found: $LIST_FILE"
+    exit 1
+  fi
+
+  while read -r PKG; do
+    [[ "$PKG" =~ ^#.*$ || -z "$PKG" ]] && continue
     build_package "$PKG" || {
       echo "Skipping $PKG due to errors."
     }
-  done
+  done < "$LIST_FILE"
 fi
 
-echo "Debian packages generated successfully in $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION."
+echo "✅ Debian packaging process completed."
+echo "📦 Output location: $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
 

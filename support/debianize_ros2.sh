@@ -141,7 +141,7 @@ function build_all_workspace() {
   rm -rf "$WS_PATH/build" "$WS_PATH/install" "$WS_PATH/log"
 
   # Build the entire workspace with merged install layout
-  colcon build --merge-install --install-base "$INSTALL_DIR" || {
+  colcon build --merge-install --install-base "$INSTALL_DIR" --cmake-args -DCMAKE_BUILD_TYPE=Release || {
     print_warn "Workspace build failed"
     return 1
   }
@@ -156,8 +156,8 @@ function build_all_workspace() {
 
   # Remove only global setup files (keep per-package ones!)
   rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/setup.*
-  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/local_setup.*
-  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/_local_setup.*
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/*local_setup*
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/COLCON_IGNORE
   rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/_setup_util.py
 
   # Clean up colcon metadata (optional)

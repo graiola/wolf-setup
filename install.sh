@@ -133,8 +133,9 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
             echo "# deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/ros-one-keyring.gpg] https://ros.packages.techfak.net $(lsb_release -cs) main-dbg" | sudo tee -a "$LIST_FILE"
         else
             sudo mkdir -p /usr/share/keyrings
-            sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | \
-                sudo gpg --dearmor -o "$KEY_FILE"
+            sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /tmp/ros.key
+            sudo gpg --no-tty --batch --yes --dearmor -o "$KEY_FILE" /tmp/ros.key
+            rm /tmp/ros.key
             echo "deb [arch=$(dpkg --print-architecture) signed-by=${KEY_FILE}] ${ROS_REPO} $(lsb_release -cs) main" | \
                 sudo tee "$LIST_FILE" > /dev/null
         fi

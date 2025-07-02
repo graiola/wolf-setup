@@ -15,7 +15,7 @@ wolf_banner
 ROS=noetic
 CONTAINER_NAME="wolf-app-noetic"
 IMAGE_TAG="focal"
-ROBOT_MODEL=go1
+ROBOT_MODEL=spot
 ROBOT_NAME=
 WORLD_NAME=office
 MAPPING=true

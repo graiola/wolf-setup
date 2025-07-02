@@ -64,12 +64,12 @@ cd $ROS_WS
 # Install RBDL
 # ---------------------------
 # FIXME I should remove this line one day....
-if [[ "$ROS_VERSION" == "1" ]]; then
-  echo "[INFO] Install RBDL..."
-  /bin/bash ./src/wolf/setup/support/get_debians.sh &&
-  sudo dpkg -i --force-overwrite ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb || true
-  echo "[INFO] RBDL installed"
-fi
+#if [[ "$ROS_VERSION" == "1" ]]; then
+#  echo "[INFO] Install RBDL..."
+#  /bin/bash ./src/wolf/setup/support/get_debians.sh &&
+#  sudo dpkg -i --force-overwrite ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb || true
+#  echo "[INFO] RBDL installed"
+#fi
 
 # ---------------------------
 # Build and debianize

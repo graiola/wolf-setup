@@ -16,6 +16,7 @@ ROS=humble
 CONTAINER_NAME="wolf-app-humble"
 IMAGE_TAG="jammy"
 ROBOT_MODEL=spot
+ROBOT_NAME=ras_4
 WORLD_NAME=agriculture
 NET=bridge
 
@@ -45,4 +46,4 @@ docker run --user root:root --hostname $HOSTNAME --net=$NET --device=/dev/dri:/d
         --gpus all \
         --device=/dev/ttyUSB0 \
         --volume="/tmp:/tmp:rw" \
-        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; . /usr/share/gazebo/setup.sh; export XBOT_ROOT=/opt/ros/${ROS}; ros2 launch wolf_controller wolf_controller_bringup.launch.xml world_name:=$WORLD_NAME robot_model:=$ROBOT_MODEL initial_xyz:=[0.0,0.0,0.0] intial_rpy:=[0.0,0.0,0.0]"
+        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; . /usr/share/gazebo/setup.sh; export XBOT_ROOT=/opt/ros/${ROS}; ros2 launch wolf_controller wolf_controller_bringup.launch.xml world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME robot_model:=$ROBOT_MODEL initial_xyz:=[0.0,0.0,0.0] intial_rpy:=[0.0,0.0,0.0]"

@@ -53,6 +53,7 @@ rqt
 cv-bridge
 rqt-common-plugins
 perception
+topic-tools
 #plotjuggler
 #plotjuggler-ros
 #plotjuggler-msgs

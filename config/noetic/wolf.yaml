@@ -43,6 +43,11 @@ spot_description:
     xenial: ros-kinetic-spot-description
     bionic: ros-melodic-spot-description
     focal:  ros-noetic-spot-description
+husky_description:
+  ubuntu:
+    xenial: ros-kinetic-husky-description
+    bionic: ros-melodic-husky-description
+    focal:  ros-noetic-husky-description
 go1_description:
  ubuntu:
     xenial: ros-kinetic-go1-description

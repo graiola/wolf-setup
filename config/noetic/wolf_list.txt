@@ -7,6 +7,7 @@ kinova_description
 sensors_description
 spot_description
 go1_description
+husky_description
 wolf_description_utils
 
 # SUPPORT

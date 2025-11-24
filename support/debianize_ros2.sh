@@ -137,27 +137,40 @@ function build_all_workspace() {
 
   print_info "Building the entire workspace into one Debian package..."
 
-  # Clean up any conflicting install layout
+  # Clean up any previous colcon layout or logs
   rm -rf "$WS_PATH/build" "$WS_PATH/install" "$WS_PATH/log"
 
-  colcon build --merge-install --install-base "$INSTALL_DIR" || {
+  # Build the entire workspace with merged install layout
+  colcon build --merge-install --install-base "$INSTALL_DIR" --cmake-args -DCMAKE_BUILD_TYPE=Release || {
     print_warn "Workspace build failed"
     return 1
   }
 
+  # Create the .deb staging structure
   rm -rf "$DEB_DIR"
   mkdir -p "$DEB_DIR/DEBIAN"
   mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO"
+
+  # Copy everything from install directory
   cp -a "$INSTALL_DIR/"* "$DEB_DIR/opt/ros/$ROS_DISTRO"
 
-  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/_setup_util.py"
-  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/setup.*"
+  # Remove only global setup files (keep per-package ones!)
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/setup.*
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/*local_setup*
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/COLCON_IGNORE
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/_setup_util.py
+
+  # Clean up colcon metadata (optional)
   rm -rf "$DEB_DIR/opt/ros/$ROS_DISTRO/share/colcon*"
 
+  # Ensure output directory exists
   mkdir -p "$(dirname "$OUTPUT_DEB")"
 
-  DEPS=$(rosdep check --from-paths "$WS_PATH/src" --rosdistro "$ROS_DISTRO" --ignore-src --reinstall 2>/dev/null | grep "apt:" | awk '{print $2}' | tr '\n' ',' | sed 's/,$//')
+  # Generate dependencies for control file
+  DEPS=$(rosdep check --from-paths "$WS_PATH/src" --rosdistro "$ROS_DISTRO" --ignore-src --reinstall 2>/dev/null \
+    | grep "apt:" | awk '{print $2}' | tr '\n' ',' | sed 's/,$//')
 
+  # Create control file
   cat <<EOF > "$DEB_DIR/DEBIAN/control"
 Package: ros-${ROS_DISTRO}-wolf-full
 Version: $VERSION
@@ -169,6 +182,7 @@ Depends: $DEPS
 Description: Monolithic .deb containing the entire ROS 2 workspace
 EOF
 
+  print_info "Building whole workspace .deb..."
   dpkg-deb --build "$DEB_DIR" "$OUTPUT_DEB"
   print_info "✔ Built $OUTPUT_DEB"
 

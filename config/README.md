@@ -47,3 +47,29 @@ Use checkinstall in the catkin build folder:
 ```
 sudo checkinstall --pkgname=wolf_ocs2 --pkgversion=1.0.0 --pkgarch=amd64 -y
 ```
+
+# Anybotics packages (elevation and terrain estimation)
+
+```
+# Clone Packages
+git clone git@github.com:graiola/any_node.git
+git clone git@github.com:graiola/elevation_mapping.git
+git clone git@github.com:graiola/grid_map.git
+git clone git@github.com:graiola/kindr.git
+git clone git@github.com:graiola/kindr_ros.git
+git clone git@github.com:graiola/message_logger.git
+git clone git@github.com:graiola/traversability_estimation.git
+```
+
+Compile:
+
+```
+catkin_make -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/anybotics
+```
+
+Use checkinstall in the catkin build folder:
+
+```
+sudo checkinstall --pkgname=wolf_anybotics --pkgversion=1.0.0 --pkgarch=amd64 -y
+```
+

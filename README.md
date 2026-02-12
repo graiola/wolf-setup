@@ -44,8 +44,8 @@ WoLF provides several features for your quadruped robotic friend:
 - [wolf_gazebo_resources](https://github.com/graiola/wolf_gazebo_resources): Gazebo models and simulation resources.
 - [wolf_hardware_interface](https://github.com/graiola/wolf_hardware_interface): Hardware interface for `ros_control`.
 - [wolf_gazebo_interface](https://github.com/graiola/wolf_gazebo_interface): Gazebo hardware interface for `ros_control`.
-- [wolf_controller](https://github.com/graiola/wolf_controller): Main WoLF controller package.
-- [wolf_controller_core](https://github.com/graiola/wolf_controller_core): Core libraries for the controller stack.
+- [wolf_controller](https://github.com/graiola/wolf_controller): ROS and ROS2 controller plugin.
+- [wolf_controller_core](https://github.com/graiola/wolf_controller_core): Core controller.
 - [wolf_controller_utils](https://github.com/graiola/wolf_controller_utils): Common controller utilities.
 - [wolf_wbid](https://github.com/graiola/wolf_wbid): Whole-body inverse dynamics components.
 - [wolf_planner](https://github.com/graiola/wolf_planner): MPC-based planner modules for WoLF.

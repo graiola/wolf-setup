@@ -155,6 +155,7 @@ function build_all_workspace() {
   cp -a "$INSTALL_DIR/"* "$DEB_DIR/opt/ros/$ROS_DISTRO"
 
   # Remove only global setup files (keep per-package ones!)
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/env.sh
   rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/setup.*
   rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/*local_setup*
   rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO"/COLCON_IGNORE

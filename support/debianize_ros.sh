@@ -63,6 +63,8 @@ function build_all_workspace() {
   cp -a "$INSTALL_DIR/"* "$DEB_DIR/opt/ros/$ROS_DISTRO"
 
   rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/_setup_util.py"
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/env.sh"
+  rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/local_setup."*
   rm -f "$DEB_DIR/opt/ros/$ROS_DISTRO/setup.*"
   rm -rf "$DEB_DIR/opt/ros/$ROS_DISTRO/share/catkin_tools_prebuild"
 
@@ -146,6 +148,8 @@ function build_manual() {
   [[ -d "$INSTALL_DIR/share/$PKG_NAME" ]] && mkdir -p "$DEB_DIR/opt/ros/$ROS_DISTRO/share" && cp -a "$INSTALL_DIR/share/$PKG_NAME" "$DEB_DIR/opt/ros/$ROS_DISTRO/share/"
 
   rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/_setup_util.py
+  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/env.sh
+  rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/local_setup.*
   rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/setup.*
   rm -rf "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/catkin_tools_prebuild
   rm -f "$DEB_DIR"/opt/ros/$ROS_DISTRO/share/package.xml

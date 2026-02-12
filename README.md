@@ -40,17 +40,20 @@ WoLF provides several features for your quadruped robotic friend:
 ## Packages
 
 - [wolf-setup](https://github.com/graiola/wolf-setup): This repository, containing scripts and installation utilities for WoLF.
-- [wolf_descriptions](https://github.com/graiola/wolf_descriptions): It contains robot and sensor descriptions used with WoLF. Please check out this repository If you want to add your own robot to WoLF.
-- [wolf_descriptions_extra](https://github.com/graiola/wolf_extra_descriptions): Extra robot models.
-- [wolf_gazebo_resources](https://github.com/graiola/wolf_gazebo_resources): Gazebo models and other goodies to create interesting simulation environments.
-- [wolf_hardware_interface](https://github.com/graiola/wolf_hardware_interface): It implements a hardware interface for `ros_control` to be used with WoLF.
+- [wolf_descriptions](https://github.com/graiola/wolf_descriptions): Robot and sensor descriptions used with WoLF.
+- [wolf_gazebo_resources](https://github.com/graiola/wolf_gazebo_resources): Gazebo models and simulation resources.
+- [wolf_hardware_interface](https://github.com/graiola/wolf_hardware_interface): Hardware interface for `ros_control`.
 - [wolf_gazebo_interface](https://github.com/graiola/wolf_gazebo_interface): Gazebo hardware interface for `ros_control`.
-- [wolf_unitree_interface](https://github.com/graiola/wolf_unitree_interface): Unitree hardware interface for WoLF based on `wolf_hardware_interface` and `ros_control`.
-- [wolf_navigation](https://github.com/graiola/wolf_navigation): A package interfacing the ROS navigation stack with WoLF.
-- [wolf_planner](https://github.com/graiola/wolf_planner): MPC planner for WoLF based on ocs2.
-- [wolf_rviz_plugin](https://github.com/graiola/wolf_rviz_plugin): A plugin for rviz to interact with some functionalities of WoLF.
-- [wolf_msgs](https://github.com/graiola/wolf_msgs): ROS message and service definitions.
-- [wolf_controller_utils](https://github.com/graiola/wolf_controller_utils): WoLF common utilities.
+- [wolf_controller](https://github.com/graiola/wolf_controller): Main WoLF controller package.
+- [wolf_controller_core](https://github.com/graiola/wolf_controller_core): Core libraries for the controller stack.
+- [wolf_controller_utils](https://github.com/graiola/wolf_controller_utils): Common controller utilities.
+- [wolf_wbid](https://github.com/graiola/wolf_wbid): Whole-body inverse dynamics components.
+- [wolf_planner](https://github.com/graiola/wolf_planner): MPC-based planner modules for WoLF.
+- [wolf_estimation](https://github.com/graiola/wolf_estimation): Estimation modules (state and perception related).
+- [wolf_rviz_plugin](https://github.com/graiola/wolf_rviz_plugin): RViz plugin for WoLF interactions.
+- [wolf_msgs](https://github.com/graiola/wolf_msgs): ROS messages and service definitions.
+- [rt_logger](https://github.com/graiola/rt_logger): Real-time logging utilities.
+- [rt_gui](https://github.com/graiola/rt_gui): Runtime GUI tooling.
 
 ## How to run WoLF
 

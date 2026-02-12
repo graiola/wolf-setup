@@ -46,4 +46,4 @@ docker run --user root:root --hostname $HOSTNAME --net=$NET --device=/dev/dri:/d
         --gpus all \
         --device=/dev/ttyUSB0 \
         --volume="/tmp:/tmp:rw" \
-        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; export XBOT_ROOT=/opt/ros/${ROS}; source /opt/ocs2/setup.sh; roslaunch wolf_controller wolf_controller_bringup.launch world_name:=$WORLD_NAME robot_model:=$ROBOT_MODEL robot_name:=$ROBOT_NAME rviz_gui:=true plot_node_gui:=true launch_planner:=true"
+        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; source /opt/ocs2/setup.sh; roslaunch wolf_controller wolf_controller_bringup.launch world_name:=$WORLD_NAME robot_model:=$ROBOT_MODEL robot_name:=$ROBOT_NAME rviz_gui:=true plot_node_gui:=true launch_planner:=true"

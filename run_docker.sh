@@ -56,7 +56,7 @@ function run_local_ros_workspace() {
     -v "$HOME/.gazebo:$HOME/.gazebo" \
     -v "$HOME/.ignition:$HOME/.ignition" \
     -v "$HOME/.rviz:$HOME/.rviz" \
-    -it "$FULL_IMAGE_NAME" $SHELL -c "export HOME=$HOME; cd $HOME; export XBOT_ROOT=$HOME/$1/install.sh; source /opt/ros/$2/setup.bash; bash"
+    -it "$FULL_IMAGE_NAME" $SHELL -c "export HOME=$HOME; cd $HOME; source /opt/ros/$2/setup.bash; bash"
 }
 
 function run_docker_ros_workspace() {
@@ -64,7 +64,7 @@ function run_docker_ros_workspace() {
     -e QT_X11_NO_MITSHM=1 -e GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/$1/share/wolf_gazebo_resources/models/ \
     -e SHELL -e DISPLAY -e DOCKER=1 --name "$CONTAINER_NAME" --gpus all --device=/dev/ttyUSB0 \
     -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-    -it "$FULL_IMAGE_NAME" $SHELL -c "export XBOT_ROOT=/opt/ros/$1; source /opt/ros/$1/setup.bash; $CMD robot_model:=$ROBOT_MODEL world_name:=$WORLD_NAME full_gui:=$GUI input_device:=$DEVICE"
+    -it "$FULL_IMAGE_NAME" $SHELL -c "source /opt/ros/$1/setup.bash; $CMD robot_model:=$ROBOT_MODEL world_name:=$WORLD_NAME full_gui:=$GUI input_device:=$DEVICE"
 }
 
 # Parse args
@@ -157,4 +157,3 @@ if $RUN_LOCAL_WS; then
 else
     run_docker_ros_workspace "$ROS_DISTRO"
 fi
-

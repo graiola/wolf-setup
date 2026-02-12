@@ -148,7 +148,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - working on issue #2
 - clean the ros topics
-- reduce xbot logger verbosity
+- reduce logger verbosity
 - cleaned up various branches
  
 ### Fixed

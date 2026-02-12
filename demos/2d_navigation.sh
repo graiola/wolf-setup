@@ -56,4 +56,4 @@ docker run --user root:root --hostname $HOSTNAME --ipc=host --net=$NET --device=
 	--volume="/etc/passwd:/etc/passwd:ro" \
 	--volume="/etc/shadow:/etc/shadow:ro" \
 	--volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
-        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; export XBOT_ROOT=/opt/ros/${ROS}; roslaunch wolf_navigation_utils wolf_navigation.launch mapping:=$MAPPING world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME robot_model:=$ROBOT_MODEL gazebo_gui:=$GAZEBO_GUI initial_xyz:=[0.0,0.0,5.0]"
+        -it $IMAGE_NAME $SHELL -c "source /opt/ros/$ROS/setup.bash; roslaunch wolf_navigation_utils wolf_navigation.launch mapping:=$MAPPING world_name:=$WORLD_NAME robot_name:=$ROBOT_NAME robot_model:=$ROBOT_MODEL gazebo_gui:=$GAZEBO_GUI initial_xyz:=[0.0,0.0,5.0]"

@@ -16,6 +16,7 @@ fi
 
 ROS_WS=${ROS_WS:-ros_ws}
 BUILD_OCS2=${BUILD_OCS2:-false}
+INSTALL_OCS2_FROM_DEBS=false
 export DEBS_OUT="/tmp/debs/${BRANCH}/${UBUNTU}"
 mkdir -p "$DEBS_OUT"
 
@@ -53,6 +54,17 @@ else
   echo "[INFO] Skipping OCS2 build (BUILD_OCS2=${BUILD_OCS2})"
 fi
 
+# If OCS2 build is disabled on ROS1, require a preinstalled OCS2 and source it.
+if [[ "$ROS_VERSION" == "1" && "$BUILD_OCS2" != "true" ]]; then
+  if [[ -f /opt/ocs2/setup.sh ]]; then
+    echo "[INFO] Using preinstalled OCS2 from /opt/ocs2"
+    source /opt/ocs2/setup.sh
+  else
+    echo "[INFO] /opt/ocs2 not found. Will install OCS2 debian with get_debians.sh."
+    INSTALL_OCS2_FROM_DEBS=true
+  fi
+fi
+
 # ---------------------------
 # Clone workspace if not local
 # ---------------------------
@@ -65,16 +77,32 @@ fi
 
 cd $ROS_WS
 
-# ---------------------------
-# Install RBDL
-# ---------------------------
-# FIXME I should remove this line one day....
-#if [[ "$ROS_VERSION" == "1" ]]; then
-#  echo "[INFO] Install RBDL..."
-#  /bin/bash ./src/wolf/setup/support/get_debians.sh &&
-#  sudo dpkg -i --force-overwrite ./src/wolf/setup/debs/${BRANCH}/${UBUNTU}/rbdl-x86_64-linux-gnu-2.5.0.deb || true
-#  echo "[INFO] RBDL installed"
-#fi
+if [[ "$INSTALL_OCS2_FROM_DEBS" == "true" ]]; then
+  echo "[INFO] Downloading WoLF debians..."
+  /bin/bash ./src/wolf/setup/support/get_debians.sh
+
+  OCS2_DEB_DIR="./src/wolf/setup/debs/${BRANCH}/${UBUNTU}"
+  mapfile -t OCS2_DEBS < <(find "$OCS2_DEB_DIR" -maxdepth 1 -type f -name "*ocs2*.deb" | sort)
+
+  if [[ ${#OCS2_DEBS[@]} -eq 0 ]]; then
+    echo "[ERROR] No OCS2 debian found in ${OCS2_DEB_DIR}"
+    exit 1
+  fi
+
+  echo "[INFO] Installing OCS2 debian(s): ${OCS2_DEBS[*]}"
+  sudo dpkg -i --force-overwrite "${OCS2_DEBS[@]}" || true
+  sudo apt-get install -f -y
+
+  if [[ ! -f /opt/ocs2/setup.sh ]]; then
+    echo "[ERROR] OCS2 install failed: /opt/ocs2/setup.sh still missing"
+    exit 1
+  fi
+
+  source /opt/ocs2/setup.sh
+  echo "[INFO] OCS2 installed from downloaded debians"
+fi
+
+# RBDL is expected from image dependencies/rosdep. No manual install step here.
 
 # ---------------------------
 # Build and debianize
@@ -83,7 +111,16 @@ if [[ "$ROS_VERSION" == "1" ]]; then
   echo "[INFO] Building ROS 1 workspace..."
   catkin_init_workspace src
   catkin config --install
-  catkin build ai_utils_msgs rt_gui_ros -DCMAKE_BUILD_TYPE=Release
+
+  # Bootstrap message/gui packages first. Support both legacy and current message package names.
+  PREBUILD_PKGS="rt_gui_ros"
+  if [[ -d "./src/wolf/ai_utils_msgs" ]]; then
+    PREBUILD_PKGS="ai_utils_msgs ${PREBUILD_PKGS}"
+  elif [[ -d "./src/wolf/wolf_msgs" ]]; then
+    PREBUILD_PKGS="wolf_msgs ${PREBUILD_PKGS}"
+  fi
+
+  catkin build ${PREBUILD_PKGS} -DCMAKE_BUILD_TYPE=Release
   source ./install/setup.bash
   catkin build -DCMAKE_BUILD_TYPE=Release
   ./src/wolf/setup/support/debianize_ros.sh -b "${BRANCH}" -w "${ROS_WS}"

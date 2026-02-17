@@ -39,6 +39,7 @@ WoLF provides several features for your quadruped robotic friend:
 
 ## Packages
 
+- [wolf](https://github.com/graiola/wolf): The main repository with the following submodules.
 - [wolf-setup](https://github.com/graiola/wolf-setup): This repository, containing scripts and installation utilities for WoLF.
 - [wolf_descriptions](https://github.com/graiola/wolf_descriptions): Robot and sensor descriptions used with WoLF.
 - [wolf_gazebo_resources](https://github.com/graiola/wolf_gazebo_resources): Gazebo models and simulation resources.

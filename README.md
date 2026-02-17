@@ -57,9 +57,45 @@ WoLF provides several features for your quadruped robotic friend:
 
 ## How to run WoLF
 
-You can run WoLF by installing the debian packages on your computer or with a docker container. To clone this repository run the following command:
+You can run WoLF from source, by installing the debian packages on your computer, or with a docker container. To clone this repository run the following command:
 
 `git clone https://github.com/graiola/wolf-setup.git`
+
+### Source installation
+
+Use source installation if you want to develop or tune the framework.
+
+- ROS1 Noetic branch: `ros1-noetic-pub`
+- ROS2 Humble branch: `ros2-humble-pub`
+
+#### ROS1 (Noetic)
+
+```bash
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+git clone -b ros1-noetic-pub https://github.com/graiola/wolf.git
+cd wolf
+git submodule update --init --recursive
+cd ~/catkin_ws
+source /opt/ros/noetic/setup.bash
+catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
+catkin build
+source devel/setup.bash
+```
+
+#### ROS2 (Humble)
+
+```bash
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
+git clone -b ros2-humble-pub https://github.com/graiola/wolf.git
+cd wolf
+git submodule update --init --recursive
+cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+source install/setup.bash
+```
 
 ### Docker container for Ubuntu 16.04 - 18.04 - 20.04
 
@@ -85,6 +121,7 @@ We prepared some demos to run directly within the docker container:
 - `./demos/3d_navigation.sh` : Run an outdoor 3D navigation demo
 - `./demos/manipulation.sh` : Run spot with a kinova arm mounted on top
 - `./demos/locomotion.sh` : Run a demo with stairs
+- `./demos/ros2.sh` : ROS2 demo
 
 #### Notes:
 
@@ -101,19 +138,6 @@ To install the required dependencies (including ROS) and the WoLF debian package
 After the installation, update your bash enviroment with the following command:
 
 `source ~/.bashrc`
-
-#### How to start the controller
-
-WoLF provides four interfaces to move the robot:
-
-- A [PS3](docs/ps3.png) joypad interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=ps3`
-- A [XBox](docs/xbox.jpeg) joypad interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=xbox`
-- A [keyboard](docs/keyboard.png) interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=keyboard`
-- A [spacemouse](docs/spacemouse.pdf) interface: `roslaunch wolf_controller wolf_controller_bringup.launch input_device:=spacemouse`
-
-A twist topic is always active and listening for velocity commands on `/robot_name/wolf_controller/twist`. This topic can be used to send twist commands at a lower priority than the above mentioned interfaces.
-It can also be used to send `move_base` commands if you want  to integrate WoLF with the ROS navigation stack (see [wolf_navigation](https://github.com/graiola/wolf_navigation) for an example).
-To make the robot stand up, press the `start` button on the joypad or press the `enter` key if you are using the keyboard.
 
 ## How to add a new robot
 

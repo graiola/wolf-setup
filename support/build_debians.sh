@@ -23,7 +23,9 @@ Application Options:
 \n
 -d,--distro \tUbuntu distro to use [focal|jammy|noble], overrides ROS default, example: -d noble
 \n
--l,--local_ws \tLocal ROS workspace to use for the build, note: it makes the branch option useless, example: -l ros_ws"
+-l,--local_ws \tLocal ROS workspace to use for the build, note: it makes the branch option useless, example: -l ros_ws
+\n
+-o,--build_ocs2 \tEnable OCS2 workspace build/debianization (ROS1 only). Default: false"
 
 # Defaults
 BRANCH_OPT=devel
@@ -32,6 +34,7 @@ UBUNTU_OPT=""
 ROS_VERSION_OPT=""
 SERVICE_OPT=""
 ROS_WS_OPT=""
+BUILD_OCS2_OPT=false
 
 # Parse args
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
@@ -56,6 +59,9 @@ while [ -n "$1" ]; do
         -l|--local_ws)
             ROS_WS_OPT="$2"
             shift
+            ;;
+        -o|--build_ocs2)
+            BUILD_OCS2_OPT=true
             ;;
         *)
             print_warn "Option $1 not recognized!"
@@ -130,6 +136,7 @@ fi
 print_info "Using service: $SERVICE_OPT"
 print_info "ROS distro: $ROS_DISTRO_OPT"
 print_info "Ubuntu distro: $UBUNTU_OPT"
+print_info "Build OCS2: $BUILD_OCS2_OPT"
 
 # Run Compose
 BRANCH=$BRANCH_OPT \
@@ -137,6 +144,7 @@ ROS_WS=$ROS_WS_OPT \
 ROS_VERSION=$ROS_VERSION_OPT \
 ROS_DISTRO=$ROS_DISTRO_OPT \
 UBUNTU=$UBUNTU_OPT \
+BUILD_OCS2=$BUILD_OCS2_OPT \
 docker-compose -f "$BUILDER_COMPOSE" down
 
 BRANCH=$BRANCH_OPT \
@@ -144,5 +152,5 @@ ROS_WS=$ROS_WS_OPT \
 ROS_VERSION=$ROS_VERSION_OPT \
 ROS_DISTRO=$ROS_DISTRO_OPT \
 UBUNTU=$UBUNTU_OPT \
+BUILD_OCS2=$BUILD_OCS2_OPT \
 docker-compose -f "$BUILDER_COMPOSE" up --force-recreate --remove-orphans "$SERVICE_OPT"
-

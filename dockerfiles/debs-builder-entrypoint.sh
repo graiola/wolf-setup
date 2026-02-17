@@ -15,15 +15,16 @@ if [[ -z "$ROS_VERSION" ]]; then
 fi
 
 ROS_WS=${ROS_WS:-ros_ws}
+BUILD_OCS2=${BUILD_OCS2:-false}
 export DEBS_OUT="/tmp/debs/${BRANCH}/${UBUNTU}"
 mkdir -p "$DEBS_OUT"
 
 source /opt/ros/${ROS_DISTRO}/setup.bash
 
 # ---------------------------
-# Build OCS2 from source (ROS 1 only)
+# Build OCS2 from source (optional, ROS 1 only)
 # ---------------------------
-if [[ "$ROS_VERSION" == "1" ]]; then
+if [[ "$ROS_VERSION" == "1" && "$BUILD_OCS2" == "true" ]]; then
   echo "[INFO] Building OCS2 stack..."
   OCS2_WS=ocs2_ws
   rm -rf $OCS2_WS/src
@@ -46,6 +47,10 @@ if [[ "$ROS_VERSION" == "1" ]]; then
   cd ~
 
   echo "[INFO] OCS2 installed and .deb moved"
+elif [[ "$BUILD_OCS2" == "true" ]]; then
+  echo "[WARN] BUILD_OCS2=true ignored for ROS_VERSION=${ROS_VERSION}. OCS2 build is supported only on ROS 1."
+else
+  echo "[INFO] Skipping OCS2 build (BUILD_OCS2=${BUILD_OCS2})"
 fi
 
 # ---------------------------
@@ -105,4 +110,3 @@ else
 fi
 
 echo "[✔] Done!"
-

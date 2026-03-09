@@ -112,11 +112,9 @@ if [[ "$ROS_VERSION" == "1" ]]; then
   catkin_init_workspace src
   catkin config --install
 
-  # Bootstrap message/gui packages first. Support both legacy and current message package names.
+  # Bootstrap message/gui packages first. AI utility interfaces now live in wolf_msgs.
   PREBUILD_PKGS="rt_gui_ros"
-  if [[ -d "./src/wolf/ai_utils_msgs" ]]; then
-    PREBUILD_PKGS="ai_utils_msgs ${PREBUILD_PKGS}"
-  elif [[ -d "./src/wolf/wolf_msgs" ]]; then
+  if [[ -d "./src/wolf/wolf_msgs" ]]; then
     PREBUILD_PKGS="wolf_msgs ${PREBUILD_PKGS}"
   fi
 

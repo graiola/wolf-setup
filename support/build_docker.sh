@@ -24,6 +24,7 @@ BRANCH_OPT="devel"
 PUSH_OPT="no"
 NO_CACHE_FLAG=""
 DOCKER_COMPOSE_FILE="$SCRIPTPATH/../dockerfiles/dc-image-builder.yaml"
+IMAGE_REGISTRY="${IMAGE_REGISTRY:-serger87}"
 
 # Help
 [[ "$1" == "-h" || "$1" == "--help" ]] && echo -e "$USAGE" && exit 0
@@ -58,7 +59,7 @@ build_image() {
     local SERVICE="wolf-${TYPE}-${DISTRO_OPT}"
     local IMAGE_NAME="wolf-${TYPE}-${ROS_DISTRO_OPT}"
     local TAG="${IMAGE_NAME}:${DISTRO_OPT}"
-    local FULL_TAG="serger87/${TAG}"
+    local FULL_TAG="${IMAGE_REGISTRY}/${TAG}"
     local DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/$TYPE"
 
     # Determine ROS version (1 or 2)
@@ -74,6 +75,10 @@ build_image() {
     docker-compose -f "$DOCKER_COMPOSE_FILE" build $NO_CACHE_FLAG "$SERVICE"
 
     if [[ "$PUSH_OPT" == "yes" ]]; then
+        if [[ -z "$IMAGE_REGISTRY" ]]; then
+            print_warn "IMAGE_REGISTRY is empty, cannot push image $TAG"
+            exit 1
+        fi
         print_info "Tagging and pushing $TYPE image as $FULL_TAG"
         docker tag "$IMAGE_NAME:$DISTRO_OPT" "$FULL_TAG"
         docker push "$FULL_TAG"
@@ -87,4 +92,3 @@ build_image() {
 [[ "$BUILD_OPT" == "app"  || "$BUILD_OPT" == "all" ]] && build_image "app"
 
 print_info "Build process completed."
-

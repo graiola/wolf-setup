@@ -1,4 +1,8 @@
+iproute2
 iputils-ping
+procps
+x11-apps
+xauth
 libqt5opengl5-dev
 libmatio-dev
 unzip

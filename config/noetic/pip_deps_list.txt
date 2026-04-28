@@ -1,0 +1,2 @@
+# Python packages installed via pip (not available as apt python3-* packages).
+casadi==3.7.2

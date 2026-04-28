@@ -149,8 +149,29 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     print_info "Installing Python libraries..."
     grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/python_deps_list.txt" | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
 
+    PIP_DEPS_FILE="$SCRIPTPATH/config/${ROS_DISTRO}/pip_deps_list.txt"
+    if [[ -f "$PIP_DEPS_FILE" ]]; then
+        mapfile -t PIP_DEPS < <(grep -vE '^\s*#|^\s*$' "$PIP_DEPS_FILE")
+        if [[ ${#PIP_DEPS[@]} -gt 0 ]]; then
+            print_info "Installing pip libraries..."
+            sudo apt-get install -y python3-pip
+            PIP_ARGS=(install --no-cache-dir)
+            if ${PYTHON_NAME} -m pip install --help 2>/dev/null | grep -q -- '--break-system-packages'; then
+                PIP_ARGS+=(--break-system-packages)
+            fi
+            sudo ${PYTHON_NAME} -m pip "${PIP_ARGS[@]}" "${PIP_DEPS[@]}"
+        fi
+    fi
+
     print_info "Installing ROS packages..."
     grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/ros_deps_list.txt" | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
+
+    if ${PYTHON_NAME} -c "import casadi" >/dev/null 2>&1; then
+        print_info "Configuring CasADi CMake/loader paths..."
+        CASADI_DIR="$(${PYTHON_NAME} -c 'import casadi; from pathlib import Path; print(Path(casadi.__file__).resolve().parent)')"
+        sudo ln -sfn "$CASADI_DIR" /usr/local/casadi
+        echo "/usr/local/casadi" | sudo tee /etc/ld.so.conf.d/casadi.conf > /dev/null
+    fi
 
     sudo ldconfig
     sudo rosdep init || true
@@ -179,4 +200,3 @@ for LINE in "source /opt/ros/${ROS_DISTRO}/setup.bash" "source /opt/ocs2/setup.s
         print_info "$LINE is already in .bashrc"
     fi
 done
-

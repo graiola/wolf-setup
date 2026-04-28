@@ -5,7 +5,7 @@ To add new dependencies you can modify the files:
 - `ros_deps_list.txt`
 - `sys_deps_list.txt`
 - `python_deps_list.txt` for apt-installed Python modules (`python3-<name>`)
-- `pip_deps_list.txt` for pip-only Python modules (for example `casadi==3.7.2`)
+- `pip_deps_list.txt` for pip-only Python modules
 
 These files contain the list of packages necessary to run the WoLF.
 

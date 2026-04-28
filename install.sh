@@ -115,6 +115,8 @@ one)
     ;;
 esac
 
+ROS_CONFIG_DIR="$SCRIPTPATH/config/${ROS_DISTRO}"
+
 # Install base components
 if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     # Define variables
@@ -144,12 +146,12 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     sudo apt-get update
 
     print_info "Installing system libraries..."
-    grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/sys_deps_list.txt" | xargs sudo apt-get install -y
+    grep -v '#' "${ROS_CONFIG_DIR}/sys_deps_list.txt" | xargs sudo apt-get install -y
 
     print_info "Installing Python libraries..."
-    grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/python_deps_list.txt" | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
+    grep -v '#' "${ROS_CONFIG_DIR}/python_deps_list.txt" | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
 
-    PIP_DEPS_FILE="$SCRIPTPATH/config/${ROS_DISTRO}/pip_deps_list.txt"
+    PIP_DEPS_FILE="${ROS_CONFIG_DIR}/pip_deps_list.txt"
     if [[ -f "$PIP_DEPS_FILE" ]]; then
         mapfile -t PIP_DEPS < <(grep -vE '^\s*#|^\s*$' "$PIP_DEPS_FILE")
         if [[ ${#PIP_DEPS[@]} -gt 0 ]]; then
@@ -164,14 +166,7 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     fi
 
     print_info "Installing ROS packages..."
-    grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/ros_deps_list.txt" | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
-
-    if ${PYTHON_NAME} -c "import casadi" >/dev/null 2>&1; then
-        print_info "Configuring CasADi CMake/loader paths..."
-        CASADI_DIR="$(${PYTHON_NAME} -c 'import casadi; from pathlib import Path; print(Path(casadi.__file__).resolve().parent)')"
-        sudo ln -sfn "$CASADI_DIR" /usr/local/casadi
-        echo "/usr/local/casadi" | sudo tee /etc/ld.so.conf.d/casadi.conf > /dev/null
-    fi
+    grep -v '#' "${ROS_CONFIG_DIR}/ros_deps_list.txt" | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
 
     sudo ldconfig
     sudo rosdep init || true

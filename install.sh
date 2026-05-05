@@ -124,7 +124,7 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     ROS_REPO="http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu"
     GAZEBO_KEY_FILE="/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg"
     GAZEBO_LIST_FILE="/etc/apt/sources.list.d/gazebo-stable.list"
-    GAZEBO_REPO="http://packages.osrfoundation.org/gazebo/ubuntu-stable"
+    GAZEBO_REPO="https://packages.osrfoundation.org/gazebo/ubuntu-stable"
 
     # Check if the repository is already added
     if grep -q "${ROS_REPO}" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
@@ -155,6 +155,9 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
             sudo curl -sSL https://packages.osrfoundation.org/gazebo.gpg -o /tmp/gazebo.gpg
             sudo gpg --no-tty --batch --yes --dearmor -o "$GAZEBO_KEY_FILE" /tmp/gazebo.gpg
             rm /tmp/gazebo.gpg
+            echo 'Acquire::Retries "5";' | sudo tee /etc/apt/apt.conf.d/80-retries > /dev/null
+            echo 'Acquire::http::Timeout "30";' | sudo tee -a /etc/apt/apt.conf.d/80-retries > /dev/null
+            echo 'Acquire::https::Timeout "30";' | sudo tee -a /etc/apt/apt.conf.d/80-retries > /dev/null
             echo "deb [arch=$(dpkg --print-architecture) signed-by=${GAZEBO_KEY_FILE}] ${GAZEBO_REPO} $(lsb_release -cs) main" | \
                 sudo tee "$GAZEBO_LIST_FILE" > /dev/null
         fi

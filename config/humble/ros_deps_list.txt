@@ -1,18 +1,15 @@
 # This is the list of ROS packages we need to install:
-desktop-full
+desktop
 ament-lint-auto
 tinyxml-vendor
 libstatistics-collector
 ros2-control
 ros2-controllers
 realtime-tools
-gazebo-dev
-gazebo-plugins
-gazebo-ros
-gazebo-ros2-control
-gazebo-ros-pkgs
-gazebo-set-joint-positions-plugin
-ign-ros2-control
+ros-gz
+ros-gz-bridge
+ros-gz-sim
+gz-ros2-control
 joy
 spacenav
 tf-transformations
@@ -28,7 +25,7 @@ kdl-parser
 pointcloud-to-laserscan
 velodyne-laserscan
 velodyne-pointcloud
-velodyne-gazebo-plugins
+# Classic Gazebo-only; keep it out of the Humble gz-based base image.
 velodyne-description
 nav2-core
 nav2-map-server

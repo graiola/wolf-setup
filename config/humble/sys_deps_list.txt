@@ -16,4 +16,8 @@ libassimp-dev
 libmpfr-dev
 libomp-dev
 checkinstall
+libgz-sim7
+gz-sim7-cli
+libgz-plugin2-dev
+libgz-sim7-dev
 python-is-python3

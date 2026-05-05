@@ -120,6 +120,9 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     # Define variables
     KEY_FILE="/usr/share/keyrings/ros-archive-keyring.gpg"
     ROS_REPO="http://packages.ros.org/${ROS_VERSION_NAME}/ubuntu"
+    GAZEBO_KEY_FILE="/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg"
+    GAZEBO_LIST_FILE="/etc/apt/sources.list.d/gazebo-stable.list"
+    GAZEBO_REPO="http://packages.osrfoundation.org/gazebo/ubuntu-stable"
 
     # Check if the repository is already added
     if grep -q "${ROS_REPO}" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
@@ -138,6 +141,20 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
             rm /tmp/ros.key
             echo "deb [arch=$(dpkg --print-architecture) signed-by=${KEY_FILE}] ${ROS_REPO} $(lsb_release -cs) main" | \
                 sudo tee "$LIST_FILE" > /dev/null
+        fi
+    fi
+
+    if [[ "$ROS_DISTRO" == "humble" ]]; then
+        if grep -q "${GAZEBO_REPO}" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
+            print_info "Gazebo repository is already present. Skipping Gazebo repository setup."
+        else
+            print_info "Adding Gazebo repository..."
+            sudo mkdir -p /usr/share/keyrings
+            sudo curl -sSL https://packages.osrfoundation.org/gazebo.gpg -o /tmp/gazebo.gpg
+            sudo gpg --no-tty --batch --yes --dearmor -o "$GAZEBO_KEY_FILE" /tmp/gazebo.gpg
+            rm /tmp/gazebo.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=${GAZEBO_KEY_FILE}] ${GAZEBO_REPO} $(lsb_release -cs) main" | \
+                sudo tee "$GAZEBO_LIST_FILE" > /dev/null
         fi
     fi
 
@@ -179,4 +196,3 @@ for LINE in "source /opt/ros/${ROS_DISTRO}/setup.bash" "source /opt/ocs2/setup.s
         print_info "$LINE is already in .bashrc"
     fi
 done
-

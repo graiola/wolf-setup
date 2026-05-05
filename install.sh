@@ -115,6 +115,8 @@ one)
     ;;
 esac
 
+ROS_CONFIG_DIR="$SCRIPTPATH/config/${ROS_DISTRO}"
+
 # Install base components
 if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     # Define variables
@@ -161,13 +163,27 @@ if [[ "$INSTALL_OPT" == "base" || "$INSTALL_OPT" == "all" ]]; then
     sudo apt-get update
 
     print_info "Installing system libraries..."
-    grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/sys_deps_list.txt" | xargs sudo apt-get install -y
+    grep -v '#' "${ROS_CONFIG_DIR}/sys_deps_list.txt" | xargs sudo apt-get install -y
 
     print_info "Installing Python libraries..."
-    grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/python_deps_list.txt" | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
+    grep -v '#' "${ROS_CONFIG_DIR}/python_deps_list.txt" | xargs printf -- "${PYTHON_NAME}-%s\n" | xargs sudo apt-get install -y
+
+    PIP_DEPS_FILE="${ROS_CONFIG_DIR}/pip_deps_list.txt"
+    if [[ -f "$PIP_DEPS_FILE" ]]; then
+        mapfile -t PIP_DEPS < <(grep -vE '^\s*#|^\s*$' "$PIP_DEPS_FILE")
+        if [[ ${#PIP_DEPS[@]} -gt 0 ]]; then
+            print_info "Installing pip libraries..."
+            sudo apt-get install -y python3-pip
+            PIP_ARGS=(install --no-cache-dir)
+            if ${PYTHON_NAME} -m pip install --help 2>/dev/null | grep -q -- '--break-system-packages'; then
+                PIP_ARGS+=(--break-system-packages)
+            fi
+            sudo ${PYTHON_NAME} -m pip "${PIP_ARGS[@]}" "${PIP_DEPS[@]}"
+        fi
+    fi
 
     print_info "Installing ROS packages..."
-    grep -v '#' "$SCRIPTPATH/config/${ROS_DISTRO}/ros_deps_list.txt" | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
+    grep -v '#' "${ROS_CONFIG_DIR}/ros_deps_list.txt" | xargs printf -- "ros-${ROS_DISTRO}-%s\n" | xargs sudo apt-get install -y
 
     sudo ldconfig
     sudo rosdep init || true

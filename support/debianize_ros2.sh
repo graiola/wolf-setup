@@ -67,10 +67,12 @@ done
 # Check OS and set dependencies
 if [[ $OS_VERSION == "jammy" ]]; then
   ROS_DISTRO=humble
+elif [[ $OS_VERSION == "noble" ]]; then
+  ROS_DISTRO=jazzy
 elif [[ $OS_VERSION == "focal" ]]; then
   ROS_DISTRO=foxy
 else
-  print_warn "Unsupported Ubuntu version! This script supports Ubuntu 20.04 (Focal) and 22.04 (Jammy)."
+  print_warn "Unsupported Ubuntu version! This script supports Ubuntu 20.04 (Focal), 22.04 (Jammy), and 24.04 (Noble)."
   exit 1
 fi
 
@@ -215,4 +217,3 @@ fi
 
 print_info "✅ Debian packaging process completed."
 print_info "📦 Output location: $SCRIPTPATH/../debs/$BRANCH/$OS_VERSION"
-

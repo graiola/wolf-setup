@@ -11,7 +11,7 @@ Options:
   -h, --help           Show help options
   -i, --image          Image(s) to build [base|app|all] (default: all)
   -d, --distro         Distro to build [bionic|focal|jammy|noble] (default: jammy)
-  -r, --ros            ROS distro [noetic|one|foxy|humble] (default: one)
+  -r, --ros            ROS distro [noetic|foxy|humble|jazzy] (default inferred from distro)
   -b, --branch         Branch to install in the app image (default: devel)
   -p, --push           Push the built image(s)
       --no-cache       Build without using cache"
@@ -19,7 +19,7 @@ Options:
 # Defaults
 BUILD_OPT="all"
 DISTRO_OPT="jammy"
-ROS_DISTRO_OPT="one"
+ROS_DISTRO_OPT=""
 BRANCH_OPT="devel"
 PUSH_OPT="no"
 NO_CACHE_FLAG=""
@@ -46,7 +46,22 @@ done
 # Validation
 [[ ! "$BUILD_OPT" =~ ^(base|app|all)$ ]] && print_warn "Invalid image: $BUILD_OPT" && echo -e "$USAGE" && exit 1
 [[ ! "$DISTRO_OPT" =~ ^(bionic|focal|jammy|noble)$ ]] && print_warn "Invalid distro: $DISTRO_OPT" && echo -e "$USAGE" && exit 1
-[[ ! "$ROS_DISTRO_OPT" =~ ^(noetic|one|foxy|humble)$ ]] && print_warn "Invalid ROS distro: $ROS_DISTRO_OPT" && echo -e "$USAGE" && exit 1
+if [[ -n "$ROS_DISTRO_OPT" && ! "$ROS_DISTRO_OPT" =~ ^(noetic|one|foxy|humble|jazzy)$ ]]; then
+    print_warn "Invalid ROS distro: $ROS_DISTRO_OPT"
+    echo -e "$USAGE"
+    exit 1
+fi
+
+if [[ -z "$ROS_DISTRO_OPT" ]]; then
+    case "$DISTRO_OPT" in
+        bionic|focal) ROS_DISTRO_OPT="noetic" ;;
+        jammy) ROS_DISTRO_OPT="humble" ;;
+        noble) ROS_DISTRO_OPT="jazzy" ;;
+    esac
+elif [[ "$ROS_DISTRO_OPT" == "one" ]]; then
+    print_warn "ROS distro 'one' is deprecated. Falling back to jazzy."
+    ROS_DISTRO_OPT="jazzy"
+fi
 
 print_info "Build: $BUILD_OPT | Distro: $DISTRO_OPT | ROS: $ROS_DISTRO_OPT | Branch: $BRANCH_OPT | Push: $PUSH_OPT"
 
@@ -63,7 +78,7 @@ build_image() {
     local DOCKERFILE_PATH="$SCRIPTPATH/../dockerfiles/$TYPE"
 
     # Determine ROS version (1 or 2)
-    if [[ "$ROS_DISTRO_OPT" == "noetic" || "$ROS_DISTRO_OPT" == "one" ]]; then
+    if [[ "$ROS_DISTRO_OPT" == "noetic" ]]; then
         ROS_VERSION="1"
     else
         ROS_VERSION="2"

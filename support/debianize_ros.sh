@@ -35,7 +35,7 @@ OS_VERSION=$(lsb_release -cs)
 case "$OS_VERSION" in
   focal) ROS_DISTRO=noetic ;;
   jammy) ROS_DISTRO=humble ;;
-  noble) ROS_DISTRO=one ;;
+  noble) print_error "Ubuntu Noble is not supported by the catkin-based debianize_ros.sh helper."; exit 1 ;;
   *) print_error "Unsupported Ubuntu version: $OS_VERSION"; exit 1 ;;
 esac
 
@@ -210,4 +210,3 @@ else
     done < "$PKG_LIST"
   fi
 fi
-

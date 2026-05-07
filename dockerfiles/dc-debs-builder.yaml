@@ -46,7 +46,7 @@ services:
 
   wolf-builder-noble:
     <<: *common
-    image: wolf-base-one:noble
+    image: wolf-base-jazzy:noble
 
   # Local development variants
 
@@ -72,7 +72,7 @@ services:
     command: ["/debs-builder-entrypoint.sh"]
 
   wolf-builder-noble-local:
-    image: wolf-base-one:noble
+    image: wolf-base-jazzy:noble
     user: "root:root"
     volumes: *local-volumes
     environment: *local-env

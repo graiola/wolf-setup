@@ -1,0 +1,58 @@
+# This is the list of ROS packages we need to install.
+# Jazzy starts from the Humble set and should be pruned / adjusted as Noble
+# package availability is validated.
+desktop
+ament-lint-auto
+tinyxml-vendor
+libstatistics-collector
+ros2-control
+ros2-controllers
+realtime-tools
+ros-gz
+ros-gz-bridge
+ros-gz-sim
+gz-ros2-control
+joy
+spacenav
+tf-transformations
+rqt-tf-tree
+robot-state-publisher
+joint-state-publisher-gui
+rviz-visual-tools
+moveit-core
+moveit-msgs
+pybind11-vendor
+kdl-parser
+# For navigation
+pointcloud-to-laserscan
+velodyne-laserscan
+velodyne-pointcloud
+# Classic Gazebo-only; keep it out of the Humble gz-based base image.
+velodyne-description
+nav2-core
+nav2-map-server
+nav2-amcl
+nav2-costmap-2d
+robot-localization
+pcl-ros
+pcl-conversions
+slam-toolbox
+cv-bridge
+twist-mux
+srdfdom
+rtabmap-ros
+rtabmap-slam
+# OCS2
+pinocchio
+hpp-fcl
+# Extra
+camera-info-manager
+image-transport
+rqt
+cv-bridge
+rqt-common-plugins
+perception
+topic-tools
+#plotjuggler
+#plotjuggler-ros
+#plotjuggler-msgs

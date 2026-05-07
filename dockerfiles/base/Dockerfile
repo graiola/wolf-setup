@@ -17,15 +17,7 @@ RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-
         openssh-client \
         gpg-agent \
         tzdata \
-        cmake-curses-gui \
-        xserver-xorg-video-intel \
-        libgl1-mesa-glx \
-        libgl1-mesa-dri \
-        xserver-xorg-core \
-        libglu1-mesa-dev \
-        freeglut3-dev \
-        mesa-common-dev \
-        mesa-utils
+        cmake-curses-gui
 
 ADD . /root/
 

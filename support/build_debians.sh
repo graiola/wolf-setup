@@ -19,7 +19,7 @@ Application Options:
 \n
 -b,--branch \tBranch to build, example: -b devel
 \n
--r,--ros \tROS distro to install [noetic|foxy|humble|one], example: -r noetic
+-r,--ros \tROS distro to install [noetic|foxy|humble|jazzy], example: -r noetic
 \n
 -d,--distro \tUbuntu distro to use [focal|jammy|noble], overrides ROS default, example: -d noble
 \n
@@ -89,7 +89,7 @@ if [[ -z "$UBUNTU_OPT" ]]; then
             UBUNTU_OPT=jammy
             ROS_VERSION_OPT=2
             ;;
-        one)
+        jazzy|one)
             UBUNTU_OPT=noble
             ROS_VERSION_OPT=2
             ;;
@@ -115,7 +115,7 @@ else
         noetic)
             ROS_VERSION_OPT=1
             ;;
-        foxy|humble|one)
+        foxy|humble|jazzy|one)
             ROS_VERSION_OPT=2
             ;;
         *)

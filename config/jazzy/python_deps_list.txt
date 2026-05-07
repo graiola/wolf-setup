@@ -1,0 +1,7 @@
+pip
+colcon-core
+colcon-common-extensions
+pygame
+pybind11
+numpy
+scipy

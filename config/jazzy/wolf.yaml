@@ -1,0 +1,88 @@
+wolf_rviz_plugin:
+  ubuntu:
+    focal: ros-foxy-wolf-rviz-plugin
+    noble: ros-jazzy-wolf-rviz-plugin
+wolf_wbid:
+  ubuntu:
+    focal: ros-foxy-wolf-wbid
+    noble: ros-jazzy-wolf-wbid
+wolf_controller_core:
+  ubuntu:
+    focal: ros-foxy-wolf-controller-core
+    noble: ros-jazzy-wolf-controller-core
+wolf_controller:
+  ubuntu:
+    focal: ros-foxy-wolf-controller
+    noble: ros-jazzy-wolf-controller
+wolf_controller_utils:
+  ubuntu:
+    focal: ros-foxy-wolf-controller-utils
+    noble: ros-jazzy-wolf-controller-utils
+wolf_gazebo_interface:
+  ubuntu:
+    focal: ros-foxy-wolf-gazebo-interface
+    noble: ros-jazzy-wolf-gazebo-interface
+wolf_gazebo_resources:
+  ubuntu:
+    focal: ros-foxy-wolf-gazebo-resources
+    noble: ros-jazzy-wolf-gazebo-resources
+wolf_hardware_interface:
+  ubuntu:
+    focal: ros-foxy-wolf-hardware-interface
+    noble: ros-jazzy-wolf-hardware-interface
+sensors_description:
+  ubuntu:
+    focal: ros-foxy-sensors-description
+    noble: ros-jazzy-sensors-description
+spot_description:
+  ubuntu:
+    focal: ros-foxy-spot-description
+    noble: ros-jazzy-spot-description
+go1_description:
+ ubuntu:
+    focal: ros-foxy-go1-description
+    noble: ros-jazzy-go1-description
+kinova_description:
+  ubuntu:
+    focal: ros-foxy-kinova-description
+    noble: ros-jazzy-kinova-description
+wolf_description_utils:
+  ubuntu:
+    focal: ros-foxy-wolf-description-utils
+    noble: ros-jazzy-wolf-description-utils
+rt_logger:
+  ubuntu:
+    focal: ros-foxy-rt-logger
+    noble: ros-jazzy-rt-logger
+rt_gui_core:
+  ubuntu:
+    focal: ros-foxy-rt-gui-core
+    noble: ros-jazzy-rt-gui-core
+rt_gui_msgs:
+  ubuntu:
+    focal: ros-foxy-rt-gui-msgs
+    noble: ros-jazzy-rt-gui-msgs
+rt_gui_ros:
+  ubuntu:
+    focal: ros-foxy-rt-gui-ros
+    noble: ros-jazzy-rt-gui-ros
+wolf_msgs:
+  ubuntu:
+    noble: ros-jazzy-wolf-msgs
+    focal: ros-foxy-wolf-msgs
+wolf_estimation:
+  ubuntu:
+    focal: ros-foxy-wolf-estimation
+    noble: ros-jazzy-wolf-estimation
+wolf_ngva:
+  ubuntu:
+    focal: ros-foxy-wolf-ngva
+    noble: ros-jazzy-wolf-ngva
+wolf_3dnav_core:
+  ubuntu:
+    noble: ros-jazzy-wolf-3dnav-core
+    focal: ros-foxy-wolf-3dnav-core
+wolf_3dnav_ros2:
+  ubuntu:
+    noble: ros-jazzy-wolf-3dnav-ros2
+    focal: ros-foxy-wolf-3dnav-ros2

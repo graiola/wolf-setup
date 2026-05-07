@@ -119,9 +119,9 @@ case "$IMAGE_TAG" in
         CMD='ros2 launch wolf_controller wolf_controller_bringup.launch.xml'
         ;;
     noble)
-        ROS_DISTRO=one
-        ROS_VERSION=1
-        CMD='roslaunch wolf_controller wolf_controller_bringup.launch'
+        ROS_DISTRO=jazzy
+        ROS_VERSION=2
+        CMD='ros2 launch wolf_controller wolf_controller_bringup.launch.xml'
         ;;
     *)
         print_warn "Unsupported image tag for ROS setup"; exit 1

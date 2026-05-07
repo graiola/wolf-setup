@@ -38,12 +38,12 @@ services:
         - BRANCH=${BRANCH}
 
   wolf-base-noble:
-    image: wolf-base-one:noble
+    image: wolf-base-jazzy:noble
     build:
       <<: *base-build
       args:
-        - IMAGE=nvidia/opengl:base-ubuntu24.04
-        - ROS=one
+        - IMAGE=nvidia/cuda:12.6.1-base-ubuntu24.04
+        - ROS=jazzy
         - BRANCH=${BRANCH}
 
   # App Images
@@ -75,12 +75,11 @@ services:
         - BRANCH=${BRANCH}
 
   wolf-app-noble:
-    image: wolf-app-one:noble
+    image: wolf-app-jazzy:noble
     build:
       <<: *app-build
       args:
-        - IMAGE=wolf-base-one:noble
-        - ROS=one
+        - IMAGE=wolf-base-jazzy:noble
+        - ROS=jazzy
         - BRANCH=${BRANCH}
-
 

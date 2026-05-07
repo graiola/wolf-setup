@@ -19,6 +19,8 @@ libassimp-dev
 libmpfr-dev
 libomp-dev
 checkinstall
+libgz-sim8
+gz-sim8-cli
 libgz-plugin2-dev
 libgz-sim8-dev
 gz-harmonic

@@ -15,6 +15,7 @@ gz-ros2-control
 joy
 spacenav
 tf-transformations
+tf2-eigen
 rqt-tf-tree
 robot-state-publisher
 joint-state-publisher-gui

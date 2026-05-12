@@ -12,9 +12,9 @@ source $SCRIPTPATH/../support/fun.cfg
 wolf_banner
 
 # Options
-ROS=humble
-CONTAINER_NAME="wolf-app-humble"
-IMAGE_TAG="jammy"
+ROS=jazzy
+CONTAINER_NAME="wolf-app-jazzy"
+IMAGE_TAG="noble"
 ROBOT_MODEL=spot
 ROBOT_NAME=ras_4
 WORLD_NAME=agriculture

@@ -1,6 +1,4 @@
-# Noble / Jazzy Gazebo Sim baseline currently targets Harmonic.
-# This list starts from the Humble stack and should be refined as the Jazzy
-# image work progresses.
+# Noble / Jazzy Gazebo Sim baseline targeting Harmonic.
 iproute2
 iputils-ping
 procps

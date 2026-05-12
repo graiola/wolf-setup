@@ -1,6 +1,4 @@
-# This is the list of ROS packages we need to install.
-# Jazzy starts from the Humble set and should be pruned / adjusted as Noble
-# package availability is validated.
+# ROS packages for the active Noble / Jazzy lane.
 desktop
 ament-lint-auto
 tinyxml-vendor
@@ -28,7 +26,7 @@ kdl-parser
 pointcloud-to-laserscan
 velodyne-laserscan
 velodyne-pointcloud
-# Classic Gazebo-only; keep it out of the Humble gz-based base image.
+# Classic Gazebo-only; keep it out of the active gz-based base image.
 velodyne-description
 nav2-core
 nav2-map-server
@@ -40,6 +38,7 @@ pcl-conversions
 slam-toolbox
 cv-bridge
 twist-mux
+twist-stamper
 srdfdom
 rtabmap-ros
 rtabmap-slam

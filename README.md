@@ -98,6 +98,35 @@ colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 source install/setup.bash
 ```
 
+### Optional ROS 2 embedded MPC workspace
+
+The ROS 2 `wolf_planner` bundle is opt-in for Humble and Jazzy. Its
+`manifests/planner.repos` places the planner, controller and inverse-dynamics
+repositories together under `src/planner` when imported from a clean workspace:
+
+```bash
+mkdir -p ~/planner_ws/src
+vcs import ~/planner_ws/src < /path/to/wolf_planner/manifests/planner.repos
+./support/build_planner_ros2.sh --workspace ~/planner_ws --distro humble
+```
+
+Use coordinated migration commits: the ROS 2 planner requires the updated
+controller observation layout, postural receiver and planned-contact API.
+Install the system and ROS dependencies documented by `wolf_planner` before
+building. The manifest does not import robot descriptions or simulators; pass
+the intended robot's URDF and planner task configuration at launch.
+
+For an existing workspace, move or reuse its checkouts instead of importing
+duplicate package names. Tactix-managed Nav2 provider paths remain unchanged;
+the new manifest does not relocate them. Normal `wolf_list.txt` package lists
+are unchanged. The separate `config/{humble,jazzy}/planner_list.txt` bundles are
+used only by the explicit build command. It builds packages and dependencies,
+and does not start the planner or switch the controller to EXT. The perceptive
+experimental package remains excluded.
+
+The coordinated ROS 2 build and simulation validation in the planner migration
+plan are still required before enabling MPC control on a robot.
+
 ### Docker container for Ubuntu 16.04 - 18.04 - 20.04
 
 To download the image from [docker-hub](https://hub.docker.com/r/serger87/wolf-app) and launch WoLF within a docker container, run the following script:

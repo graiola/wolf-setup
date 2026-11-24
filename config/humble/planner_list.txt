@@ -1,0 +1,7 @@
+# Optional ROS 2 MPC bundle. Normal wolf_list.txt is unchanged.
+wolf_planner_mpc
+wolf_planner_interface
+wolf_planner_default
+wolf_planner_adaptive
+wolf_planner
+wolf_controller

@@ -198,7 +198,14 @@ if [[ "$INSTALL_OPT" == "app" || "$INSTALL_OPT" == "all" ]]; then
 fi
 
 # Update Bashrc
-for LINE in "source /opt/ros/${ROS_DISTRO}/setup.bash" "source /opt/ocs2/setup.sh"; do
+WOLF_SETUP_FILES=("/opt/ros/${ROS_DISTRO}/setup.bash")
+# The embedded ROS 2 planner has no separate OCS2 environment. Preserve the
+# optional legacy overlay only for a ROS 1 installation where it exists.
+if [[ "$ROS_VERSION_NAME" == "ros" && -r /opt/ocs2/setup.sh ]]; then
+    WOLF_SETUP_FILES+=("/opt/ocs2/setup.sh")
+fi
+for WOLF_SETUP_FILE in "${WOLF_SETUP_FILES[@]}"; do
+    LINE="source $WOLF_SETUP_FILE"
     if ! grep -Fwq "$LINE" ~/.bashrc; then
         print_info "Adding $LINE to .bashrc"
         echo "$LINE" >> ~/.bashrc

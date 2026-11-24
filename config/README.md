@@ -29,7 +29,30 @@ Move the wolf.yaml file to the apache server:
 
 `sudo echo "yaml https://raw.githubusercontent.com/graiola/wolf-setup/master/config/$ROS_VERSION/wolf.yaml" >> /etc/ros/rosdep/sources.list.d/20-default.list `
 
-# OCS2
+# ROS 2 MPC
+
+Humble and Jazzy use the embedded solver in `wolf_planner_mpc`. Do not build
+OCS2 catkin packages or source `/opt/ocs2/setup.sh` for this migration. Import
+the coordinated `wolf_planner/manifests/planner.repos` into a clean workspace;
+its repositories are siblings under `src/planner/`. In an existing workspace,
+reuse the owning source manifests and checkouts so colcon sees each package once.
+
+The optional `support/build_planner_ros2.sh` helper builds the packages in
+`config/<distro>/planner_list.txt` using installed numerical dependencies.
+The planner README describes the alternative explicit fetch of pinned
+HPIPM/BLASFEO libraries, the compatible Pinocchio/HPP-FCL versions and native
+validation. These dependencies remain necessary for the numerical solver;
+the external OCS2 package graph does not.
+
+The top-level installer only adds the ROS 2 environment to `.bashrc`. If a
+previous installation added a legacy OCS2 source line, use a clean ROS 2 shell
+and remove that line from the ROS 2 shell configuration before building.
+
+The perceptive plugin and the ROS 1 terrain packages below are excluded from
+the active default/adaptive planner build. See the planner's
+`docs/PERCEPTIVE_MIGRATION.md` for their separate port and acceptance gates.
+
+# Legacy ROS 1 OCS2
 
 This is a short guide on how to create a ocs2 package with only the necessary deps:
 
@@ -54,7 +77,7 @@ Use checkinstall in the catkin build folder:
 sudo checkinstall --pkgname=wolf_ocs2 --pkgversion=1.0.0 --pkgarch=amd64 -y
 ```
 
-# Anybotics packages (elevation and terrain estimation)
+# Legacy ROS 1 terrain packages (elevation and terrain estimation)
 
 ```
 # Clone Packages

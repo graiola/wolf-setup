@@ -40,7 +40,7 @@ twist-mux
 srdfdom
 rtabmap-ros
 rtabmap-slam
-# OCS2
+# Robot dynamics for the embedded MPC backend (no external OCS2 packages).
 pinocchio
 hpp-fcl
 # Extra
